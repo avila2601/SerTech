@@ -1,7 +1,7 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
 }
 
 .tecnicos-container {
@@ -12,7 +12,7 @@
 .tecnicos-header {
   text-align: center;
   margin-bottom: 3rem;
-  padding: 2rem;
+  padding: 2rem 0;
   background: rgba(31, 41, 55, 0.6);
   border-radius: 16px;
   backdrop-filter: blur(10px);
@@ -21,18 +21,14 @@
 
 .tecnicos-header h1 {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
   color: #e0e0e0;
+  margin-bottom: 1rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .tecnicos-header p {
-  color: #b0b0b0;
   font-size: 1.1rem;
+  color: #b0b0b0;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -97,8 +93,9 @@
 
 .tecnicos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 .tecnico-card {
@@ -111,8 +108,6 @@
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
 .tecnico-card::before {
@@ -121,7 +116,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   transform: scaleX(0);
   transition: transform 0.3s ease;
@@ -137,67 +132,56 @@
   border-color: rgba(102, 126, 234, 0.3);
 }
 
+.tecnico-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
 .tecnico-avatar {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 0 auto 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
-.tecnico-info {
-  text-align: center;
-  flex-grow: 1;
-  margin-bottom: 1.5rem;
-}
-
 .tecnico-info h3 {
+  font-size: 1.3rem;
   color: #e0e0e0;
-  margin-bottom: 0.75rem;
-  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
-.especialidad {
-  color: #667eea;
-  font-weight: 500;
-  margin-bottom: 1rem;
-  font-size: 1rem;
+.tecnico-info p {
+  color: #9ca3af;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
 }
 
-.rating-section {
+.tecnico-rating {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
 .stars {
-  display: flex;
-  gap: 2px;
+  color: #fbbf24;
+  font-size: 0.9rem;
 }
 
-.star {
-  color: #ffd700;
-  font-size: 1.2rem;
-}
-
-.star.empty {
-  color: #4a5568;
-}
-
-.rating-value {
-  font-weight: bold;
+.rating {
   color: #e0e0e0;
-  font-size: 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .experiencia {
@@ -206,30 +190,36 @@
   margin-bottom: 1rem;
 }
 
-.estado {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.tecnico-details {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
   margin-bottom: 1.5rem;
 }
 
-.estado.disponible {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-  color: white;
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 }
 
-.estado.no-disponible {
-  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
-  color: white;
+.detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.detail-value {
+  color: #e0e0e0;
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
 .tecnico-actions {
   text-align: center;
-  margin-top: auto;
 }
 
 .btn {
@@ -295,17 +285,145 @@
   opacity: 0.5;
 }
 
+/* Responsive para tablets */
 @media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+
+  .tecnicos-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem 0;
+  }
+
   .tecnicos-header h1 {
     font-size: 2rem;
   }
 
-  .tecnicos-grid {
-    grid-template-columns: 1fr;
+  .tecnicos-header p {
+    font-size: 1rem;
   }
 
-  .btn {
-    width: 100%;
-    text-align: center;
+  .tecnicos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .tecnico-card {
+    padding: 1.5rem;
+  }
+
+  .tecnico-header {
+    margin-bottom: 1rem;
+  }
+
+  .tecnico-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  .tecnico-info h3 {
+    font-size: 1.1rem;
+  }
+
+  .tecnico-info p {
+    font-size: 0.9rem;
+  }
+
+  .tecnico-details {
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .detail-item {
+    margin-bottom: 0.4rem;
+  }
+
+  .detail-label,
+  .detail-value {
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive para móviles pequeños */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  .tecnicos-header {
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  .tecnicos-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .tecnicos-header p {
+    font-size: 0.9rem;
+  }
+
+  .tecnicos-grid {
+    gap: 1rem;
+  }
+
+  .tecnico-card {
+    padding: 1rem;
+  }
+
+  .tecnico-header {
+    margin-bottom: 0.8rem;
+    gap: 0.8rem;
+  }
+
+  .tecnico-avatar {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+
+  .tecnico-info h3 {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .tecnico-info p {
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .tecnico-rating {
+    margin-bottom: 0.8rem;
+  }
+
+  .stars,
+  .rating {
+    font-size: 0.8rem;
+  }
+
+  .experiencia {
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .tecnico-details {
+    padding: 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .detail-item {
+    margin-bottom: 0.3rem;
+  }
+
+  .detail-label,
+  .detail-value {
+    font-size: 0.8rem;
+  }
+
+  .no-tecnicos {
+    padding: 2rem;
+    font-size: 1rem;
   }
 }

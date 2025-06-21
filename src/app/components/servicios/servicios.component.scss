@@ -1,33 +1,25 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
 }
 
 .servicios-header {
   text-align: center;
   margin-bottom: 3rem;
-  padding: 2rem;
-  background: rgba(31, 41, 55, 0.6);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem 0;
 }
 
 .servicios-header h1 {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
   color: #e0e0e0;
+  margin-bottom: 1rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .servicios-header p {
-  color: #b0b0b0;
   font-size: 1.1rem;
+  color: #b0b0b0;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -42,19 +34,21 @@
 
 .categoria-btn {
   padding: 0.75rem 1.5rem;
-  border: 2px solid #667eea;
-  background: transparent;
-  color: #667eea;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  background: rgba(31, 41, 55, 0.8);
+  color: #e0e0e0;
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
+  backdrop-filter: blur(10px);
 }
 
 .categoria-btn:hover,
 .categoria-btn.active {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  border-color: #667eea;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
@@ -63,6 +57,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 .servicio-card {
@@ -83,7 +78,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   transform: scaleX(0);
   transition: transform 0.3s ease;
@@ -100,19 +95,16 @@
 }
 
 .servicio-icon {
-  text-align: center;
+  font-size: 3rem;
   margin-bottom: 1.5rem;
-}
-
-.servicio-icon span {
-  font-size: 3.5rem;
+  text-align: center;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
 .servicio-content h3 {
-  margin-bottom: 1rem;
-  color: #e0e0e0;
   font-size: 1.4rem;
+  color: #e0e0e0;
+  margin-bottom: 1rem;
   font-weight: 600;
 }
 
@@ -128,21 +120,20 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
 }
 
 .precio {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: #4CAF50;
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .duracion {
-  color: #9ca3af;
   font-size: 0.9rem;
+  color: #9ca3af;
 }
 
 .servicio-actions {
@@ -204,22 +195,137 @@
   opacity: 0.5;
 }
 
+/* Responsive para tablets */
 @media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+
+  .servicios-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem 0;
+  }
+
   .servicios-header h1 {
     font-size: 2rem;
   }
 
+  .servicios-header p {
+    font-size: 1rem;
+  }
+
   .categorias-filtro {
-    flex-direction: column;
-    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .categoria-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
   }
 
   .servicios-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
-  .btn {
-    width: 100%;
-    text-align: center;
+  .servicio-card {
+    padding: 1.5rem;
+  }
+
+  .servicio-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .servicio-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .servicio-content p {
+    font-size: 0.95rem;
+  }
+
+  .servicio-details {
+    padding: 0.8rem;
+  }
+
+  .precio {
+    font-size: 1.1rem;
+  }
+
+  .duracion {
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive para móviles pequeños */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  .servicios-header {
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  .servicios-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .servicios-header p {
+    font-size: 0.9rem;
+  }
+
+  .categorias-filtro {
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .categoria-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .servicios-grid {
+    gap: 1rem;
+  }
+
+  .servicio-card {
+    padding: 1rem;
+  }
+
+  .servicio-icon {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .servicio-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .servicio-content p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .servicio-details {
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .precio {
+    font-size: 1rem;
+  }
+
+  .duracion {
+    font-size: 0.8rem;
+  }
+
+  .no-servicios {
+    padding: 2rem;
+    font-size: 1rem;
   }
 }

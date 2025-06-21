@@ -1,89 +1,72 @@
 .container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
 }
 
 .agendar-header {
   text-align: center;
   margin-bottom: 3rem;
-  padding: 2rem;
-  background: rgba(31, 41, 55, 0.6);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem 0;
 }
 
 .agendar-header h1 {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
   color: #e0e0e0;
+  margin-bottom: 1rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .agendar-header p {
-  color: #b0b0b0;
   font-size: 1.1rem;
+  color: #b0b0b0;
   max-width: 600px;
   margin: 0 auto;
 }
 
 .agendar-content {
-  background: rgba(31, 41, 55, 0.8);
-  padding: 2rem;
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .agendar-form {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  background: rgba(31, 41, 55, 0.8);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .form-section {
-  background: rgba(17, 24, 39, 0.6);
-  padding: 1.5rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 1.5rem;
-}
-
-.form-section:last-child {
-  margin-bottom: 0;
+  margin-bottom: 2.5rem;
 }
 
 .form-section h3 {
+  font-size: 1.3rem;
   color: #e0e0e0;
   margin-bottom: 1.5rem;
-  font-size: 1.3rem;
-  font-weight: 600;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .form-group {
   margin-bottom: 1.5rem;
 }
 
-.form-group:last-child {
-  margin-bottom: 0;
-}
-
 .form-group label {
   display: block;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   color: #e0e0e0;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 .form-group input,
@@ -94,9 +77,9 @@
   border: 1px solid #374151;
   border-radius: 8px;
   font-size: 1rem;
-  background: rgba(17, 24, 39, 0.8);
-  color: #e0e0e0;
   transition: all 0.3s ease;
+  background: rgba(31, 41, 55, 0.8);
+  color: #e0e0e0;
   backdrop-filter: blur(10px);
 }
 
@@ -106,7 +89,7 @@
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-  background: rgba(17, 24, 39, 0.9);
+  background: rgba(31, 41, 55, 0.9);
 }
 
 .form-group input::placeholder,
@@ -114,41 +97,10 @@
   color: #9ca3af;
 }
 
-.form-group textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
 .error {
   color: #f87171;
   font-size: 0.875rem;
-  margin-top: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.error i {
-  font-size: 1rem;
-}
-
-.success {
-  color: #34d399;
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.success i {
-  font-size: 1rem;
+  margin-top: 0.25rem;
 }
 
 .tecnicos-grid {
@@ -159,53 +111,54 @@
 }
 
 .tecnico-card {
-  display: flex;
-  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px solid transparent;
+  border-radius: 12px;
   padding: 1rem;
-  border: 2px solid #374151;
-  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: rgba(17, 24, 39, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .tecnico-card:hover {
-  border-color: #667eea;
+  border-color: rgba(102, 126, 234, 0.3);
+  background: rgba(102, 126, 234, 0.1);
   transform: translateY(-2px);
-  background: rgba(17, 24, 39, 0.8);
 }
 
 .tecnico-card.selected {
-  border-color: #4CAF50;
-  background: rgba(76, 175, 80, 0.1);
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .tecnico-avatar {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
   border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  margin-right: 1rem;
   font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
 }
 
 .tecnico-info h4 {
-  margin: 0 0 0.25rem 0;
-  color: #e0e0e0;
   font-size: 1rem;
+  color: #e0e0e0;
+  margin-bottom: 0.25rem;
   font-weight: 600;
 }
 
 .tecnico-info p {
-  margin: 0 0 0.25rem 0;
   color: #9ca3af;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
 }
 
 .tecnico-rating {
@@ -216,132 +169,229 @@
 }
 
 .stars {
-  color: #ffd700;
-  font-size: 0.9rem;
+  color: #fbbf24;
+  font-size: 0.8rem;
 }
 
 .rating {
-  font-weight: bold;
   color: #e0e0e0;
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 0.8rem;
 }
 
 .experiencia {
   color: #9ca3af;
   font-size: 0.8rem;
-  margin: 0;
 }
 
 .form-actions {
   display: flex;
   gap: 1rem;
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn {
-  padding: 1rem 2rem;
+  padding: 0.75rem 2rem;
   border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
-  font-weight: 600;
-  position: relative;
-  overflow: hidden;
-  min-width: 150px;
-}
-
-.btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-  transition: left 0.3s ease;
-}
-
-.btn:hover::before {
-  left: 0;
+  font-weight: 500;
+  min-width: 120px;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #45a049 0%, #388e3c 100%);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(76, 175, 80, 0.5);
-}
-
-.btn-primary:disabled {
-  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #e0e0e0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(74, 85, 104, 0.3);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-3px);
+  background: linear-gradient(135deg, #3a4557 0%, #1a202c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 85, 104, 0.4);
 }
 
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
 }
 
-.spinner {
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  border-top: 4px solid #667eea;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
+/* Responsive para tablets */
 @media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+
+  .agendar-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem 0;
+  }
+
   .agendar-header h1 {
     font-size: 2rem;
   }
 
+  .agendar-header p {
+    font-size: 1rem;
+  }
+
+  .agendar-form {
+    padding: 1.5rem;
+  }
+
+  .form-section {
+    margin-bottom: 2rem;
+  }
+
+  .form-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
   .form-row {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
-  .form-actions {
-    flex-direction: column;
+  .form-group {
+    margin-bottom: 1rem;
   }
 
-  .btn {
-    width: 100%;
-    padding: 1rem;
+  .form-group label {
+    font-size: 0.9rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.6rem;
+    font-size: 0.95rem;
   }
 
   .tecnicos-grid {
     grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .tecnico-card {
+    padding: 0.8rem;
+  }
+
+  .tecnico-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .tecnico-info h4 {
+    font-size: 0.9rem;
+  }
+
+  .tecnico-info p {
+    font-size: 0.8rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Responsive para móviles pequeños */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  .agendar-header {
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  .agendar-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .agendar-header p {
+    font-size: 0.9rem;
+  }
+
+  .agendar-form {
+    padding: 1rem;
+  }
+
+  .form-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-section h3 {
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .form-group {
+    margin-bottom: 0.8rem;
+  }
+
+  .form-group label {
+    font-size: 0.85rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .tecnicos-grid {
+    gap: 0.6rem;
+  }
+
+  .tecnico-card {
+    padding: 0.6rem;
+  }
+
+  .tecnico-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+
+  .tecnico-info h4 {
+    font-size: 0.85rem;
+  }
+
+  .tecnico-info p {
+    font-size: 0.75rem;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 }

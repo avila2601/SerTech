@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="citas-header">
+  <div class="mis-citas-header">
     <h1>Mis Citas</h1>
     <p>Gestiona tus servicios técnicos programados</p>
   </div>
@@ -18,57 +18,66 @@
   <div class="citas-grid">
     <div *ngFor="let cita of citasFiltradas" class="cita-card">
       <div class="cita-header">
-        <div class="cita-estado" [class]="getEstadoClass(cita.estado)">
-          {{ cita.estado }}
+        <div class="cita-info">
+          <h3>{{ getServicioNombre(cita.servicioId) }}</h3>
+          <p>{{ formatDate(cita.fecha) }} - {{ cita.hora }}</p>
         </div>
-        <div class="cita-fecha">
-          {{ formatDate(cita.fecha) }} - {{ cita.hora }}
+        <div class="estado" [class]="getEstadoClass(cita.estado)">
+          {{ cita.estado }}
         </div>
       </div>
 
-      <div class="cita-content">
-        <div class="cita-info">
-          <h3>{{ getServicioNombre(cita.servicioId) }}</h3>
-          <p class="tecnico">Técnico: {{ getTecnicoNombre(cita.tecnicoId) }}</p>
-          <p class="direccion" *ngIf="cita.direccion">
-            <strong>Dirección:</strong> {{ cita.direccion }}
-          </p>
-          <p class="notas" *ngIf="cita.notas">
-            <strong>Notas:</strong> {{ cita.notas }}
-          </p>
+      <div class="cita-details">
+        <div class="detail-row">
+          <span class="detail-label">Técnico:</span>
+          <span class="detail-value">{{
+            getTecnicoNombre(cita.tecnicoId)
+          }}</span>
         </div>
+        <div class="detail-row" *ngIf="cita.direccion">
+          <span class="detail-label">Dirección:</span>
+          <span class="detail-value">{{ cita.direccion }}</span>
+        </div>
+        <div class="detail-row" *ngIf="cita.notas">
+          <span class="detail-label">Notas:</span>
+          <span class="detail-value">{{ cita.notas }}</span>
+        </div>
+      </div>
 
-        <div class="cita-actions">
-          <button
-            *ngIf="cita.estado === EstadoCita.PENDIENTE"
-            class="btn btn-danger"
-            (click)="cancelarCita(cita.id)"
-          >
-            Cancelar
-          </button>
-          <button
-            *ngIf="cita.estado === EstadoCita.PENDIENTE"
-            class="btn btn-secondary"
-            (click)="reprogramarCita(cita)"
-          >
-            Reprogramar
-          </button>
-          <button
-            *ngIf="cita.estado === EstadoCita.COMPLETADA"
-            class="btn btn-primary"
-            (click)="agendarNuevoServicio()"
-          >
-            Agendar Nuevo
-          </button>
-        </div>
+      <div class="cita-actions">
+        <button
+          *ngIf="cita.estado === EstadoCita.PENDIENTE"
+          class="btn btn-danger"
+          (click)="cancelarCita(cita.id)"
+        >
+          Cancelar
+        </button>
+        <button
+          *ngIf="cita.estado === EstadoCita.PENDIENTE"
+          class="btn btn-secondary"
+          (click)="reprogramarCita(cita)"
+        >
+          Reprogramar
+        </button>
+        <button
+          *ngIf="cita.estado === EstadoCita.COMPLETADA"
+          class="btn btn-primary"
+          (click)="agendarNuevoServicio()"
+        >
+          Agendar Nuevo
+        </button>
       </div>
     </div>
   </div>
 
   <div *ngIf="citasFiltradas.length === 0" class="no-citas">
+    <h3>No tienes citas programadas</h3>
     <p>
-      No tienes citas
-      {{ estadoSeleccionado ? "en este estado" : "programadas" }}.
+      {{
+        estadoSeleccionado
+          ? "No tienes citas en este estado."
+          : "Aún no has agendado ningún servicio técnico."
+      }}
     </p>
     <button class="btn btn-primary" (click)="agendarNuevoServicio()">
       Agendar mi primer servicio
