@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="citas-header">
+    <h1>Mis Citas</h1>
+    <p>Gestiona tus servicios técnicos programados</p>
+  </div>
+
+  <div class="citas-filtro">
+    <button
+      *ngFor="let estado of estados"
+      class="estado-btn"
+      [class.active]="estadoSeleccionado === estado"
+      (click)="filtrarPorEstado(estado)"
+    >
+      {{ estado }}
+    </button>
+  </div>
+
+  <div class="citas-grid">
+    <div *ngFor="let cita of citasFiltradas" class="cita-card">
+      <div class="cita-header">
+        <div class="cita-estado" [class]="getEstadoClass(cita.estado)">
+          {{ cita.estado }}
+        </div>
+        <div class="cita-fecha">
+          {{ formatDate(cita.fecha) }} - {{ cita.hora }}
+        </div>
+      </div>
+
+      <div class="cita-content">
+        <div class="cita-info">
+          <h3>{{ getServicioNombre(cita.servicioId) }}</h3>
+          <p class="tecnico">Técnico: {{ getTecnicoNombre(cita.tecnicoId) }}</p>
+          <p class="direccion" *ngIf="cita.direccion">
+            <strong>Dirección:</strong> {{ cita.direccion }}
+          </p>
+          <p class="notas" *ngIf="cita.notas">
+            <strong>Notas:</strong> {{ cita.notas }}
+          </p>
+        </div>
+
+        <div class="cita-actions">
+          <button
+            *ngIf="cita.estado === EstadoCita.PENDIENTE"
+            class="btn btn-danger"
+            (click)="cancelarCita(cita.id)"
+          >
+            Cancelar
+          </button>
+          <button
+            *ngIf="cita.estado === EstadoCita.PENDIENTE"
+            class="btn btn-secondary"
+            (click)="reprogramarCita(cita)"
+          >
+            Reprogramar
+          </button>
+          <button
+            *ngIf="cita.estado === EstadoCita.COMPLETADA"
+            class="btn btn-primary"
+            (click)="agendarNuevoServicio()"
+          >
+            Agendar Nuevo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="citasFiltradas.length === 0" class="no-citas">
+    <p>
+      No tienes citas
+      {{ estadoSeleccionado ? "en este estado" : "programadas" }}.
+    </p>
+    <button class="btn btn-primary" (click)="agendarNuevoServicio()">
+      Agendar mi primer servicio
+    </button>
+  </div>
+</div>

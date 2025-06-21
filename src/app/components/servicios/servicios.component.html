@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="servicios-header">
+    <h1>Nuestros Servicios</h1>
+    <p>Ofrecemos una amplia gama de servicios técnicos profesionales</p>
+  </div>
+
+  <div class="categorias-filtro">
+    <button
+      *ngFor="let categoria of categorias"
+      class="categoria-btn"
+      [class.active]="categoriaSeleccionada === categoria"
+      (click)="filtrarPorCategoria(categoria)"
+    >
+      {{ categoria }}
+    </button>
+  </div>
+
+  <div class="servicios-grid">
+    <div *ngFor="let servicio of serviciosFiltrados" class="servicio-card">
+      <div class="servicio-icon">
+        <span>{{ getIcono(servicio.categoria) }}</span>
+      </div>
+      <div class="servicio-content">
+        <h3>{{ servicio.nombre }}</h3>
+        <p>{{ servicio.descripcion }}</p>
+        <div class="servicio-details">
+          <span class="precio">${{ servicio.precio }}</span>
+          <span class="duracion">{{ servicio.duracionEstimada }} min</span>
+        </div>
+        <div class="servicio-actions">
+          <button class="btn btn-primary" (click)="agendarServicio(servicio)">
+            Agendar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="serviciosFiltrados.length === 0" class="no-servicios">
+    <p>No hay servicios disponibles en esta categoría.</p>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="tecnicos-header">
+    <h1>Nuestros Técnicos</h1>
+    <p>Profesionales expertos en diferentes áreas técnicas</p>
+  </div>
+
+  <div class="tecnicos-grid">
+    <div *ngFor="let tecnico of tecnicos" class="tecnico-card">
+      <div class="tecnico-avatar">
+        <span>{{ tecnico.nombre.charAt(0) }}</span>
+      </div>
+      <div class="tecnico-info">
+        <h3>{{ tecnico.nombre }}</h3>
+        <p class="especialidad">{{ tecnico.especialidad }}</p>
+        <div class="rating-section">
+          <div class="stars">
+            <span
+              *ngFor="let star of getStars(tecnico.calificacion)"
+              class="star"
+              >★</span
+            >
+            <span
+              *ngFor="let star of getEmptyStars(tecnico.calificacion)"
+              class="star empty"
+              >☆</span
+            >
+          </div>
+          <span class="rating-value">{{ tecnico.calificacion }}</span>
+        </div>
+        <p class="experiencia">{{ tecnico.experiencia }} años de experiencia</p>
+        <div
+          class="estado"
+          [class.disponible]="tecnico.disponible"
+          [class.no-disponible]="!tecnico.disponible"
+        >
+          {{ tecnico.disponible ? "Disponible" : "No disponible" }}
+        </div>
+      </div>
+      <div class="tecnico-actions">
+        <button
+          class="btn btn-primary"
+          [disabled]="!tecnico.disponible"
+          (click)="seleccionarTecnico(tecnico)"
+        >
+          {{ tecnico.disponible ? "Seleccionar" : "No disponible" }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="tecnicos.length === 0" class="no-tecnicos">
+    <p>No hay técnicos disponibles en este momento.</p>
+  </div>
+</div>
