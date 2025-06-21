@@ -12,11 +12,9 @@ import { CommonModule } from '@angular/common';
 export class HomeComponent {
   constructor(private router: Router) {}
 
-  agendarServicio(): void {
-    this.router.navigate(['/agendar']);
-  }
-
-  verServicios(): void {
-    this.router.navigate(['/servicios']);
+  navegarAServicio(tipoServicio: string): void {
+    this.router.navigate(['/servicios'], {
+      queryParams: { tipo: tipoServicio }
+    });
   }
 }

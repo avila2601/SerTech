@@ -22,7 +22,6 @@ import { CommonModule } from '@angular/common';
 
         <ul class="nav-menu" [class.active]="isMenuOpen">
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
-          <li><a routerLink="/servicios" routerLinkActive="active" (click)="closeMenu()">Servicios</a></li>
           <li><a routerLink="/tecnicos" routerLinkActive="active" (click)="closeMenu()">Técnicos</a></li>
           <li><a routerLink="/agendar" routerLinkActive="active" (click)="closeMenu()">Agendar</a></li>
           <li><a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a></li>

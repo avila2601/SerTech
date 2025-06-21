@@ -1,42 +1,66 @@
 <div class="container">
   <div class="servicios-header">
-    <h1>Nuestros Servicios</h1>
-    <p>Ofrecemos una amplia gama de servicios técnicos profesionales</p>
+    <h1>Servicio Seleccionado</h1>
   </div>
 
-  <div class="categorias-filtro">
-    <button
-      *ngFor="let categoria of categorias"
-      class="categoria-btn"
-      [class.active]="categoriaSeleccionada === categoria"
-      (click)="filtrarPorCategoria(categoria)"
-    >
-      {{ categoria }}
-    </button>
-  </div>
+  <div class="servicio-seleccionado" *ngIf="servicioSeleccionado">
+    <div class="service-card">
+      <div class="service-icon">🔧</div>
+      <h3>{{ servicioSeleccionado.nombre }}</h3>
+      <p>{{ servicioSeleccionado.descripcion }}</p>
 
-  <div class="servicios-grid">
-    <div *ngFor="let servicio of serviciosFiltrados" class="servicio-card">
-      <div class="servicio-icon">
-        <span>{{ getIcono(servicio.categoria) }}</span>
+      <div class="marca-selector">
+        <select
+          class="marca-select"
+          [(ngModel)]="marcaSeleccionada"
+          (change)="onMarcaChange()"
+        >
+          <option value="" disabled selected>
+            Selecciona la marca del producto
+          </option>
+          <option *ngFor="let marca of marcas" [value]="marca">
+            {{ marca }}
+          </option>
+        </select>
       </div>
-      <div class="servicio-content">
-        <h3>{{ servicio.nombre }}</h3>
-        <p>{{ servicio.descripcion }}</p>
-        <div class="servicio-details">
-          <span class="precio">${{ servicio.precio }}</span>
-          <span class="duracion">{{ servicio.duracionEstimada }} min</span>
-        </div>
-        <div class="servicio-actions">
-          <button class="btn btn-primary" (click)="agendarServicio(servicio)">
-            Agendar
-          </button>
-        </div>
+
+      <div class="producto-selector" *ngIf="marcaSeleccionada">
+        <select
+          class="producto-select"
+          [(ngModel)]="productoSeleccionado"
+          (change)="onProductoChange()"
+        >
+          <option value="" disabled selected>Tipo de producto</option>
+          <option *ngFor="let producto of productos" [value]="producto">
+            {{ producto }}
+          </option>
+        </select>
       </div>
+
+      <div class="referencia-selector" *ngIf="productoSeleccionado">
+        <select class="referencia-select" [(ngModel)]="referenciaSeleccionada">
+          <option value="" disabled selected>Referencia</option>
+          <option *ngFor="let referencia of referencias" [value]="referencia">
+            {{ referencia }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="servicio-actions">
+      <button class="btn btn-primary" (click)="agendarServicio()">
+        Agendar este Servicio
+      </button>
+      <button class="btn btn-secondary" (click)="volverAHome()">
+        Volver al Inicio
+      </button>
     </div>
   </div>
 
-  <div *ngIf="serviciosFiltrados.length === 0" class="no-servicios">
-    <p>No hay servicios disponibles en esta categoría.</p>
+  <div class="no-servicio" *ngIf="!servicioSeleccionado">
+    <p>No se ha seleccionado ningún servicio.</p>
+    <button class="btn btn-primary" (click)="volverAHome()">
+      Volver al Inicio
+    </button>
   </div>
 </div>

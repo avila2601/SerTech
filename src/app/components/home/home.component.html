@@ -5,14 +5,6 @@
       <p class="hero-subtitle">
         Soluciones rápidas y confiables para todos tus equipos tecnológicos
       </p>
-      <div class="hero-buttons">
-        <button class="btn btn-primary" (click)="agendarServicio()">
-          Agendar Servicio
-        </button>
-        <button class="btn btn-secondary" (click)="verServicios()">
-          Ver Servicios
-        </button>
-      </div>
     </div>
   </div>
 </div>
@@ -21,22 +13,22 @@
   <div class="container">
     <h2>En que podemos ayudarte el día de hoy?</h2>
     <div class="services-grid">
-      <div class="service-card">
+      <div class="service-card" (click)="navegarAServicio('mantenimiento')">
         <div class="service-icon">🔧</div>
         <h3>Mantenimiento</h3>
         <p>Mantenimiento preventivo de tu equipo</p>
       </div>
-      <div class="service-card">
+      <div class="service-card" (click)="navegarAServicio('reparacion')">
         <div class="service-icon">🔧</div>
         <h3>Reparación</h3>
         <p>Tu equipo tiene un daño? lo reparamos</p>
       </div>
-      <div class="service-card">
+      <div class="service-card" (click)="navegarAServicio('instalacion')">
         <div class="service-icon">⚙️</div>
         <h3>Instalación</h3>
         <p>Instalación y configuración</p>
       </div>
-      <div class="service-card">
+      <div class="service-card" (click)="navegarAServicio('diagnostico')">
         <div class="service-icon">🔍</div>
         <h3>Diagnóstico</h3>
         <p>Diagnóstico de problemas</p>
