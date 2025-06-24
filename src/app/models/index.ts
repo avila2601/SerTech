@@ -12,7 +12,6 @@ export interface Tecnico {
   id: string;
   nombre: string;
   especialidad: string;
-  experiencia: number;
   calificacion: number;
   disponible: boolean;
   foto?: string;

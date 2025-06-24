@@ -27,14 +27,7 @@
           </div>
           <span class="rating-value">{{ tecnico.calificacion }}</span>
         </div>
-        <p class="experiencia">{{ tecnico.experiencia }} años de experiencia</p>
-        <div
-          class="estado"
-          [class.disponible]="tecnico.disponible"
-          [class.no-disponible]="!tecnico.disponible"
-        >
-          {{ tecnico.disponible ? "Disponible" : "No disponible" }}
-        </div>
+        <!-- <p class="experiencia">{{ tecnico.experiencia }} años de experiencia</p> -->
       </div>
       <div class="tecnico-actions">
         <button

@@ -9,30 +9,52 @@ export class TecnicoService {
   private tecnicos: Tecnico[] = [
     {
       id: '1',
-      nombre: 'Carlos Rodríguez',
-      especialidad: 'Computadoras y Laptops',
-      experiencia: 5,
-      calificacion: 4.8,
+      nombre: 'Juan Pérez',
+      especialidad: 'Electrodomésticos',
+      calificacion: 4.7,
       disponible: true,
-      foto: 'assets/images/tecnico1.jpg'
+      foto: ''
     },
     {
       id: '2',
-      nombre: 'María González',
-      especialidad: 'Electrodomésticos',
-      experiencia: 3,
-      calificacion: 4.6,
+      nombre: 'María López',
+      especialidad: 'Refrigeradores y Aires Acondicionados',
+      calificacion: 4.9,
       disponible: true,
-      foto: 'assets/images/tecnico2.jpg'
+      foto: ''
     },
     {
       id: '3',
-      nombre: 'Luis Martínez',
-      especialidad: 'Aires Acondicionados',
-      experiencia: 7,
-      calificacion: 4.9,
+      nombre: 'Carlos Ramírez',
+      especialidad: 'Lavadoras y Secadoras',
+      calificacion: 4.5,
+      disponible: false,
+      foto: ''
+    },
+    // Técnicos adicionales
+    {
+      id: '4',
+      nombre: 'Ana Torres',
+      especialidad: 'Microondas y Hornos',
+      calificacion: 4.8,
       disponible: true,
-      foto: 'assets/images/tecnico3.jpg'
+      foto: ''
+    },
+    {
+      id: '5',
+      nombre: 'Luis Fernández',
+      especialidad: 'Televisores y Audio',
+      calificacion: 4.6,
+      disponible: true,
+      foto: ''
+    },
+    {
+      id: '6',
+      nombre: 'Patricia Soto',
+      especialidad: 'Pequeños electrodomésticos',
+      calificacion: 4.4,
+      disponible: false,
+      foto: ''
     }
   ];
 

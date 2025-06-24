@@ -91,108 +91,60 @@
         </div>
       </div>
 
-      <!-- Selección de Servicio -->
-      <div class="form-section">
-        <h3>Servicio Requerido</h3>
-        <div class="form-group">
-          <label for="servicio">Tipo de Servicio *</label>
-          <select id="servicio" formControlName="servicioId">
-            <option value="">Selecciona un servicio</option>
-            <option *ngFor="let servicio of servicios" [value]="servicio.id">
-              {{ servicio.nombre }} - ${{ servicio.precio }}
-            </option>
-          </select>
-          <div
-            class="error"
-            *ngIf="
-              agendarForm.get('servicioId')?.invalid &&
-              agendarForm.get('servicioId')?.touched
-            "
-          >
-            Selecciona un servicio
-          </div>
-        </div>
-      </div>
-
-      <!-- Información del Equipo -->
-      <div class="form-section">
-        <h3>Información del Equipo</h3>
-        <div class="form-row">
+      <!-- Información del Servicio Seleccionado -->
+      <div
+        class="form-section"
+        *ngIf="marcaSeleccionada || productoSeleccionado"
+      >
+        <h3>Información del Servicio</h3>
+        <div class="form-row" *ngIf="marcaSeleccionada">
           <div class="form-group">
-            <label for="tipoEquipo">Tipo de Equipo</label>
-            <select id="tipoEquipo" formControlName="tipoEquipo">
-              <option value="">Selecciona el tipo</option>
-              <option *ngFor="let tipo of tiposEquipo" [value]="tipo">
-                {{ tipo }}
-              </option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="marca">Marca</label>
+            <label>Marca del Producto</label>
             <input
               type="text"
-              id="marca"
-              formControlName="marca"
-              placeholder="Marca del equipo"
+              [value]="marcaSeleccionada"
+              readonly
+              class="readonly-input"
+            />
+          </div>
+          <div class="form-group" *ngIf="productoSeleccionado">
+            <label>Tipo de Producto</label>
+            <input
+              type="text"
+              [value]="productoSeleccionado"
+              readonly
+              class="readonly-input"
             />
           </div>
         </div>
-        <div class="form-group">
-          <label for="modelo">Modelo</label>
-          <input
-            type="text"
-            id="modelo"
-            formControlName="modelo"
-            placeholder="Modelo del equipo"
-          />
-        </div>
-        <div class="form-group">
-          <label for="descripcion">Descripción del Problema</label>
-          <textarea
-            id="descripcion"
-            formControlName="descripcion"
-            rows="3"
-            placeholder="Describe el problema que tienes con tu equipo"
-          ></textarea>
-        </div>
-      </div>
-
-      <!-- Selección de Técnico -->
-      <div class="form-section">
-        <h3>Técnico Asignado</h3>
-        <div class="tecnicos-grid">
-          <div
-            *ngFor="let tecnico of tecnicos"
-            class="tecnico-card"
-            [class.selected]="
-              agendarForm.get('tecnicoId')?.value === tecnico.id
-            "
-            (click)="seleccionarTecnico(tecnico.id)"
-          >
-            <div class="tecnico-avatar">
-              <span>{{ tecnico.nombre.charAt(0) }}</span>
-            </div>
-            <div class="tecnico-info">
-              <h4>{{ tecnico.nombre }}</h4>
-              <p>{{ tecnico.especialidad }}</p>
-              <div class="tecnico-rating">
-                <span class="stars">★★★★★</span>
-                <span class="rating">{{ tecnico.calificacion }}</span>
-              </div>
-              <p class="experiencia">
-                {{ tecnico.experiencia }} años de experiencia
-              </p>
-            </div>
+        <div class="form-row" *ngIf="modeloSeleccionado">
+          <div class="form-group">
+            <label>Modelo</label>
+            <input
+              type="text"
+              [value]="modeloSeleccionado"
+              readonly
+              class="readonly-input"
+            />
+          </div>
+          <div class="form-group" *ngIf="ubicacionSeleccionada">
+            <label>Ubicación</label>
+            <input
+              type="text"
+              [value]="ubicacionSeleccionada"
+              readonly
+              class="readonly-input"
+            />
           </div>
         </div>
-        <div
-          class="error"
-          *ngIf="
-            agendarForm.get('tecnicoId')?.invalid &&
-            agendarForm.get('tecnicoId')?.touched
-          "
-        >
-          Selecciona un técnico
+        <div class="form-group" *ngIf="sintomasSeleccionados">
+          <label>Descripción de Síntomas</label>
+          <textarea
+            [value]="sintomasSeleccionados"
+            readonly
+            class="readonly-textarea"
+            rows="3"
+          ></textarea>
         </div>
       </div>
 
