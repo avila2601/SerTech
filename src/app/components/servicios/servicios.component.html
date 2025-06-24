@@ -37,14 +37,42 @@
         </select>
       </div>
 
-      <div class="referencia-selector" *ngIf="productoSeleccionado">
-        <select class="referencia-select" [(ngModel)]="referenciaSeleccionada">
-          <option value="" disabled selected>Referencia</option>
-          <option *ngFor="let referencia of referencias" [value]="referencia">
-            {{ referencia }}
+      <div class="modelo-selector" *ngIf="productoSeleccionado">
+        <select class="modelo-select" [(ngModel)]="modeloSeleccionado">
+          <option value="" disabled selected>Modelo (opcional)</option>
+          <option *ngFor="let modelo of modelos" [value]="modelo">
+            {{ modelo }}
           </option>
         </select>
+        <div class="modelo-ayuda">
+          <span class="ayuda-link" (click)="abrirModalModelo()"
+            >¿Cómo se encuentra el número de modelo? *</span
+          >
+        </div>
+        <div class="modelo-info">
+          * Ingresar el modelo del producto y los síntomas presentados nos
+          permitirá solucionar tu requerimiento de forma más rápida y eficiente
+        </div>
+        <div class="sintomas-box" *ngIf="productoSeleccionado">
+          <textarea
+            class="sintomas-textarea"
+            [(ngModel)]="sintomas"
+            rows="3"
+            placeholder="Describe los síntomas que presenta tu equipo..."
+          ></textarea>
+        </div>
+        <div class="ubicacion-selector">
+          <select class="ubicacion-select" [(ngModel)]="ubicacionSeleccionada">
+            <option value="" disabled selected>Donde te encuentras?</option>
+            <option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion">
+              {{ ubicacion }}
+            </option>
+          </select>
+        </div>
+
       </div>
+
+
     </div>
 
     <div class="servicio-actions">
@@ -62,5 +90,28 @@
     <button class="btn btn-primary" (click)="volverAHome()">
       Volver al Inicio
     </button>
+  </div>
+
+  <!-- Modal de ayuda para modelo -->
+  <div class="modal-modelo" *ngIf="mostrarModalModelo">
+    <div class="modal-content">
+      <button class="cerrar-modal" (click)="cerrarModalModelo()">
+        &times;
+      </button>
+      <h2 class="modal-titulo">Encuentra el modelo</h2>
+      <p class="modal-descripcion">
+        Este número normalmente se encuentra en una etiqueta o placa ubicada en
+        alguna parte del electrodoméstico.
+      </p>
+      <div class="modal-subtitulo">¿Dónde buscar?</div>
+      <ul class="modal-lista">
+        <li>En la parte trasera o lateral del electrodoméstico.</li>
+        <li>En el interior, cerca de los compartimientos o controles.</li>
+        <li>
+          En la parte inferior o en una etiqueta adhesiva visible al mover el
+          equipo.
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

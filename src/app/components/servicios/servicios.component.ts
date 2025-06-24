@@ -23,7 +23,19 @@ export class ServiciosComponent implements OnInit {
   servicioSeleccionado: Servicio | null = null;
   marcaSeleccionada: string = '';
   productoSeleccionado: string = '';
-  referenciaSeleccionada: string = '';
+  modeloSeleccionado: string = '';
+  mostrarModalModelo: boolean = false;
+  sintomas: string = '';
+  ubicacionSeleccionada: string = '';
+  ubicaciones: string[] = [
+    'Cerrillos', 'Cerro Navia', 'Conchalí', 'El Bosque', 'Estación Central',
+    'Huechuraba', 'Independencia', 'La Cisterna', 'La Florida', 'La Granja',
+    'La Pintana', 'La Reina', 'Las Condes', 'Lo Barnechea', 'Lo Espejo',
+    'Lo Prado', 'Macul', 'Maipú', 'Ñuñoa', 'Pedro Aguirre Cerda',
+    'Peñalolén', 'Providencia', 'Pudahuel', 'Puente Alto', 'Quilicura',
+    'Quinta Normal', 'Recoleta', 'Renca', 'San Joaquín', 'San Miguel',
+    'San Ramón', 'Santiago (Centro)', 'Vitacura', 'El Monte', 'Padre Hurtado'
+  ];
 
   marcas: string[] = [
     'Samsung', 'LG', 'Whirlpool', 'Mabe', 'Electrolux',
@@ -37,7 +49,7 @@ export class ServiciosComponent implements OnInit {
     'Aspiradora', 'Ventilador', 'Aire acondicionado', 'Televisor', 'Estéreo'
   ];
 
-  referencias: string[] = [
+  modelos: string[] = [
     'RF-2023-A', 'LG-WM-4500', 'WH-SD-789', 'MB-FR-321', 'EL-MW-567',
     'PN-TV-890', 'SN-BT-234', 'PH-AC-456', 'BS-DW-789', 'FG-RF-123',
     'GE-LV-567', 'MY-DR-890', 'KA-MX-234', 'KM-WM-456', 'AM-TV-789'
@@ -106,11 +118,11 @@ export class ServiciosComponent implements OnInit {
 
   onMarcaChange(): void {
     this.productoSeleccionado = '';
-    this.referenciaSeleccionada = '';
+    this.modeloSeleccionado = '';
   }
 
   onProductoChange(): void {
-    this.referenciaSeleccionada = '';
+    this.modeloSeleccionado = '';
   }
 
   agendarServicio(): void {
@@ -122,17 +134,19 @@ export class ServiciosComponent implements OnInit {
       alert('Por favor selecciona un tipo de producto');
       return;
     }
-    if (!this.referenciaSeleccionada) {
-      alert('Por favor selecciona una referencia');
+    if (!this.ubicacionSeleccionada) {
+      alert('Por favor selecciona tu ubicación');
       return;
     }
-
+    // modeloSeleccionado es opcional
     // Aquí puedes agregar la lógica para agendar el servicio
     console.log('Agendando servicio:', {
       servicio: this.servicioSeleccionado,
       marca: this.marcaSeleccionada,
       producto: this.productoSeleccionado,
-      referencia: this.referenciaSeleccionada
+      modelo: this.modeloSeleccionado,
+      ubicacion: this.ubicacionSeleccionada,
+      sintomas: this.sintomas
     });
 
     // Navegar a la página de agendar con los datos
@@ -141,9 +155,19 @@ export class ServiciosComponent implements OnInit {
         servicio: this.servicioSeleccionado?.id,
         marca: this.marcaSeleccionada,
         producto: this.productoSeleccionado,
-        referencia: this.referenciaSeleccionada
+        modelo: this.modeloSeleccionado,
+        ubicacion: this.ubicacionSeleccionada,
+        sintomas: this.sintomas
       }
     });
+  }
+
+  abrirModalModelo() {
+    this.mostrarModalModelo = true;
+  }
+
+  cerrarModalModelo() {
+    this.mostrarModalModelo = false;
   }
 
   volverAHome(): void {
