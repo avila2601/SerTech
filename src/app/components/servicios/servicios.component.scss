@@ -349,6 +349,36 @@
     font-size: 0.9rem;
   }
 
+  .ubicacion-select {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .fecha-hora-selector {
+    .fecha-hora-inputs {
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 15px !important;
+
+      .fecha-selector,
+      .hora-selector {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+      }
+
+      .hora-selector {
+        order: 2 !important;
+      }
+    }
+  }
+
+  .fecha-input,
+  .hora-select {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
   .btn {
     padding: 6px 12px;
     font-size: 0.9rem;
@@ -491,31 +521,92 @@
 }
 
 .ubicacion-selector {
-  margin-top: 14px;
-  margin-bottom: 0;
+  margin-top: 16px;
   width: 100%;
+
+  .ubicacion-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 16px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+    }
+
+    option {
+      background: #1a1a2e;
+      color: #fff;
+    }
+  }
+}
+
+.fecha-hora-selector {
+  margin-top: 16px;
+
+  .fecha-hora-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+
+    .fecha-selector,
+    .hora-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      label {
+        font-weight: 600;
+        color: #e0e0e0;
+        font-size: 14px;
+      }
+
+      .fecha-input,
+      .hora-select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        font-size: 16px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+
+        &:focus {
+          outline: none;
+          border-color: #667eea;
+          box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+      }
+
+      .hora-select option {
+        background: #1a1a2e;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.producto-select {
+  padding: 10px 14px;
+  font-size: 0.95rem;
 }
 
 .ubicacion-select {
-  width: 100%;
-  padding: 12px 15px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  font-size: 16px;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  margin-bottom: 0;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+}
 
-  &:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
-  }
-
-  option {
-    background: #1a1a2e;
-    color: #fff;
-  }
+.fecha-input,
+.hora-select {
+  padding: 10px 14px;
+  font-size: 0.95rem;
 }

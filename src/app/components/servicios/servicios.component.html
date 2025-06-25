@@ -69,6 +69,35 @@
             </option>
           </select>
         </div>
+
+        <!-- Fecha y Hora -->
+        <div class="fecha-hora-selector" *ngIf="ubicacionSeleccionada">
+          <div class="fecha-hora-inputs">
+            <div class="fecha-selector">
+              <label for="fecha">Fecha del servicio *</label>
+              <input
+                type="date"
+                id="fecha"
+                [(ngModel)]="fechaSeleccionada"
+                [min]="minDate"
+                class="fecha-input"
+              />
+            </div>
+            <div class="hora-selector">
+              <label for="hora" class="hora-label">Hora del servicio *</label>
+              <select
+                id="hora"
+                [(ngModel)]="horaSeleccionada"
+                class="hora-select"
+              >
+                <option value="">Selecciona una hora</option>
+                <option *ngFor="let hora of horasDisponibles" [value]="hora">
+                  {{ hora }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -77,7 +106,7 @@
         Volver al Inicio
       </button>
       <button class="btn btn-primary" (click)="agendarServicio()">
-        Continuar
+        Seleccionar Técnico
       </button>
     </div>
   </div>

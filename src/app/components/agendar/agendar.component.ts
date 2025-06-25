@@ -15,11 +15,6 @@ import { Cliente, Cita } from '../../models';
 })
 export class AgendarComponent implements OnInit {
   agendarForm: FormGroup;
-  horasDisponibles = [
-    '08:00', '09:00', '10:00', '11:00', '12:00', '13:00',
-    '14:00', '15:00', '16:00', '17:00', '18:00'
-  ];
-  minDate: string;
   isSubmitting = false;
 
   // Información del servicio seleccionado
@@ -41,13 +36,9 @@ export class AgendarComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       telefono: ['', Validators.required],
       direccion: ['', Validators.required],
-      fecha: ['', Validators.required],
-      hora: ['', Validators.required]
+      fecha: [''],
+      hora: ['']
     });
-
-    // Fecha mínima es hoy
-    const today = new Date();
-    this.minDate = today.toISOString().split('T')[0];
   }
 
   ngOnInit(): void {
@@ -123,14 +114,20 @@ export class AgendarComponent implements OnInit {
   }
 
   regresar(): void {
-    // Navegar de vuelta a servicios manteniendo la selección
-    this.router.navigate(['/servicios'], {
+    console.log('Regresando a técnicos...');
+    console.log('Marca seleccionada:', this.marcaSeleccionada);
+    console.log('Producto seleccionado:', this.productoSeleccionado);
+
+    this.router.navigate(['/tecnicos'], {
       queryParams: {
+        servicio: this.route.snapshot.queryParams['servicio'] || '',
         marca: this.marcaSeleccionada,
         producto: this.productoSeleccionado,
         modelo: this.modeloSeleccionado,
         sintomas: this.sintomasSeleccionados,
-        ubicacion: this.ubicacionSeleccionada
+        ubicacion: this.ubicacionSeleccionada,
+        fecha: this.agendarForm.get('fecha')?.value || '',
+        hora: this.agendarForm.get('hora')?.value || ''
       }
     });
   }

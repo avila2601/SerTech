@@ -27,6 +27,13 @@ export class ServiciosComponent implements OnInit {
   mostrarModalModelo: boolean = false;
   sintomas: string = '';
   ubicacionSeleccionada: string = '';
+  fechaSeleccionada: string = '';
+  horaSeleccionada: string = '';
+  minDate: string;
+  horasDisponibles = [
+    '08:00', '09:00', '10:00', '11:00', '12:00', '13:00',
+    '14:00', '15:00', '16:00', '17:00', '18:00'
+  ];
   ubicaciones: string[] = [
     'Cerrillos', 'Cerro Navia', 'Conchalí', 'El Bosque', 'Estación Central',
     'Huechuraba', 'Independencia', 'La Cisterna', 'La Florida', 'La Granja',
@@ -86,7 +93,11 @@ export class ServiciosComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private servicioService: ServicioService
-  ) {}
+  ) {
+    // Fecha mínima es hoy
+    const today = new Date();
+    this.minDate = today.toISOString().split('T')[0];
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -97,6 +108,8 @@ export class ServiciosComponent implements OnInit {
         this.modeloSeleccionado = params['modelo'] || '';
         this.sintomas = params['sintomas'] || '';
         this.ubicacionSeleccionada = params['ubicacion'] || '';
+        this.fechaSeleccionada = params['fecha'] || '';
+        this.horaSeleccionada = params['hora'] || '';
 
         // Si no hay servicio seleccionado, seleccionar uno por defecto
         if (!this.servicioSeleccionado) {
@@ -157,6 +170,14 @@ export class ServiciosComponent implements OnInit {
       alert('Por favor selecciona tu ubicación');
       return;
     }
+    if (!this.fechaSeleccionada) {
+      alert('Por favor selecciona una fecha');
+      return;
+    }
+    if (!this.horaSeleccionada) {
+      alert('Por favor selecciona una hora');
+      return;
+    }
     // modeloSeleccionado es opcional
     // Aquí puedes agregar la lógica para agendar el servicio
     console.log('Agendando servicio:', {
@@ -165,18 +186,22 @@ export class ServiciosComponent implements OnInit {
       producto: this.productoSeleccionado,
       modelo: this.modeloSeleccionado,
       ubicacion: this.ubicacionSeleccionada,
-      sintomas: this.sintomas
+      sintomas: this.sintomas,
+      fecha: this.fechaSeleccionada,
+      hora: this.horaSeleccionada
     });
 
-    // Navegar a la página de agendar con los datos
-    this.router.navigate(['/agendar'], {
+    // Navegar a la página de técnicos con los datos
+    this.router.navigate(['/tecnicos'], {
       queryParams: {
         servicio: this.servicioSeleccionado?.id,
         marca: this.marcaSeleccionada,
         producto: this.productoSeleccionado,
         modelo: this.modeloSeleccionado,
         ubicacion: this.ubicacionSeleccionada,
-        sintomas: this.sintomas
+        sintomas: this.sintomas,
+        fecha: this.fechaSeleccionada,
+        hora: this.horaSeleccionada
       }
     });
   }

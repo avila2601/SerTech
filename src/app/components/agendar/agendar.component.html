@@ -146,47 +146,24 @@
             rows="3"
           ></textarea>
         </div>
-      </div>
-
-      <!-- Fecha y Hora -->
-      <div class="form-section">
-        <h3>Fecha y Hora</h3>
-        <div class="form-row">
+        <div class="form-row" *ngIf="agendarForm.get('fecha')?.value">
           <div class="form-group">
-            <label for="fecha">Fecha *</label>
+            <label>Fecha del Servicio</label>
             <input
-              type="date"
-              id="fecha"
-              formControlName="fecha"
-              [min]="minDate"
+              type="text"
+              [value]="agendarForm.get('fecha')?.value"
+              readonly
+              class="readonly-input"
             />
-            <div
-              class="error"
-              *ngIf="
-                agendarForm.get('fecha')?.invalid &&
-                agendarForm.get('fecha')?.touched
-              "
-            >
-              Fecha es requerida
-            </div>
           </div>
-          <div class="form-group">
-            <label for="hora">Hora *</label>
-            <select id="hora" formControlName="hora">
-              <option value="">Selecciona una hora</option>
-              <option *ngFor="let hora of horasDisponibles" [value]="hora">
-                {{ hora }}
-              </option>
-            </select>
-            <div
-              class="error"
-              *ngIf="
-                agendarForm.get('hora')?.invalid &&
-                agendarForm.get('hora')?.touched
-              "
-            >
-              Hora es requerida
-            </div>
+          <div class="form-group" *ngIf="agendarForm.get('hora')?.value">
+            <label>Hora del Servicio</label>
+            <input
+              type="text"
+              [value]="agendarForm.get('hora')?.value"
+              readonly
+              class="readonly-input"
+            />
           </div>
         </div>
       </div>
@@ -201,7 +178,8 @@
           class="btn btn-primary"
           [disabled]="agendarForm.invalid || isSubmitting"
         >
-          {{ isSubmitting ? "Agendando..." : "Agendar Servicio" }}
+          <span *ngIf="!isSubmitting">Agendar Servicio</span>
+          <span *ngIf="isSubmitting">Agendando...</span>
         </button>
       </div>
     </form>
