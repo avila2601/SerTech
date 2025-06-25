@@ -1,19 +1,19 @@
 .container {
-  max-width: 1200px;
+  max-width: 700px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
 .mis-citas-header {
   text-align: center;
-  margin-bottom: 3rem;
-  padding: 2rem 0;
+  margin-bottom: 2rem;
+  padding: 1.5rem 0;
 }
 
 .mis-citas-header h1 {
   font-size: 2.5rem;
   color: #e0e0e0;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -28,7 +28,7 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
@@ -55,15 +55,15 @@
 
 .citas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .cita-card {
   background: rgba(31, 41, 55, 0.8);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -98,7 +98,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .cita-info h3 {
@@ -146,14 +146,37 @@
 .cita-details {
   background: rgba(0, 0, 0, 0.2);
   padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.detail-section {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.detail-section h4 {
+  color: #a5b4fc;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .detail-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  padding: 0.2rem 0;
 }
 
 .detail-row:last-child {
@@ -163,12 +186,17 @@
 .detail-label {
   color: #9ca3af;
   font-size: 0.9rem;
+  font-weight: 500;
+  min-width: 100px;
 }
 
 .detail-value {
   color: #e0e0e0;
   font-weight: 500;
   font-size: 0.9rem;
+  text-align: right;
+  flex: 1;
+  margin-left: 1rem;
 }
 
 .cita-actions {

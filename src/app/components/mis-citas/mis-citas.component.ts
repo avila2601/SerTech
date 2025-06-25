@@ -91,7 +91,48 @@ export class MisCitasComponent implements OnInit {
 
   getTecnicoNombre(tecnicoId: string): string {
     const tecnico = this.tecnicos.find(t => t.id === tecnicoId);
-    return tecnico ? tecnico.nombre : 'Técnico no encontrado';
+    return tecnico ? tecnico.nombre : 'No asignado';
+  }
+
+  getTecnicoEspecialidad(tecnicoId: string): string {
+    const tecnico = this.tecnicos.find(t => t.id === tecnicoId);
+    return tecnico ? tecnico.especialidad : 'No asignado';
+  }
+
+  getTecnicoCalificacion(tecnicoId: string): number {
+    const tecnico = this.tecnicos.find(t => t.id === tecnicoId);
+    return tecnico ? tecnico.calificacion : 0;
+  }
+
+  getClienteNombre(clienteId: string): string {
+    const cliente = this.clientes.find(c => c.id === clienteId);
+    return cliente ? cliente.nombre : 'No disponible';
+  }
+
+  getClienteEmail(clienteId: string): string {
+    const cliente = this.clientes.find(c => c.id === clienteId);
+    return cliente ? cliente.email : 'No disponible';
+  }
+
+  getClienteTelefono(clienteId: string): string {
+    const cliente = this.clientes.find(c => c.id === clienteId);
+    return cliente ? cliente.telefono : 'No disponible';
+  }
+
+  getClienteDireccion(clienteId: string): string {
+    const cliente = this.clientes.find(c => c.id === clienteId);
+    return cliente ? cliente.direccion : 'No disponible';
+  }
+
+  getServicioInfo(cita: Cita): any {
+    try {
+      if (cita.notas) {
+        return JSON.parse(cita.notas);
+      }
+    } catch (error) {
+      console.error('Error parsing service info:', error);
+    }
+    return {};
   }
 
   cancelarCita(citaId: string): void {

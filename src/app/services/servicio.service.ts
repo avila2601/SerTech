@@ -10,23 +10,23 @@ export class ServicioService {
     {
       id: '1',
       nombre: 'Mantenimiento Preventivo',
-      descripcion: 'Limpieza y optimización del sistema',
+      descripcion: 'Revisión, limpieza y ajuste el equipo para evitar fallas y prolongar su vida útil.',
       precio: 50,
       duracionEstimada: 60,
       categoria: CategoriaServicio.MANTENIMIENTO
     },
     {
       id: '2',
-      nombre: 'Reparación de Hardware',
-      descripcion: 'Reparación de componentes físicos',
+      nombre: 'Reparación de tu equipo',
+      descripcion: 'Corrección de fallas o daños para restaurar su funcionamiento normal (en caso de requerirse cambio de piezas te las cotizamos).',
       precio: 80,
       duracionEstimada: 120,
       categoria: CategoriaServicio.REPARACION
     },
     {
       id: '3',
-      nombre: 'Instalación de Software',
-      descripcion: 'Instalación y configuración de programas',
+      nombre: 'Instalación de equipos',
+      descripcion: 'Instalación, configuración y puesta en funcionamiento de tu equipo.',
       precio: 40,
       duracionEstimada: 45,
       categoria: CategoriaServicio.INSTALACION

@@ -91,83 +91,6 @@
         </div>
       </div>
 
-      <!-- Información del Servicio Seleccionado -->
-      <div
-        class="form-section"
-        *ngIf="marcaSeleccionada || productoSeleccionado"
-      >
-        <h3>Información del Servicio</h3>
-        <div class="form-row" *ngIf="marcaSeleccionada">
-          <div class="form-group">
-            <label>Marca del Producto</label>
-            <input
-              type="text"
-              [value]="marcaSeleccionada"
-              readonly
-              class="readonly-input"
-            />
-          </div>
-          <div class="form-group" *ngIf="productoSeleccionado">
-            <label>Tipo de Producto</label>
-            <input
-              type="text"
-              [value]="productoSeleccionado"
-              readonly
-              class="readonly-input"
-            />
-          </div>
-        </div>
-        <div class="form-row" *ngIf="modeloSeleccionado">
-          <div class="form-group">
-            <label>Modelo</label>
-            <input
-              type="text"
-              [value]="modeloSeleccionado"
-              readonly
-              class="readonly-input"
-            />
-          </div>
-          <div class="form-group" *ngIf="ubicacionSeleccionada">
-            <label>Ubicación</label>
-            <input
-              type="text"
-              [value]="ubicacionSeleccionada"
-              readonly
-              class="readonly-input"
-            />
-          </div>
-        </div>
-        <div class="form-group" *ngIf="sintomasSeleccionados">
-          <label>Descripción de Síntomas</label>
-          <textarea
-            [value]="sintomasSeleccionados"
-            readonly
-            class="readonly-textarea"
-            rows="3"
-          ></textarea>
-        </div>
-        <div class="form-row" *ngIf="agendarForm.get('fecha')?.value">
-          <div class="form-group">
-            <label>Fecha del Servicio</label>
-            <input
-              type="text"
-              [value]="agendarForm.get('fecha')?.value"
-              readonly
-              class="readonly-input"
-            />
-          </div>
-          <div class="form-group" *ngIf="agendarForm.get('hora')?.value">
-            <label>Hora del Servicio</label>
-            <input
-              type="text"
-              [value]="agendarForm.get('hora')?.value"
-              readonly
-              class="readonly-input"
-            />
-          </div>
-        </div>
-      </div>
-
       <!-- Botones -->
       <div class="form-actions">
         <button type="button" class="btn btn-secondary" (click)="regresar()">
@@ -178,7 +101,7 @@
           class="btn btn-primary"
           [disabled]="agendarForm.invalid || isSubmitting"
         >
-          <span *ngIf="!isSubmitting">Agendar Servicio</span>
+          <span *ngIf="!isSubmitting">Continuar</span>
           <span *ngIf="isSubmitting">Agendando...</span>
         </button>
       </div>

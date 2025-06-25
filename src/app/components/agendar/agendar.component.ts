@@ -68,48 +68,22 @@ export class AgendarComponent implements OnInit {
 
       const formValue = this.agendarForm.value;
 
-      // Crear cliente
-      const cliente: Omit<Cliente, 'id'> = {
-        nombre: formValue.nombre,
-        email: formValue.email,
-        telefono: formValue.telefono,
-        direccion: formValue.direccion
-      };
-
-      const nuevoCliente = this.clienteService.agregarCliente(cliente);
-
-      // Guardar toda la información del servicio en las notas como JSON
-      const infoServicio = {
-        marca: this.marcaSeleccionada,
-        producto: this.productoSeleccionado,
-        modelo: this.modeloSeleccionado,
-        sintomas: this.sintomasSeleccionados,
-        ubicacion: this.ubicacionSeleccionada
-      };
-
-      // Corregir el manejo de fecha para evitar problemas de zona horaria
-      const fechaSeleccionada = new Date(formValue.fecha + 'T00:00:00');
-
-      const cita: Omit<Cita, 'id' | 'estado'> = {
-        clienteId: nuevoCliente.id,
-        tecnicoId: '1', // Técnico por defecto
-        servicioId: '1', // Servicio por defecto
-        fecha: fechaSeleccionada,
-        hora: formValue.hora,
-        notas: JSON.stringify(infoServicio),
-        direccion: formValue.direccion
-      };
-
-      const nuevaCita = this.citaService.crearCita(cita);
-
-      // Simular delay
-      setTimeout(() => {
-        this.isSubmitting = false;
-        alert('¡Servicio agendado exitosamente!');
-        this.router.navigate(['/mis-citas'], {
-          queryParams: { clienteId: nuevoCliente.id }
-        });
-      }, 1000);
+      // Navegar a resumen-cita pasando todos los datos
+      this.router.navigate(['/resumen-cita'], {
+        queryParams: {
+          marca: this.marcaSeleccionada,
+          producto: this.productoSeleccionado,
+          modelo: this.modeloSeleccionado,
+          sintomas: this.sintomasSeleccionados,
+          ubicacion: this.ubicacionSeleccionada,
+          fecha: formValue.fecha,
+          hora: formValue.hora,
+          nombre: formValue.nombre,
+          email: formValue.email,
+          telefono: formValue.telefono,
+          direccion: formValue.direccion
+        }
+      });
     }
   }
 

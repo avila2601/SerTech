@@ -9,5 +9,6 @@ export const routes: Routes = [
   { path: 'tecnicos', loadComponent: () => import('./components/tecnicos/tecnicos.component').then(m => m.TecnicosComponent), canActivate: [TecnicosGuard] },
   { path: 'mis-citas', loadComponent: () => import('./components/mis-citas/mis-citas.component').then(m => m.MisCitasComponent) },
   { path: 'debug', loadComponent: () => import('./components/debug/debug.component').then(m => m.DebugComponent) },
+  { path: 'resumen-cita', loadComponent: () => import('./components/resumen-cita/resumen-cita.component').then(m => m.ResumenCitaComponent) },
   { path: '**', redirectTo: '' }
 ];
