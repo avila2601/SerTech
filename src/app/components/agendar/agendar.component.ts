@@ -51,13 +51,23 @@ export class AgendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Obtener los datos del servicio seleccionado desde query params
+    // Obtener los datos del servicio seleccionado y personales desde query params
     this.route.queryParams.subscribe(params => {
       this.marcaSeleccionada = params['marca'] || '';
       this.productoSeleccionado = params['producto'] || '';
       this.modeloSeleccionado = params['modelo'] || '';
       this.sintomasSeleccionados = params['sintomas'] || '';
       this.ubicacionSeleccionada = params['ubicacion'] || '';
+
+      // Rellenar el formulario si existen datos personales y de fecha/hora
+      this.agendarForm.patchValue({
+        nombre: params['nombre'] || '',
+        email: params['email'] || '',
+        telefono: params['telefono'] || '',
+        direccion: params['direccion'] || '',
+        fecha: params['fecha'] || '',
+        hora: params['hora'] || ''
+      });
     });
   }
 
@@ -77,14 +87,25 @@ export class AgendarComponent implements OnInit {
 
       const nuevoCliente = this.clienteService.agregarCliente(cliente);
 
-      // Crear cita simplificada
+      // Guardar toda la información del servicio en las notas como JSON
+      const infoServicio = {
+        marca: this.marcaSeleccionada,
+        producto: this.productoSeleccionado,
+        modelo: this.modeloSeleccionado,
+        sintomas: this.sintomasSeleccionados,
+        ubicacion: this.ubicacionSeleccionada
+      };
+
+      // Corregir el manejo de fecha para evitar problemas de zona horaria
+      const fechaSeleccionada = new Date(formValue.fecha + 'T00:00:00');
+
       const cita: Omit<Cita, 'id' | 'estado'> = {
         clienteId: nuevoCliente.id,
         tecnicoId: '1', // Técnico por defecto
         servicioId: '1', // Servicio por defecto
-        fecha: new Date(formValue.fecha),
+        fecha: fechaSeleccionada,
         hora: formValue.hora,
-        notas: this.sintomasSeleccionados,
+        notas: JSON.stringify(infoServicio),
         direccion: formValue.direccion
       };
 
@@ -94,12 +115,23 @@ export class AgendarComponent implements OnInit {
       setTimeout(() => {
         this.isSubmitting = false;
         alert('¡Servicio agendado exitosamente!');
-        this.router.navigate(['/mis-citas']);
+        this.router.navigate(['/mis-citas'], {
+          queryParams: { clienteId: nuevoCliente.id }
+        });
       }, 1000);
     }
   }
 
-  cancelar(): void {
-    this.router.navigate(['/']);
+  regresar(): void {
+    // Navegar de vuelta a servicios manteniendo la selección
+    this.router.navigate(['/servicios'], {
+      queryParams: {
+        marca: this.marcaSeleccionada,
+        producto: this.productoSeleccionado,
+        modelo: this.modeloSeleccionado,
+        sintomas: this.sintomasSeleccionados,
+        ubicacion: this.ubicacionSeleccionada
+      }
+    });
   }
 }

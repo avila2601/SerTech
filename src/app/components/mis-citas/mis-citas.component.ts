@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CitaService } from '../../services/cita.service';
 import { ServicioService } from '../../services/servicio.service';
 import { TecnicoService } from '../../services/tecnico.service';
@@ -23,22 +23,30 @@ export class MisCitasComponent implements OnInit {
   estados = Object.values(EstadoCita);
   estadoSeleccionado: EstadoCita | null = null;
   EstadoCita = EstadoCita;
+  clienteIdActual: string = '1'; // Por defecto
 
   constructor(
     private citaService: CitaService,
     private servicioService: ServicioService,
     private tecnicoService: TecnicoService,
     private clienteService: ClienteService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.cargarDatos();
+    // Obtener el ID del cliente desde query params
+    this.route.queryParams.subscribe(params => {
+      if (params['clienteId']) {
+        this.clienteIdActual = params['clienteId'];
+      }
+      this.cargarDatos();
+    });
   }
 
   cargarDatos(): void {
-    // Cargar citas (simulando que el cliente actual tiene ID '1')
-    this.citaService.getCitasPorCliente('1').subscribe(citas => {
+    // Cargar citas del cliente actual
+    this.citaService.getCitasPorCliente(this.clienteIdActual).subscribe(citas => {
       this.citas = citas;
       this.citasFiltradas = citas;
     });
@@ -66,7 +74,9 @@ export class MisCitasComponent implements OnInit {
   }
 
   formatDate(fecha: Date): string {
-    return new Date(fecha).toLocaleDateString('es-ES', {
+    // Asegurar que la fecha se maneje correctamente
+    const fechaObj = new Date(fecha);
+    return fechaObj.toLocaleDateString('es-ES', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -92,10 +102,46 @@ export class MisCitasComponent implements OnInit {
   }
 
   reprogramarCita(cita: Cita): void {
+    // Extraer información del servicio desde las notas
+    let infoServicio = {
+      marca: '',
+      producto: '',
+      modelo: '',
+      sintomas: '',
+      ubicacion: ''
+    };
+
+    if (cita.notas) {
+      try {
+        const notasParsed = JSON.parse(cita.notas);
+        infoServicio = {
+          marca: notasParsed.marca || '',
+          producto: notasParsed.producto || '',
+          modelo: notasParsed.modelo || '',
+          sintomas: notasParsed.sintomas || '',
+          ubicacion: notasParsed.ubicacion || ''
+        };
+      } catch (e) {
+        infoServicio.sintomas = cita.notas;
+      }
+    }
+
+    // Buscar el cliente para obtener sus datos personales
+    const cliente = this.clientes.find(c => c.id === cita.clienteId);
+
     this.router.navigate(['/agendar'], {
       queryParams: {
-        servicioId: cita.servicioId,
-        tecnicoId: cita.tecnicoId
+        marca: infoServicio.marca,
+        producto: infoServicio.producto,
+        modelo: infoServicio.modelo,
+        sintomas: infoServicio.sintomas,
+        ubicacion: infoServicio.ubicacion,
+        nombre: cliente?.nombre || '',
+        email: cliente?.email || '',
+        telefono: cliente?.telefono || '',
+        direccion: cliente?.direccion || '',
+        fecha: cita.fecha ? new Date(cita.fecha).toISOString().split('T')[0] : '',
+        hora: cita.hora || ''
       }
     });
   }

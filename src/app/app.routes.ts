@@ -8,5 +8,6 @@ export const routes: Routes = [
   { path: 'servicios', loadComponent: () => import('./components/servicios/servicios.component').then(m => m.ServiciosComponent) },
   { path: 'tecnicos', loadComponent: () => import('./components/tecnicos/tecnicos.component').then(m => m.TecnicosComponent), canActivate: [TecnicosGuard] },
   { path: 'mis-citas', loadComponent: () => import('./components/mis-citas/mis-citas.component').then(m => m.MisCitasComponent) },
+  { path: 'debug', loadComponent: () => import('./components/debug/debug.component').then(m => m.DebugComponent) },
   { path: '**', redirectTo: '' }
 ];

@@ -90,6 +90,25 @@ export class ServiciosComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
+      // Manejar datos que vienen desde agendar (regresar)
+      if (params['marca']) {
+        this.marcaSeleccionada = params['marca'];
+        this.productoSeleccionado = params['producto'] || '';
+        this.modeloSeleccionado = params['modelo'] || '';
+        this.sintomas = params['sintomas'] || '';
+        this.ubicacionSeleccionada = params['ubicacion'] || '';
+
+        // Si no hay servicio seleccionado, seleccionar uno por defecto
+        if (!this.servicioSeleccionado) {
+          this.servicioService.getServiciosPorCategoria(CategoriaServicio.REPARACION).subscribe(servicios => {
+            if (servicios && servicios.length > 0) {
+              this.servicioSeleccionado = servicios[0];
+            }
+          });
+        }
+      }
+
+      // Manejar selección desde home
       const tipoServicio = params['tipo'];
       if (tipoServicio) {
         // Mapear el tipo de servicio a la categoría correspondiente
