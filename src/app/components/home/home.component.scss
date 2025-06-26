@@ -1,44 +1,70 @@
+.hero-text-section {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 0.1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .hero-section {
-  background: linear-gradient(135deg, #35489d 0%, #17042a 50%, #72277a 100%);
   color: white;
   text-align: center;
   position: relative;
   overflow: hidden;
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
 }
 
-.hero-section::before {
-  content: '';
+.hero-background-left {
   position: absolute;
   top: 0;
   left: 0;
+  width: 50%;
+  height: 100%;
+  background-image: url('https://www.recatourense.es/images/servicio-tecnico/reparacion-de-electrodomesticos.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.hero-background-right {
+  position: absolute;
+  top: 0;
   right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-  opacity: 0.3;
+  width: 50%;
+  height: 100%;
+  background-image: url('https://serviciotecnico-alicante.com/wp-content/uploads/2021/07/servicio-tecnico-AEG-en-Alicante-1.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  z-index: 0;
 }
 
 .hero-content {
   position: relative;
-  z-index: 1;
-  padding: 1.5rem 0;
+  z-index: 3;
+  padding: 0;
+  width: 100%;
+  text-align: center;
 }
 
 .hero-title {
   font-size: 3.5rem;
   font-weight: 700;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 1rem;
+
 }
 
 .hero-subtitle {
   font-size: 1.3rem;
-  margin-bottom: 1.5rem;
-  opacity: 0.95;
+  margin-bottom: 0.8rem;
+  color: #e0e0e0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
 }
 
 .hero-buttons {
@@ -310,3 +336,4 @@
     font-size: 0.9rem;
   }
 }
+

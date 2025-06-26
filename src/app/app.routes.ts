@@ -4,6 +4,7 @@ import { TecnicosGuard } from './tecnicos.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'quienes-somos', loadComponent: () => import('./components/quienes-somos/quienes-somos.component').then(m => m.QuienesSomosComponent) },
   { path: 'informacion-personal', loadComponent: () => import('./components/informacion-personal/informacion-personal.component').then(m => m.InformacionPersonalComponent) },
   { path: 'servicios', loadComponent: () => import('./components/servicios/servicios.component').then(m => m.ServiciosComponent) },
   { path: 'tecnicos', loadComponent: () => import('./components/tecnicos/tecnicos.component').then(m => m.TecnicosComponent), canActivate: [TecnicosGuard] },

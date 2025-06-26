@@ -22,8 +22,8 @@ import { CommonModule } from '@angular/common';
 
         <ul class="nav-menu" [class.active]="isMenuOpen">
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
+          <li><a routerLink="/quienes-somos" routerLinkActive="active" (click)="closeMenu()">¿Quienes Somos?</a></li>
           <!-- <li><a routerLink="/tecnicos" routerLinkActive="active" (click)="closeMenu()">Técnicos</a></li> -->
-          <li><a routerLink="/agendar" routerLinkActive="active" (click)="closeMenu()">Agendar</a></li>
           <li><a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a></li>
         </ul>
       </div>
@@ -206,7 +206,7 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class AppComponent {
-  title = 'ser-tech';
+  title = 'sertech';
   isMenuOpen = false;
 
   toggleMenu() {

@@ -188,6 +188,6 @@ export class MisCitasComponent implements OnInit {
   }
 
   agendarNuevoServicio(): void {
-    this.router.navigate(['/agendar']);
+    this.router.navigate(['/']);
   }
 }
