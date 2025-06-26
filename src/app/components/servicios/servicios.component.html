@@ -74,7 +74,7 @@
         <div class="fecha-hora-selector" *ngIf="ubicacionSeleccionada">
           <div class="fecha-hora-inputs">
             <div class="fecha-selector">
-              <label for="fecha">Fecha del servicio *</label>
+              <label for="fecha">Fecha del servicio (opcional)</label>
               <input
                 type="date"
                 id="fecha"
@@ -84,7 +84,9 @@
               />
             </div>
             <div class="hora-selector">
-              <label for="hora" class="hora-label">Hora del servicio *</label>
+              <label for="hora" class="hora-label"
+                >Hora del servicio (opcional)</label
+              >
               <select
                 id="hora"
                 [(ngModel)]="horaSeleccionada"
@@ -96,6 +98,12 @@
                 </option>
               </select>
             </div>
+          </div>
+          <div class="fecha-hora-info">
+            <p>
+              * Si no seleccionas fecha y hora, te contactaremos para coordinar
+              el servicio
+            </p>
           </div>
         </div>
       </div>

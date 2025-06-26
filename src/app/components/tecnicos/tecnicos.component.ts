@@ -54,7 +54,7 @@ export class TecnicosComponent implements OnInit {
       if (params['fecha']) preservedParams.fecha = params['fecha'];
       if (params['hora']) preservedParams.hora = params['hora'];
 
-      this.router.navigate(['/agendar'], {
+      this.router.navigate(['/informacion-personal'], {
         queryParams: preservedParams
       });
     });

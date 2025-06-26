@@ -1,18 +1,17 @@
 <div class="container">
   <div class="agendar-header">
-    <h1>Agendar Servicio Técnico</h1>
-    <p>Completa el formulario para programar tu servicio</p>
+    <h1>Información Personal</h1>
+    <p>Completa tus datos para continuar con el servicio</p>
   </div>
 
   <div class="agendar-content">
     <form
-      [formGroup]="agendarForm"
+      [formGroup]="informacionForm"
       (ngSubmit)="onSubmit()"
       class="agendar-form"
     >
       <!-- Información del Cliente -->
       <div class="form-section">
-        <h3>Información Personal</h3>
         <div class="form-row">
           <div class="form-group">
             <label for="nombre">Nombre Completo *</label>
@@ -25,8 +24,8 @@
             <div
               class="error"
               *ngIf="
-                agendarForm.get('nombre')?.invalid &&
-                agendarForm.get('nombre')?.touched
+                informacionForm.get('nombre')?.invalid &&
+                informacionForm.get('nombre')?.touched
               "
             >
               El nombre es requerido
@@ -43,8 +42,8 @@
             <div
               class="error"
               *ngIf="
-                agendarForm.get('email')?.invalid &&
-                agendarForm.get('email')?.touched
+                informacionForm.get('email')?.invalid &&
+                informacionForm.get('email')?.touched
               "
             >
               Email válido es requerido
@@ -63,8 +62,8 @@
             <div
               class="error"
               *ngIf="
-                agendarForm.get('telefono')?.invalid &&
-                agendarForm.get('telefono')?.touched
+                informacionForm.get('telefono')?.invalid &&
+                informacionForm.get('telefono')?.touched
               "
             >
               Teléfono es requerido
@@ -81,8 +80,8 @@
             <div
               class="error"
               *ngIf="
-                agendarForm.get('direccion')?.invalid &&
-                agendarForm.get('direccion')?.touched
+                informacionForm.get('direccion')?.invalid &&
+                informacionForm.get('direccion')?.touched
               "
             >
               Dirección es requerida
@@ -99,10 +98,10 @@
         <button
           type="submit"
           class="btn btn-primary"
-          [disabled]="agendarForm.invalid || isSubmitting"
+          [disabled]="informacionForm.invalid || isSubmitting"
         >
           <span *ngIf="!isSubmitting">Continuar</span>
-          <span *ngIf="isSubmitting">Agendando...</span>
+          <span *ngIf="isSubmitting">Procesando...</span>
         </button>
       </div>
     </form>

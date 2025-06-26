@@ -170,14 +170,7 @@ export class ServiciosComponent implements OnInit {
       alert('Por favor selecciona tu ubicación');
       return;
     }
-    if (!this.fechaSeleccionada) {
-      alert('Por favor selecciona una fecha');
-      return;
-    }
-    if (!this.horaSeleccionada) {
-      alert('Por favor selecciona una hora');
-      return;
-    }
+    // fechaSeleccionada y horaSeleccionada son opcionales
     // modeloSeleccionado es opcional
     // Aquí puedes agregar la lógica para agendar el servicio
     console.log('Agendando servicio:', {

@@ -51,8 +51,8 @@ export class ResumenCitaComponent implements OnInit {
   }
 
   regresar(): void {
-    // Navegar de vuelta al componente agendar preservando todos los datos
-    this.router.navigate(['/agendar'], {
+    // Navegar de vuelta al componente información personal preservando todos los datos
+    this.router.navigate(['/informacion-personal'], {
       queryParams: {
         marca: this.marca,
         producto: this.producto,
@@ -70,7 +70,7 @@ export class ResumenCitaComponent implements OnInit {
   }
 
   agendarCita(): void {
-    if (!this.nombre || !this.email || !this.telefono || !this.direccion || !this.fecha || !this.hora) {
+    if (!this.nombre || !this.email || !this.telefono || !this.direccion) {
       alert('Por favor completa todos los campos requeridos');
       return;
     }
@@ -96,15 +96,21 @@ export class ResumenCitaComponent implements OnInit {
       ubicacion: this.ubicacion
     };
 
-    // Corregir el manejo de fecha para evitar problemas de zona horaria
-    const fechaSeleccionada = new Date(this.fecha + 'T00:00:00');
+    // Manejar fecha y hora opcionales
+    let fechaSeleccionada: Date;
+    if (this.fecha) {
+      fechaSeleccionada = new Date(this.fecha + 'T00:00:00');
+    } else {
+      // Si no hay fecha seleccionada, usar fecha actual
+      fechaSeleccionada = new Date();
+    }
 
     const cita: Omit<Cita, 'id' | 'estado'> = {
       clienteId: nuevoCliente.id,
       tecnicoId: '1', // Técnico por defecto
       servicioId: '1', // Servicio por defecto
       fecha: fechaSeleccionada,
-      hora: this.hora,
+      hora: this.hora || 'Por coordinar', // Si no hay hora, usar "Por coordinar"
       notas: JSON.stringify(infoServicio),
       direccion: this.direccion
     };

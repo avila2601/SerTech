@@ -7,14 +7,14 @@ import { ClienteService } from '../../services/cliente.service';
 import { Cliente, Cita } from '../../models';
 
 @Component({
-  selector: 'app-agendar',
+  selector: 'app-informacion-personal',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './agendar.component.html',
   styleUrls: ['./agendar.component.scss']
 })
-export class AgendarComponent implements OnInit {
-  agendarForm: FormGroup;
+export class InformacionPersonalComponent implements OnInit {
+  informacionForm: FormGroup;
   isSubmitting = false;
 
   // Información del servicio seleccionado
@@ -31,7 +31,7 @@ export class AgendarComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.agendarForm = this.fb.group({
+    this.informacionForm = this.fb.group({
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       telefono: ['', Validators.required],
@@ -51,7 +51,7 @@ export class AgendarComponent implements OnInit {
       this.ubicacionSeleccionada = params['ubicacion'] || '';
 
       // Rellenar el formulario si existen datos personales y de fecha/hora
-      this.agendarForm.patchValue({
+      this.informacionForm.patchValue({
         nombre: params['nombre'] || '',
         email: params['email'] || '',
         telefono: params['telefono'] || '',
@@ -63,10 +63,10 @@ export class AgendarComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.agendarForm.valid) {
+    if (this.informacionForm.valid) {
       this.isSubmitting = true;
 
-      const formValue = this.agendarForm.value;
+      const formValue = this.informacionForm.value;
 
       // Navegar a resumen-cita pasando todos los datos
       this.router.navigate(['/resumen-cita'], {
@@ -94,14 +94,14 @@ export class AgendarComponent implements OnInit {
 
     this.router.navigate(['/tecnicos'], {
       queryParams: {
-        servicio: this.route.snapshot.queryParams['servicio'] || '',
+        servicio: this.route.snapshot.queryParams['servicio'] || '1',
         marca: this.marcaSeleccionada,
         producto: this.productoSeleccionado,
         modelo: this.modeloSeleccionado,
         sintomas: this.sintomasSeleccionados,
         ubicacion: this.ubicacionSeleccionada,
-        fecha: this.agendarForm.get('fecha')?.value || '',
-        hora: this.agendarForm.get('hora')?.value || ''
+        fecha: this.informacionForm.get('fecha')?.value || '',
+        hora: this.informacionForm.get('hora')?.value || ''
       }
     });
   }
