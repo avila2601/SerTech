@@ -10,8 +10,8 @@ import { Cliente, Cita } from '../../models';
   selector: 'app-informacion-personal',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './agendar.component.html',
-  styleUrls: ['./agendar.component.scss']
+  templateUrl: './informacion-personal.component.html',
+  styleUrls: ['./informacion-personal.component.scss']
 })
 export class InformacionPersonalComponent implements OnInit {
   informacionForm: FormGroup;
