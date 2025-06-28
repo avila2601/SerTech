@@ -89,6 +89,8 @@ export class ServiciosComponent implements OnInit {
     }
   ];
 
+  iconoServicio: string = '';
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -134,6 +136,10 @@ export class ServiciosComponent implements OnInit {
             }
           });
         }
+      }
+      // Guardar el icono recibido
+      if (params['icono']) {
+        this.iconoServicio = params['icono'];
       }
     });
   }

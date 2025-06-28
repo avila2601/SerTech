@@ -12,9 +12,9 @@ import { CommonModule } from '@angular/common';
 export class HomeComponent {
   constructor(private router: Router) {}
 
-  navegarAServicio(tipoServicio: string): void {
+  navegarAServicio(tipoServicio: string, icono: string): void {
     this.router.navigate(['/servicios'], {
-      queryParams: { tipo: tipoServicio }
+      queryParams: { tipo: tipoServicio, icono }
     });
   }
 }

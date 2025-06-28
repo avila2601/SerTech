@@ -10,7 +10,7 @@ export class ServicioService {
     {
       id: '1',
       nombre: 'Mantenimiento Preventivo',
-      descripcion: 'Revisión, limpieza y ajuste el equipo para evitar fallas y prolongar su vida útil.',
+      descripcion: 'Revisión, limpieza y ajuste del equipo para evitar fallas y prolongar su vida útil.',
       precio: 50,
       duracionEstimada: 60,
       categoria: CategoriaServicio.MANTENIMIENTO
@@ -18,7 +18,7 @@ export class ServicioService {
     {
       id: '2',
       nombre: 'Reparación de tu equipo',
-      descripcion: 'Corrección de fallas o daños para restaurar su funcionamiento normal (en caso de requerirse cambio de piezas te las cotizamos).',
+      descripcion: 'Se realiza una visita de diagnóstico para detectar fallas y si es necesario, cotizar el cambio de piezas.',
       precio: 80,
       duracionEstimada: 120,
       categoria: CategoriaServicio.REPARACION

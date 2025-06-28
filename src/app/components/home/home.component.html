@@ -16,24 +16,35 @@
 
 <section class="services-overview">
   <div class="container">
-    <h2>En que podemos ayudarte el día de hoy?</h2>
+    <h2>Conecta con técnicos expertos en minutos</h2>
+    <p class="hero-description">
+      Nos encargamos de acercarte a profesionales altamente calificados para el
+      mantenimiento y reparación de tus electrodomésticos.
+    </p>
+    <p class="hero-description">
+      Tú eliges el tipo de servicio, nosotros te ayudamos a encontrar la mejor
+      opción con rapidez, confianza y al mejor precio.
+    </p>
     <div class="services-grid">
-      <div class="service-card" (click)="navegarAServicio('mantenimiento')">
-        <div class="service-icon">🔧</div>
+      <div
+        class="service-card"
+        (click)="navegarAServicio('mantenimiento', '🧰')"
+      >
+        <div class="service-icon">🧰</div>
         <h3>Mantenimiento</h3>
         <p>Mantenimiento preventivo de tu equipo</p>
       </div>
-      <div class="service-card" (click)="navegarAServicio('reparacion')">
+      <div class="service-card" (click)="navegarAServicio('reparacion', '🔧')">
         <div class="service-icon">🔧</div>
         <h3>Reparación</h3>
-        <p>Tu equipo tiene un daño? lo reparamos</p>
+        <p>Tu equipo tiene un daño? solicita una visita</p>
       </div>
-      <div class="service-card" (click)="navegarAServicio('instalacion')">
+      <div class="service-card" (click)="navegarAServicio('instalacion', '⚙️')">
         <div class="service-icon">⚙️</div>
         <h3>Instalación</h3>
         <p>Instalación y configuración</p>
       </div>
-      <div class="service-card" (click)="navegarAServicio('diagnostico')">
+      <div class="service-card" (click)="navegarAServicio('diagnostico', '🔍')">
         <div class="service-icon">🔍</div>
         <h3>Diagnóstico</h3>
         <p>Diagnóstico de problemas</p>

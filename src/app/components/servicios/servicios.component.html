@@ -5,7 +5,7 @@
 
   <div class="servicio-seleccionado" *ngIf="servicioSeleccionado">
     <div class="service-card">
-      <div class="service-icon">🔧</div>
+      <div class="service-icon">{{ iconoServicio }}</div>
       <h3>{{ servicioSeleccionado.nombre }}</h3>
       <p>{{ servicioSeleccionado.descripcion }}</p>
 
