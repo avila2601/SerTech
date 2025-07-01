@@ -1,0 +1,50 @@
+[
+  {
+    "id": "1",
+    "nombre": "Juan Pérez",
+    "especialidad": "Electrodomésticos",
+    "calificacion": 4.7,
+    "disponible": true,
+    "foto": ""
+  },
+  {
+    "id": "2",
+    "nombre": "María López",
+    "especialidad": "Refrigeradores y Aires Acondicionados",
+    "calificacion": 4.9,
+    "disponible": true,
+    "foto": ""
+  },
+  {
+    "id": "3",
+    "nombre": "Carlos Ramírez",
+    "especialidad": "Lavadoras y Secadoras",
+    "calificacion": 4.5,
+    "disponible": false,
+    "foto": ""
+  },
+  {
+    "id": "4",
+    "nombre": "Ana Torres",
+    "especialidad": "Microondas y Hornos",
+    "calificacion": 4.8,
+    "disponible": true,
+    "foto": ""
+  },
+  {
+    "id": "5",
+    "nombre": "Luis Fernández",
+    "especialidad": "Televisores y Audio",
+    "calificacion": 4.6,
+    "disponible": true,
+    "foto": ""
+  },
+  {
+    "id": "6",
+    "nombre": "Patricia Soto",
+    "especialidad": "Pequeños electrodomésticos",
+    "calificacion": 4.4,
+    "disponible": false,
+    "foto": ""
+  }
+]

@@ -1,90 +1,35 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Tecnico } from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TecnicoService {
-  private tecnicos: Tecnico[] = [
-    {
-      id: '1',
-      nombre: 'Juan Pérez',
-      especialidad: 'Electrodomésticos',
-      calificacion: 4.7,
-      disponible: true,
-      foto: ''
-    },
-    {
-      id: '2',
-      nombre: 'María López',
-      especialidad: 'Refrigeradores y Aires Acondicionados',
-      calificacion: 4.9,
-      disponible: true,
-      foto: ''
-    },
-    {
-      id: '3',
-      nombre: 'Carlos Ramírez',
-      especialidad: 'Lavadoras y Secadoras',
-      calificacion: 4.5,
-      disponible: false,
-      foto: ''
-    },
-    // Técnicos adicionales
-    {
-      id: '4',
-      nombre: 'Ana Torres',
-      especialidad: 'Microondas y Hornos',
-      calificacion: 4.8,
-      disponible: true,
-      foto: ''
-    },
-    {
-      id: '5',
-      nombre: 'Luis Fernández',
-      especialidad: 'Televisores y Audio',
-      calificacion: 4.6,
-      disponible: true,
-      foto: ''
-    },
-    {
-      id: '6',
-      nombre: 'Patricia Soto',
-      especialidad: 'Pequeños electrodomésticos',
-      calificacion: 4.4,
-      disponible: false,
-      foto: ''
-    }
-  ];
+  private url = 'assets/data/tecnicos.json';
 
-  private tecnicosSubject = new BehaviorSubject<Tecnico[]>(this.tecnicos);
-
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   getTecnicos(): Observable<Tecnico[]> {
-    return this.tecnicosSubject.asObservable();
+    return this.http.get<Tecnico[]>(this.url);
   }
 
-  getTecnicoById(id: string): Tecnico | undefined {
-    return this.tecnicos.find(tecnico => tecnico.id === id);
-  }
-
-  getTecnicosDisponibles(): Observable<Tecnico[]> {
+  getTecnicoById(id: string): Observable<Tecnico | undefined> {
     return new Observable(observer => {
-      this.tecnicosSubject.subscribe(tecnicos => {
-        observer.next(tecnicos.filter(t => t.disponible));
+      this.getTecnicos().subscribe(tecnicos => {
+        observer.next(tecnicos.find(tecnico => tecnico.id === id));
+        observer.complete();
       });
     });
   }
 
-  actualizarDisponibilidad(id: string, disponible: boolean): boolean {
-    const index = this.tecnicos.findIndex(t => t.id === id);
-    if (index !== -1) {
-      this.tecnicos[index].disponible = disponible;
-      this.tecnicosSubject.next([...this.tecnicos]);
-      return true;
-    }
-    return false;
+  getTecnicosDisponibles(): Observable<Tecnico[]> {
+    return new Observable(observer => {
+      this.getTecnicos().subscribe(tecnicos => {
+        observer.next(tecnicos.filter((t: Tecnico) => t.disponible));
+        observer.complete();
+      });
+    });
   }
 }
