@@ -80,12 +80,6 @@ export class ServiciosComponent implements OnInit {
       titulo: 'Instalación',
       descripcion: 'Instalación y configuración',
       icono: '⚙️'
-    },
-    {
-      tipo: 'diagnostico',
-      titulo: 'Diagnóstico',
-      descripcion: 'Diagnóstico de problemas',
-      icono: '🔍'
     }
   ];
 
@@ -148,8 +142,7 @@ export class ServiciosComponent implements OnInit {
     const mapeo: { [key: string]: CategoriaServicio } = {
       'mantenimiento': CategoriaServicio.MANTENIMIENTO,
       'reparacion': CategoriaServicio.REPARACION,
-      'instalacion': CategoriaServicio.INSTALACION,
-      'diagnostico': CategoriaServicio.DIAGNOSTICO
+      'instalacion': CategoriaServicio.INSTALACION
     };
     return mapeo[tipo] || null;
   }

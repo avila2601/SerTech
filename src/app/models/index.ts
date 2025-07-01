@@ -52,7 +52,6 @@ export enum CategoriaServicio {
   MANTENIMIENTO = 'Mantenimiento',
   REPARACION = 'Reparación',
   INSTALACION = 'Instalación',
-  DIAGNOSTICO = 'Diagnóstico',
   LIMPIEZA = 'Limpieza'
 }
 
