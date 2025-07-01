@@ -13,7 +13,7 @@ export class ServicioService {
       {
         id: '1',
         nombre: 'Mantenimiento Preventivo',
-        descripcion: 'Mantenimiento regular para prevenir fallas y prolongar la vida útil de tus electrodomésticos.',
+        descripcion: 'Mantenimiento para asegurar el óptimo funcionamiento de tus electrodomésticos, prolongar su vida útil y prevenir futuras fallas. Incluye limpieza, revisión técnica y pruebas de operación.',
         precio: 50,
         duracionEstimada: 60,
         categoria: CategoriaServicio.MANTENIMIENTO
@@ -21,7 +21,7 @@ export class ServicioService {
       {
         id: '2',
         nombre: 'Reparación de Electrodomésticos',
-        descripcion: 'Corrección de fallas o daños para restaurar su funcionamiento normal (en caso de requerirse cambio de piezas te las cotizamos).',
+        descripcion: 'Visita de diagnóstico para detectar fallas y si es necesario, cotizar el cambio de piezas.',
         precio: 80,
         duracionEstimada: 120,
         categoria: CategoriaServicio.REPARACION
@@ -29,7 +29,7 @@ export class ServicioService {
       {
         id: '3',
         nombre: 'Instalación y Configuración',
-        descripcion: 'Instalación profesional y configuración inicial de electrodomésticos nuevos.',
+        descripcion: 'Instalación profesional de electrodomésticos, asegurando una conexión segura y funcional. Verificación del correcto montaje, nivelación y puesta en marcha del equipo.',
         precio: 40,
         duracionEstimada: 90,
         categoria: CategoriaServicio.INSTALACION
