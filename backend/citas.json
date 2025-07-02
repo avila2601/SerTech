@@ -21,6 +21,17 @@
       "direccion": "Calle 75 19a 30",
       "id": "2",
       "estado": "Pendiente"
+    },
+    {
+      "clienteId": "3",
+      "tecnicoId": "1",
+      "servicioId": "",
+      "fecha": "2025-07-02T16:51:54.020Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"Philips\",\"producto\":\"Aspiradora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Las Condes\"}",
+      "direccion": "Calle 75 19a 30",
+      "id": "3",
+      "estado": "Pendiente"
     }
   ],
   "clientes": [
@@ -37,6 +48,13 @@
       "telefono": "3137478782",
       "direccion": "Calle 75 19a 30",
       "id": "2"
+    },
+    {
+      "nombre": "Ragui",
+      "email": "diego1@gmail.com",
+      "telefono": "3137478782",
+      "direccion": "Calle 75 19a 30",
+      "id": "3"
     }
   ],
   "ultimoIdCliente": 0,
