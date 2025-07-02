@@ -5,7 +5,7 @@ import { CitaService } from '../../services/cita.service';
 import { ServicioService } from '../../services/servicio.service';
 import { TecnicoService } from '../../services/tecnico.service';
 import { ClienteService } from '../../services/cliente.service';
-import { Cita, Servicio, Tecnico, Cliente, EstadoCita } from '../../models';
+import { Cita, Servicio, Tecnico, Cliente } from '../../models';
 
 @Component({
   selector: 'app-mis-citas',
@@ -20,10 +20,8 @@ export class MisCitasComponent implements OnInit {
   servicios: Servicio[] = [];
   tecnicos: Tecnico[] = [];
   clientes: Cliente[] = [];
-  estados = Object.values(EstadoCita);
-  estadoSeleccionado: EstadoCita | null = null;
-  EstadoCita = EstadoCita;
-  clienteIdActual: string = '1'; // Por defecto
+  clienteIdActual: string | null = null; // Por defecto, sin filtro
+  tecnicoIdActual: string | null = null;
 
   constructor(
     private citaService: CitaService,
@@ -35,20 +33,32 @@ export class MisCitasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Obtener el ID del cliente desde query params
+    // Obtener el ID del cliente o del técnico desde query params
     this.route.queryParams.subscribe(params => {
       if (params['clienteId']) {
         this.clienteIdActual = params['clienteId'];
+        this.tecnicoIdActual = null;
+      } else if (params['tecnicoId']) {
+        this.tecnicoIdActual = params['tecnicoId'];
+        this.clienteIdActual = null;
+      } else {
+        this.clienteIdActual = null;
+        this.tecnicoIdActual = null;
       }
       this.cargarDatos();
     });
   }
 
   cargarDatos(): void {
-    // Cargar citas del cliente actual
-    this.citaService.getCitasPorCliente(this.clienteIdActual).subscribe(citas => {
-      this.citas = citas;
-      this.citasFiltradas = citas;
+    this.citaService.getCitas().subscribe(citas => {
+      if (this.tecnicoIdActual) {
+        this.citas = citas.filter(c => String(c.tecnicoId) === String(this.tecnicoIdActual));
+      } else if (this.clienteIdActual) {
+        this.citas = citas.filter(c => c.clienteId === this.clienteIdActual);
+      } else {
+        this.citas = citas; // Mostrar todas si no hay filtro
+      }
+      this.citasFiltradas = this.citas;
     });
 
     this.servicioService.getServicios().subscribe(servicios => {
@@ -62,15 +72,6 @@ export class MisCitasComponent implements OnInit {
     this.clienteService.getClientes().subscribe(clientes => {
       this.clientes = clientes;
     });
-  }
-
-  filtrarPorEstado(estado: EstadoCita): void {
-    this.estadoSeleccionado = estado;
-    this.citasFiltradas = this.citas.filter(c => c.estado === estado);
-  }
-
-  getEstadoClass(estado: EstadoCita): string {
-    return estado.toLowerCase().replace(' ', '-');
   }
 
   formatDate(fecha: Date): string {
@@ -133,61 +134,5 @@ export class MisCitasComponent implements OnInit {
       console.error('Error parsing service info:', error);
     }
     return {};
-  }
-
-  cancelarCita(citaId: string): void {
-    if (confirm('¿Estás seguro de que quieres cancelar esta cita?')) {
-      this.citaService.cancelarCita(citaId);
-      this.cargarDatos(); // Recargar datos
-    }
-  }
-
-  reprogramarCita(cita: Cita): void {
-    // Extraer información del servicio desde las notas
-    let infoServicio = {
-      marca: '',
-      producto: '',
-      modelo: '',
-      sintomas: '',
-      ubicacion: ''
-    };
-
-    if (cita.notas) {
-      try {
-        const notasParsed = JSON.parse(cita.notas);
-        infoServicio = {
-          marca: notasParsed.marca || '',
-          producto: notasParsed.producto || '',
-          modelo: notasParsed.modelo || '',
-          sintomas: notasParsed.sintomas || '',
-          ubicacion: notasParsed.ubicacion || ''
-        };
-      } catch (e) {
-        infoServicio.sintomas = cita.notas;
-      }
-    }
-
-    // Buscar el cliente para obtener sus datos personales
-    const cliente = this.clientes.find(c => c.id === cita.clienteId);
-
-    this.router.navigate(['/agendar'], {
-      queryParams: {
-        marca: infoServicio.marca,
-        producto: infoServicio.producto,
-        modelo: infoServicio.modelo,
-        sintomas: infoServicio.sintomas,
-        ubicacion: infoServicio.ubicacion,
-        nombre: cliente?.nombre || '',
-        email: cliente?.email || '',
-        telefono: cliente?.telefono || '',
-        direccion: cliente?.direccion || '',
-        fecha: cita.fecha ? new Date(cita.fecha).toISOString().split('T')[0] : '',
-        hora: cita.hora || ''
-      }
-    });
-  }
-
-  agendarNuevoServicio(): void {
-    this.router.navigate(['/']);
   }
 }

@@ -67,8 +67,9 @@ export class InformacionPersonalComponent implements OnInit {
       this.isSubmitting = true;
 
       const formValue = this.informacionForm.value;
+      const params = this.route.snapshot.queryParams;
 
-      // Navegar a resumen-cita pasando todos los datos
+      // Navegar a resumen-cita pasando todos los datos, incluyendo tecnicoId y servicioId
       this.router.navigate(['/resumen-cita'], {
         queryParams: {
           marca: this.marcaSeleccionada,
@@ -81,7 +82,9 @@ export class InformacionPersonalComponent implements OnInit {
           nombre: formValue.nombre,
           email: formValue.email,
           telefono: formValue.telefono,
-          direccion: formValue.direccion
+          direccion: formValue.direccion,
+          tecnicoId: params['tecnicoId'] || '',
+          servicioId: params['servicioId'] || ''
         }
       });
     }

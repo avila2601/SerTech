@@ -26,6 +26,12 @@
             >
           </div>
           <span class="rating-value">{{ tecnico.calificacion }}</span>
+          <button
+            class="btn btn-primary btn-comentarios"
+            (click)="abrirModalResenas(tecnico.id)"
+          >
+            Ver comentarios
+          </button>
         </div>
         <!-- <p class="experiencia">{{ tecnico.experiencia }} años de experiencia</p> -->
       </div>
@@ -50,4 +56,10 @@
       Volver a Servicios
     </button>
   </div>
+
+  <app-tecnicos-resenas-modal
+    *ngIf="mostrarModalResenas"
+    [tecnicoId]="tecnicoIdModal"
+    (close)="cerrarModalResenas()"
+  ></app-tecnicos-resenas-modal>
 </div>

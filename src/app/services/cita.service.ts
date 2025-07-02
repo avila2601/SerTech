@@ -17,7 +17,7 @@ export class CitaService {
     return this.storageService.getCitasPorCliente(clienteId);
   }
 
-  crearCita(cita: Omit<Cita, 'id' | 'estado'>): Cita {
+  crearCita(cita: Omit<Cita, 'id' | 'estado'>): Observable<Cita> {
     return this.storageService.crearCita(cita);
   }
 

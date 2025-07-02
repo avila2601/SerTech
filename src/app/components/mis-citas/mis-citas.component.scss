@@ -1,7 +1,8 @@
 .container {
-  max-width: 700px;
+  /* max-width: 700px; */
+  width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0;
 }
 
 .mis-citas-header {
@@ -54,13 +55,21 @@
 }
 
 .citas-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
 .cita-card {
+  width: 100%;
+  /* Puedes ajustar el max-width si quieres un límite en pantallas muy grandes */
+  /* max-width: 900px; */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
   background: rgba(31, 41, 55, 0.8);
   border-radius: 16px;
   padding: 1.5rem;
@@ -95,10 +104,12 @@
 }
 
 .cita-header {
+  flex: none;
+  min-width: 220px;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 0;
 }
 
 .cita-info h3 {
@@ -112,6 +123,79 @@
   color: #9ca3af;
   font-size: 0.95rem;
   margin-bottom: 0.25rem;
+}
+
+.cita-details {
+  flex: none;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.detail-section {
+  flex: 1 1 0;
+  min-width: 200px;
+  margin-bottom: 0;
+  padding: 0.5rem 0.5rem;
+  border-bottom: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255,255,255,0.02);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.detail-section.costo {
+  flex: 0 0 100%;
+  min-width: 0;
+  border-right: none;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: -1rem;
+  background: rgba(255,255,255,0.04);
+}
+
+.detail-section:last-child {
+  border-right: none;
+}
+
+.detail-section h4 {
+  color: #a5b4fc;
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  color: #8ca0b3;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
+}
+
+.detail-value {
+  color: #e0e0e0;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-align: right;
+  flex: 1;
+  word-break: break-word;
 }
 
 .estado {
@@ -143,66 +227,12 @@
   color: white;
 }
 
-.cita-details {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-}
-
-.detail-section {
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.detail-section:last-child {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.detail-section h4 {
-  color: #a5b4fc;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.25rem;
-  padding: 0.2rem 0;
-}
-
-.detail-row:last-child {
-  margin-bottom: 0;
-}
-
-.detail-label {
-  color: #9ca3af;
-  font-size: 0.9rem;
-  font-weight: 500;
-  min-width: 100px;
-}
-
-.detail-value {
-  color: #e0e0e0;
-  font-weight: 500;
-  font-size: 0.9rem;
-  text-align: right;
-  flex: 1;
-  margin-left: 1rem;
-}
-
 .cita-actions {
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
   justify-content: flex-end;
+  gap: 0.5rem;
+  margin-left: 2rem;
 }
 
 .btn {
@@ -301,7 +331,6 @@
   }
 
   .citas-grid {
-    grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
@@ -437,5 +466,24 @@
 
   .no-citas p {
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .cita-details {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .detail-section {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 0;
+  }
+  .detail-section:last-child {
+    border-bottom: none;
+  }
+  .detail-section.costo {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 0.3rem;
   }
 }

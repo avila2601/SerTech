@@ -3,16 +3,19 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TecnicoService } from '../../services/tecnico.service';
 import { Tecnico } from '../../models';
+import { TecnicosResenasModalComponent } from './tecnicos-resenas-modal.component';
 
 @Component({
   selector: 'app-tecnicos',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TecnicosResenasModalComponent],
   templateUrl: './tecnicos.component.html',
   styleUrls: ['./tecnicos.component.scss']
 })
 export class TecnicosComponent implements OnInit {
   tecnicos: Tecnico[] = [];
+  mostrarModalResenas: boolean = false;
+  tecnicoIdModal: string = '';
 
   constructor(
     private tecnicoService: TecnicoService,
@@ -45,7 +48,10 @@ export class TecnicosComponent implements OnInit {
       };
 
       // Preservar todos los parámetros del formulario
-      if (params['servicio']) preservedParams.servicio = params['servicio'];
+      if (params['servicio']) {
+        preservedParams.servicio = params['servicio'];
+        preservedParams.servicioId = params['servicio'];
+      }
       if (params['marca']) preservedParams.marca = params['marca'];
       if (params['producto']) preservedParams.producto = params['producto'];
       if (params['modelo']) preservedParams.modelo = params['modelo'];
@@ -76,5 +82,15 @@ export class TecnicosComponent implements OnInit {
         queryParams: preservedParams
       });
     });
+  }
+
+  abrirModalResenas(tecnicoId: string): void {
+    this.tecnicoIdModal = tecnicoId;
+    this.mostrarModalResenas = true;
+  }
+
+  cerrarModalResenas(): void {
+    this.mostrarModalResenas = false;
+    this.tecnicoIdModal = '';
   }
 }

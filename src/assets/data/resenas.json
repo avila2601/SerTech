@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "tecnicoId": "1",
+    "cliente": "Pedro Gómez",
+    "comentario": "Excelente servicio, muy profesional y rápido.",
+    "calificacion": 5,
+    "fecha": "2024-06-01"
+  },
+  {
+    "id": "2",
+    "tecnicoId": "1",
+    "cliente": "Laura Méndez",
+    "comentario": "Solucionó el problema de mi lavadora en una visita.",
+    "calificacion": 4,
+    "fecha": "2024-06-03"
+  },
+  {
+    "id": "3",
+    "tecnicoId": "2",
+    "cliente": "Andrés Silva",
+    "comentario": "Muy amable y puntual. Lo recomiendo.",
+    "calificacion": 5,
+    "fecha": "2024-06-02"
+  },
+  {
+    "id": "4",
+    "tecnicoId": "3",
+    "cliente": "Marina Torres",
+    "comentario": "Buen trabajo, aunque tardó un poco más de lo esperado.",
+    "calificacion": 4,
+    "fecha": "2024-06-04"
+  },
+  {
+    "id": "5",
+    "tecnicoId": "2",
+    "cliente": "Carlos Ruiz",
+    "comentario": "Reparó mi refrigerador y quedó como nuevo.",
+    "calificacion": 5,
+    "fecha": "2024-06-05"
+  }
+]

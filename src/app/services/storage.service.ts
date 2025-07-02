@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { Cita, Cliente, EstadoCita } from '../models';
 
 interface DataStorage {
@@ -18,16 +18,8 @@ export class StorageService {
   private readonly STORAGE_KEY = 'sertech_data';
   private data: DataStorage = {
     citas: [],
-    clientes: [
-      {
-        id: '1',
-        nombre: 'Juan Pérez',
-        email: 'juan.perez@email.com',
-        telefono: '555-0101',
-        direccion: 'Calle Principal 123, Ciudad'
-      }
-    ],
-    ultimoIdCliente: 1,
+    clientes: [],
+    ultimoIdCliente: 0,
     ultimoIdCita: 0
   };
 
@@ -56,19 +48,29 @@ export class StorageService {
 
   // Métodos para clientes
   getClientes(): Observable<Cliente[]> {
-    return of([...this.data.clientes]);
+    return this.http.get<Cliente[]>('http://localhost:3001/clientes');
   }
 
-  agregarCliente(cliente: Omit<Cliente, 'id'>): Cliente {
-    this.data.ultimoIdCliente++;
-    const nuevoCliente: Cliente = {
-      ...cliente,
-      id: this.data.ultimoIdCliente.toString()
-    };
-
-    this.data.clientes.push(nuevoCliente);
-    this.saveData();
-    return nuevoCliente;
+  agregarCliente(cliente: Omit<Cliente, 'id'>): Observable<Cliente> {
+    return this.http.get<Cliente[]>('http://localhost:3001/clientes').pipe(
+      switchMap((clientes: Cliente[]) => {
+        // Asegurar que clientes sea un array
+        if (!Array.isArray(clientes)) {
+          clientes = [];
+        }
+        // Calcular el nuevo ID
+        const nuevoId = clientes.length > 0 ? (Math.max(...clientes.map(c => +c.id)) + 1).toString() : '1';
+        const nuevoCliente: Cliente = {
+          ...cliente,
+          id: nuevoId
+        };
+        const clientesActualizados = [...clientes, nuevoCliente];
+        return this.http.put<Cliente[]>(
+          'http://localhost:3001/clientes',
+          clientesActualizados
+        ).pipe(map(() => nuevoCliente));
+      })
+    );
   }
 
   getClienteById(id: string): Cliente | undefined {
@@ -77,7 +79,7 @@ export class StorageService {
 
   // Métodos para citas
   getCitas(): Observable<Cita[]> {
-    return of([...this.data.citas]);
+    return this.http.get<Cita[]>('http://localhost:3001/citas');
   }
 
   getCitasPorCliente(clienteId: string): Observable<Cita[]> {
@@ -85,18 +87,29 @@ export class StorageService {
     return of(citasCliente);
   }
 
-  crearCita(cita: Omit<Cita, 'id' | 'estado'>): Cita {
-    this.data.ultimoIdCita++;
-    const nuevaCita: Cita = {
-      ...cita,
-      id: this.data.ultimoIdCita.toString(),
-      estado: EstadoCita.PENDIENTE
-    };
-
-    this.data.citas.push(nuevaCita);
-    this.saveData();
-    this.putCitasJson();
-    return nuevaCita;
+  crearCita(cita: Omit<Cita, 'id' | 'estado'>): Observable<Cita> {
+    // Obtener todas las citas actuales del backend
+    return this.getCitas().pipe(
+      switchMap((citas: Cita[]) => {
+        // Asegurar que citas sea un array
+        if (!Array.isArray(citas)) {
+          citas = [];
+        }
+        // Calcular el nuevo ID
+        const nuevoId = citas.length > 0 ? (Math.max(...citas.map(c => +c.id)) + 1).toString() : '1';
+        const nuevaCita: Cita = {
+          ...cita,
+          id: nuevoId,
+          estado: EstadoCita.PENDIENTE
+        };
+        const citasActualizadas = [...citas, nuevaCita];
+        // Hacer PUT al backend con el array actualizado
+        return this.http.put<Cita[]>(
+          'http://localhost:3001/citas',
+          citasActualizadas
+        ).pipe(map(() => nuevaCita));
+      })
+    );
   }
 
   /**
@@ -143,16 +156,8 @@ export class StorageService {
   clearData(): void {
     this.data = {
       citas: [],
-      clientes: [
-        {
-          id: '1',
-          nombre: 'Juan Pérez',
-          email: 'juan.perez@email.com',
-          telefono: '555-0101',
-          direccion: 'Calle Principal 123, Ciudad'
-        }
-      ],
-      ultimoIdCliente: 1,
+      clientes: [],
+      ultimoIdCliente: 0,
       ultimoIdCita: 0
     };
     this.saveData();

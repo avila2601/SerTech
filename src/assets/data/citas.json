@@ -1,14 +1,6 @@
 {
   "citas": [],
-  "clientes": [
-    {
-      "id": "1",
-      "nombre": "Juan Pérez",
-      "email": "juan.perez@email.com",
-      "telefono": "555-0101",
-      "direccion": "Calle Principal 123, Ciudad"
-    }
-  ],
-  "ultimoIdCliente": 1,
+  "clientes": [],
+  "ultimoIdCliente": 0,
   "ultimoIdCita": 0
 }

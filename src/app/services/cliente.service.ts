@@ -17,7 +17,7 @@ export class ClienteService {
     return this.storageService.getClienteById(id);
   }
 
-  agregarCliente(cliente: Omit<Cliente, 'id'>): Cliente {
+  agregarCliente(cliente: Omit<Cliente, 'id'>): Observable<Cliente> {
     return this.storageService.agregarCliente(cliente);
   }
 

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CitaService } from '../../services/cita.service';
 import { ClienteService } from '../../services/cliente.service';
 import { Cliente, Cita } from '../../models';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-resumen-cita',
@@ -26,6 +27,8 @@ export class ResumenCitaComponent implements OnInit {
   telefono: string = '';
   direccion: string = '';
   isAgendando: boolean = false;
+  tecnicoId: string = '';
+  servicioId: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +50,8 @@ export class ResumenCitaComponent implements OnInit {
       this.email = params['email'] || '';
       this.telefono = params['telefono'] || '';
       this.direccion = params['direccion'] || '';
+      this.tecnicoId = params['tecnicoId'] || '';
+      this.servicioId = params['servicioId'] || '';
     });
   }
 
@@ -85,45 +90,40 @@ export class ResumenCitaComponent implements OnInit {
       direccion: this.direccion
     };
 
-    const nuevoCliente = this.clienteService.agregarCliente(cliente);
+    this.clienteService.agregarCliente(cliente).pipe(
+      switchMap(nuevoCliente => {
+        // Guardar toda la información del servicio en las notas como JSON
+        const infoServicio = {
+          marca: this.marca,
+          producto: this.producto,
+          modelo: this.modelo,
+          sintomas: this.sintomas,
+          ubicacion: this.ubicacion
+        };
 
-    // Guardar toda la información del servicio en las notas como JSON
-    const infoServicio = {
-      marca: this.marca,
-      producto: this.producto,
-      modelo: this.modelo,
-      sintomas: this.sintomas,
-      ubicacion: this.ubicacion
-    };
+        // Manejar fecha y hora opcionales
+        let fechaSeleccionada: Date;
+        if (this.fecha) {
+          fechaSeleccionada = new Date(this.fecha + 'T00:00:00');
+        } else {
+          fechaSeleccionada = new Date();
+        }
 
-    // Manejar fecha y hora opcionales
-    let fechaSeleccionada: Date;
-    if (this.fecha) {
-      fechaSeleccionada = new Date(this.fecha + 'T00:00:00');
-    } else {
-      // Si no hay fecha seleccionada, usar fecha actual
-      fechaSeleccionada = new Date();
-    }
-
-    const cita: Omit<Cita, 'id' | 'estado'> = {
-      clienteId: nuevoCliente.id,
-      tecnicoId: '1', // Técnico por defecto
-      servicioId: '1', // Servicio por defecto
-      fecha: fechaSeleccionada,
-      hora: this.hora || 'Por coordinar', // Si no hay hora, usar "Por coordinar"
-      notas: JSON.stringify(infoServicio),
-      direccion: this.direccion
-    };
-
-    const nuevaCita = this.citaService.crearCita(cita);
-
-    // Simular delay
-    setTimeout(() => {
+        const cita: Omit<Cita, 'id' | 'estado'> = {
+          clienteId: nuevoCliente.id,
+          tecnicoId: this.tecnicoId,
+          servicioId: this.servicioId,
+          fecha: fechaSeleccionada,
+          hora: this.hora || 'Por coordinar',
+          notas: JSON.stringify(infoServicio),
+          direccion: this.direccion
+        };
+        return this.citaService.crearCita(cita);
+      })
+    ).subscribe(nuevaCita => {
       this.isAgendando = false;
       alert('¡Cita agendada exitosamente!');
-      this.router.navigate(['/mis-citas'], {
-        queryParams: { clienteId: nuevoCliente.id }
-      });
-    }, 1000);
+      this.router.navigate(['/']);
+    });
   }
 }
