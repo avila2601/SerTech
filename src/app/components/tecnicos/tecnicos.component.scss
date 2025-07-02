@@ -189,26 +189,41 @@
   align-items: center;
   gap: 0.7rem;
   margin-bottom: 0.5rem;
+  justify-content: space-between;
 }
 
-.btn-comentarios {
-  margin: 0;
-  padding: 0.25rem 0.8rem;
-  font-size: 0.93rem;
-  height: 2rem;
-  line-height: 1.2;
+.stars, .rating-value {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.rating-info {
   display: flex;
   align-items: center;
-  border-radius: 16px;
+  gap: 0.3rem;
+}
+
+.rating-section .btn-comentarios {
+  margin: 0;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.93rem;
+  height: auto;
+  min-width: unset;
+  width: auto;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
   font-weight: 500;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #fff;
   border: none;
   transition: background 0.2s, box-shadow 0.2s;
+  justify-content: center;
 }
 
-.btn-comentarios:hover, .btn-comentarios:focus {
+.rating-section .btn-comentarios:hover, .rating-section .btn-comentarios:focus {
   background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
   color: #fff;
   box-shadow: 0 4px 16px rgba(102, 126, 234, 0.18);
@@ -482,4 +497,8 @@
   background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+}
+
+.tecnico-actions .btn-primary {
+  margin-top: 0.8rem;
 }
