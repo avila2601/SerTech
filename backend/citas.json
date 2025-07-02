@@ -1,0 +1,25 @@
+{
+  "citas": [
+    {
+      "clienteId": "1",
+      "tecnicoId": "2",
+      "servicioId": "2",
+      "fecha": "2025-07-02T05:53:09.117Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"Maytag\",\"producto\":\"Aspiradora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Lo Prado\"}",
+      "direccion": "Calle 75 19a 30",
+      "id": "1"
+    }
+  ],
+  "clientes": [
+    {
+      "nombre": "Diego",
+      "email": "diego2601@gmail.com",
+      "telefono": "3137478782",
+      "direccion": "Calle 75 19a 30",
+      "id": "1"
+    }
+  ],
+  "ultimoIdCliente": 1,
+  "ultimoIdCita": 1
+}
