@@ -95,7 +95,20 @@ export class StorageService {
 
     this.data.citas.push(nuevaCita);
     this.saveData();
+    this.putCitasJson();
     return nuevaCita;
+  }
+
+  /**
+   * Envía el JSON actualizado de citas al archivo assets/data/citas.json usando PUT
+   * (esto solo funcionará si hay un backend que acepte la petición)
+   */
+  putCitasJson(): void {
+    const url = 'assets/data/citas.json';
+    this.http.put(url, this.data).subscribe({
+      next: () => console.log('Archivo citas.json actualizado'),
+      error: err => console.error('Error al actualizar citas.json:', err)
+    });
   }
 
   cancelarCita(citaId: string): void {
