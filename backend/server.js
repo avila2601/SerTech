@@ -17,18 +17,55 @@ app.get('/citas', (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'No se pudo leer el archivo de citas.' });
     }
-    res.json(JSON.parse(data));
+    const json = JSON.parse(data);
+    res.json(json.citas); // Solo el array de citas
   });
 });
 
 // Endpoint para actualizar todas las citas (PUT)
 app.put('/citas', (req, res) => {
   const nuevasCitas = req.body;
-  fs.writeFile(DATA_PATH, JSON.stringify(nuevasCitas, null, 2), 'utf8', err => {
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
     if (err) {
-      return res.status(500).json({ error: 'No se pudo guardar el archivo de citas.' });
+      return res.status(500).json({ error: 'No se pudo leer el archivo de citas.' });
     }
-    res.json({ mensaje: 'Citas actualizadas correctamente.' });
+    let json = JSON.parse(data);
+    json.citas = nuevasCitas;
+    fs.writeFile(DATA_PATH, JSON.stringify(json, null, 2), 'utf8', err => {
+      if (err) {
+        return res.status(500).json({ error: 'No se pudo guardar el archivo de citas.' });
+      }
+      res.json({ mensaje: 'Citas actualizadas correctamente.' });
+    });
+  });
+});
+
+// Endpoint para obtener todos los clientes
+app.get('/clientes', (req, res) => {
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'No se pudo leer el archivo de clientes.' });
+    }
+    const json = JSON.parse(data);
+    res.json(json.clientes); // Solo el array de clientes
+  });
+});
+
+// Endpoint para actualizar todos los clientes (PUT)
+app.put('/clientes', (req, res) => {
+  const nuevosClientes = req.body;
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'No se pudo leer el archivo de clientes.' });
+    }
+    let json = JSON.parse(data);
+    json.clientes = nuevosClientes;
+    fs.writeFile(DATA_PATH, JSON.stringify(json, null, 2), 'utf8', err => {
+      if (err) {
+        return res.status(500).json({ error: 'No se pudo guardar el archivo de clientes.' });
+      }
+      res.json({ mensaje: 'Clientes actualizados correctamente.' });
+    });
   });
 });
 

@@ -2,13 +2,25 @@
   "citas": [
     {
       "clienteId": "1",
-      "tecnicoId": "2",
-      "servicioId": "2",
-      "fecha": "2025-07-02T05:53:09.117Z",
+      "tecnicoId": "4",
+      "servicioId": "",
+      "fecha": "2025-07-02T16:27:11.230Z",
       "hora": "Por coordinar",
-      "notas": "{\"marca\":\"Maytag\",\"producto\":\"Aspiradora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Lo Prado\"}",
+      "notas": "{\"marca\":\"Frigidaire\",\"producto\":\"Tostadora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"La Florida\"}",
       "direccion": "Calle 75 19a 30",
-      "id": "1"
+      "id": "1",
+      "estado": "Pendiente"
+    },
+    {
+      "clienteId": "2",
+      "tecnicoId": "2",
+      "servicioId": "",
+      "fecha": "2025-07-02T16:43:00.116Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"Frigidaire\",\"producto\":\"Aspiradora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"La Granja\"}",
+      "direccion": "Calle 75 19a 30",
+      "id": "2",
+      "estado": "Pendiente"
     }
   ],
   "clientes": [
@@ -18,8 +30,15 @@
       "telefono": "3137478782",
       "direccion": "Calle 75 19a 30",
       "id": "1"
+    },
+    {
+      "nombre": "Juana",
+      "email": "dieg601@gmail.com",
+      "telefono": "3137478782",
+      "direccion": "Calle 75 19a 30",
+      "id": "2"
     }
   ],
-  "ultimoIdCliente": 1,
-  "ultimoIdCita": 1
+  "ultimoIdCliente": 0,
+  "ultimoIdCita": 0
 }
