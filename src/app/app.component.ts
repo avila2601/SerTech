@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { IngresoTecnicosComponent } from './components/tecnicos/ingreso-tecnicos.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, IngresoTecnicosComponent],
   template: `
     <nav class="navbar">
       <div class="container">
@@ -23,8 +24,8 @@ import { CommonModule } from '@angular/common';
         <ul class="nav-menu" [class.active]="isMenuOpen">
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
           <li><a routerLink="/quienes-somos" routerLinkActive="active" (click)="closeMenu()">¿Quienes Somos?</a></li>
-          <!-- <li><a routerLink="/tecnicos" routerLinkActive="active" (click)="closeMenu()">Técnicos</a></li> -->
           <li><a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a></li>
+          <li><button class="btn-nav-tecnicos" (click)="abrirModalTecnicos(); closeMenu()">Técnicos</button></li>
         </ul>
       </div>
     </nav>
@@ -32,6 +33,8 @@ import { CommonModule } from '@angular/common';
     <main>
       <router-outlet></router-outlet>
     </main>
+
+    <app-ingreso-tecnicos *ngIf="mostrarModalTecnicos" (close)="cerrarModalTecnicos()"></app-ingreso-tecnicos>
 
     <footer class="footer">
       <div class="container">
@@ -208,6 +211,7 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   title = 'sertech';
   isMenuOpen = false;
+  mostrarModalTecnicos = false;
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
@@ -215,5 +219,13 @@ export class AppComponent {
 
   closeMenu() {
     this.isMenuOpen = false;
+  }
+
+  abrirModalTecnicos() {
+    this.mostrarModalTecnicos = true;
+  }
+
+  cerrarModalTecnicos() {
+    this.mostrarModalTecnicos = false;
   }
 }
