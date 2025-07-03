@@ -25,7 +25,7 @@ import { Router } from '@angular/router';
         <ul class="nav-menu" [class.active]="isMenuOpen">
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
           <li><a routerLink="/quienes-somos" routerLinkActive="active" (click)="closeMenu()">¿Quienes Somos?</a></li>
-          <li><a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a></li>
+          <li *ngIf="tecnicoLogueado"><a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a></li>
           <li *ngIf="!tecnicoLogueado">
             <a href="#" routerLinkActive="active" class="" (click)="abrirModalTecnicos(); closeMenu(); $event.preventDefault()">Técnicos</a>
           </li>

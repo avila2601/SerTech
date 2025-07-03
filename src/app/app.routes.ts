@@ -7,8 +7,8 @@ export const routes: Routes = [
   { path: 'quienes-somos', loadComponent: () => import('./components/quienes-somos/quienes-somos.component').then(m => m.QuienesSomosComponent) },
   { path: 'informacion-personal', loadComponent: () => import('./components/informacion-personal/informacion-personal.component').then(m => m.InformacionPersonalComponent) },
   { path: 'servicios', loadComponent: () => import('./components/servicios/servicios.component').then(m => m.ServiciosComponent) },
-  { path: 'tecnicos', loadComponent: () => import('./components/tecnicos/tecnicos.component').then(m => m.TecnicosComponent), canActivate: [TecnicosGuard] },
-  { path: 'mis-citas', loadComponent: () => import('./components/mis-citas/mis-citas.component').then(m => m.MisCitasComponent) },
+  { path: 'tecnicos', loadComponent: () => import('./components/tecnicos/tecnicos.component').then(m => m.TecnicosComponent) },
+  { path: 'mis-citas', loadComponent: () => import('./components/mis-citas/mis-citas.component').then(m => m.MisCitasComponent), canActivate: [TecnicosGuard] },
   { path: 'debug', loadComponent: () => import('./components/debug/debug.component').then(m => m.DebugComponent) },
   { path: 'resumen-cita', loadComponent: () => import('./components/resumen-cita/resumen-cita.component').then(m => m.ResumenCitaComponent) },
   { path: '**', redirectTo: '' }
