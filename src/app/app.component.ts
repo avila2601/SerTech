@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { IngresoTecnicosComponent } from './components/tecnicos/ingreso-tecnicos.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,12 @@ import { IngresoTecnicosComponent } from './components/tecnicos/ingreso-tecnicos
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
           <li><a routerLink="/quienes-somos" routerLinkActive="active" (click)="closeMenu()">¿Quienes Somos?</a></li>
           <li><a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a></li>
-          <li><button class="btn-nav-tecnicos" (click)="abrirModalTecnicos(); closeMenu()">Técnicos</button></li>
+          <li *ngIf="!tecnicoLogueado">
+            <a href="#" routerLinkActive="active" class="" (click)="abrirModalTecnicos(); closeMenu(); $event.preventDefault()">Técnicos</a>
+          </li>
+          <li *ngIf="tecnicoLogueado">
+            <a href="#" (click)="logoutTecnico(); $event.preventDefault()">Cerrar sesión</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -34,7 +40,7 @@ import { IngresoTecnicosComponent } from './components/tecnicos/ingreso-tecnicos
       <router-outlet></router-outlet>
     </main>
 
-    <app-ingreso-tecnicos *ngIf="mostrarModalTecnicos" (close)="cerrarModalTecnicos()"></app-ingreso-tecnicos>
+    <app-ingreso-tecnicos *ngIf="mostrarModalTecnicos" (close)="cerrarModalTecnicos()" (loginSuccess)="loginTecnico($event)"></app-ingreso-tecnicos>
 
     <footer class="footer">
       <div class="container">
@@ -208,10 +214,13 @@ import { IngresoTecnicosComponent } from './components/tecnicos/ingreso-tecnicos
     }
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'sertech';
   isMenuOpen = false;
   mostrarModalTecnicos = false;
+  tecnicoLogueado: string | null = null;
+
+  constructor(private router: Router) {}
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
@@ -227,5 +236,20 @@ export class AppComponent {
 
   cerrarModalTecnicos() {
     this.mostrarModalTecnicos = false;
+  }
+
+  loginTecnico(tecnicoId: string) {
+    this.tecnicoLogueado = tecnicoId;
+    localStorage.setItem('tecnicoLogueado', tecnicoId);
+  }
+
+  logoutTecnico() {
+    this.tecnicoLogueado = null;
+    localStorage.removeItem('tecnicoLogueado');
+    this.router.navigate(['/']);
+  }
+
+  ngOnInit() {
+    this.tecnicoLogueado = localStorage.getItem('tecnicoLogueado');
   }
 }

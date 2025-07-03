@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TecnicoService } from '../../services/tecnico.service';
 
 @Component({
   selector: 'app-ingreso-tecnicos',
@@ -22,6 +23,7 @@ import { Router } from '@angular/router';
         </div>
         <button class="btn btn-primary btn-ingresar" type="submit">Ingresar</button>
       </form>
+      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
     </div>
   `,
   styles: [`
@@ -93,20 +95,36 @@ import { Router } from '@angular/router';
       border-radius: 8px;
       font-weight: 600;
     }
+    .error-msg {
+      color: #ff6b6b;
+      margin-top: 0.7rem;
+      text-align: center;
+      font-weight: 500;
+      font-size: 1rem;
+    }
   `]
 })
 export class IngresoTecnicosComponent {
   tecnicoId: string = '';
   password: string = '';
   @Output() close = new EventEmitter<void>();
+  @Output() loginSuccess = new EventEmitter<string>();
+  errorMsg: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private tecnicoService: TecnicoService) {}
 
   ingresar() {
-    // Aquí podrías validar la contraseña si lo deseas
     if (this.tecnicoId && this.password) {
-      this.cerrar();
-      this.router.navigate(['/mis-citas'], { queryParams: { tecnicoId: this.tecnicoId } });
+      this.tecnicoService.getTecnicoById(this.tecnicoId).subscribe(tecnico => {
+        if (tecnico && tecnico.contraseña === this.password) {
+          this.errorMsg = '';
+          this.loginSuccess.emit(this.tecnicoId);
+          this.cerrar();
+          this.router.navigate(['/mis-citas'], { queryParams: { tecnicoId: this.tecnicoId } });
+        } else {
+          this.errorMsg = 'ID o contraseña incorrectos';
+        }
+      });
     }
   }
 

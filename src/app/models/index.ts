@@ -15,6 +15,7 @@ export interface Tecnico {
   calificacion: number;
   disponible: boolean;
   foto?: string;
+  contraseña: string;
 }
 
 export interface Servicio {

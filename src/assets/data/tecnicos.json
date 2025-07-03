@@ -5,7 +5,8 @@
     "especialidad": "Electrodomésticos",
     "calificacion": 4.7,
     "disponible": true,
-    "foto": ""
+    "foto": "",
+    "contraseña": "clave1"
   },
   {
     "id": "2",
@@ -13,7 +14,8 @@
     "especialidad": "Refrigeradores y Aires Acondicionados",
     "calificacion": 4.9,
     "disponible": true,
-    "foto": ""
+    "foto": "",
+    "contraseña": "clave2"
   },
   {
     "id": "3",
@@ -21,7 +23,8 @@
     "especialidad": "Lavadoras y Secadoras",
     "calificacion": 4.5,
     "disponible": false,
-    "foto": ""
+    "foto": "",
+    "contraseña": "clave3"
   },
   {
     "id": "4",
@@ -29,7 +32,8 @@
     "especialidad": "Microondas y Hornos",
     "calificacion": 4.8,
     "disponible": true,
-    "foto": ""
+    "foto": "",
+    "contraseña": "clave4"
   },
   {
     "id": "5",
@@ -37,7 +41,8 @@
     "especialidad": "Televisores y Audio",
     "calificacion": 4.6,
     "disponible": true,
-    "foto": ""
+    "foto": "",
+    "contraseña": "clave5"
   },
   {
     "id": "6",
@@ -45,6 +50,7 @@
     "especialidad": "Pequeños electrodomésticos",
     "calificacion": 4.4,
     "disponible": false,
-    "foto": ""
+    "foto": "",
+    "contraseña": "clave6"
   }
 ]
