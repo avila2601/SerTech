@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CitaService } from '../../services/cita.service';
 import { ClienteService } from '../../services/cliente.service';
-import { Cliente, Cita } from '../../models';
+import { TecnicoService } from '../../services/tecnico.service';
+import { Cliente, Cita, Tecnico } from '../../models';
 import { switchMap } from 'rxjs/operators';
 
 @Component({
@@ -30,11 +31,15 @@ export class ResumenCitaComponent implements OnInit {
   tecnicoId: string = '';
   servicioId: string = '';
 
+  // Información del técnico
+  tecnico: Tecnico | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private citaService: CitaService,
-    private clienteService: ClienteService
+    private clienteService: ClienteService,
+    private tecnicoService: TecnicoService
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +57,17 @@ export class ResumenCitaComponent implements OnInit {
       this.direccion = params['direccion'] || '';
       this.tecnicoId = params['tecnicoId'] || '';
       this.servicioId = params['servicioId'] || '';
+
+      // Cargar información del técnico si hay tecnicoId
+      if (this.tecnicoId) {
+        this.cargarInformacionTecnico();
+      }
+    });
+  }
+
+  cargarInformacionTecnico(): void {
+    this.tecnicoService.getTecnicoById(this.tecnicoId).subscribe(tecnico => {
+      this.tecnico = tecnico || null;
     });
   }
 

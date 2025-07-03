@@ -21,6 +21,17 @@
       "direccion": "Calle 75 19a 30",
       "id": "2",
       "estado": "Pendiente"
+    },
+    {
+      "clienteId": "3",
+      "tecnicoId": "2",
+      "servicioId": "2",
+      "fecha": "2025-07-03T01:01:26.163Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"GE\",\"producto\":\"Tostadora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Lo Prado\"}",
+      "direccion": "Calle 75 19a 30",
+      "id": "3",
+      "estado": "Pendiente"
     }
   ],
   "clientes": [
@@ -37,6 +48,13 @@
       "telefono": "3137478782",
       "direccion": "Calle 75 19a 30",
       "id": "2"
+    },
+    {
+      "nombre": "Ragui",
+      "email": "dio2601@gmail.com",
+      "telefono": "3137478782",
+      "direccion": "Calle 75 19a 30",
+      "id": "3"
     }
   ],
   "ultimoIdCliente": 0,

@@ -10,6 +10,13 @@
     <p><strong>Fecha:</strong> {{ fecha || "Por coordinar" }}</p>
     <p><strong>Hora:</strong> {{ hora || "Por coordinar" }}</p>
   </div>
+
+  <div class="resumen-section" *ngIf="tecnico">
+    <h3>Información del Técnico</h3>
+    <p><strong>Nombre:</strong> {{ tecnico.nombre }}</p>
+    <p><strong>Especialidad:</strong> {{ tecnico.especialidad }}</p>
+  </div>
+
   <div class="resumen-section">
     <h3>Datos Personales</h3>
     <p><strong>Nombre:</strong> {{ nombre }}</p>
