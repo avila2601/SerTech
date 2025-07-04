@@ -151,6 +151,15 @@
   font-weight: 700;
   color: white;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  overflow: hidden;
+}
+
+.tecnico-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
 }
 
 .tecnico-info h3 {

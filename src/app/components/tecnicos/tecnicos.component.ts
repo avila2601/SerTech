@@ -93,4 +93,10 @@ export class TecnicosComponent implements OnInit {
     this.mostrarModalResenas = false;
     this.tecnicoIdModal = '';
   }
+
+  getRandomAvatar(id: string): string {
+    // Usamos pravatar.cc para obtener una imagen aleatoria pero consistente por técnico
+    const num = (parseInt(id, 10) % 70) + 1;
+    return `https://i.pravatar.cc/150?img=${num}`;
+  }
 }

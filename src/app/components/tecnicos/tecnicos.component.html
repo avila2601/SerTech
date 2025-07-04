@@ -1,13 +1,16 @@
 <div class="container">
   <div class="tecnicos-header">
-    <h1>Nuestros Técnicos</h1>
-    <p>Profesionales expertos en equipos</p>
+    <h1>Profesionales expertos en equipos</h1>
+    <p>Selecciona el técnico de tu preferencia</p>
   </div>
 
   <div class="tecnicos-grid">
     <div *ngFor="let tecnico of tecnicos" class="tecnico-card">
       <div class="tecnico-avatar">
-        <span>{{ tecnico.nombre.charAt(0) }}</span>
+        <img
+          [src]="tecnico.foto || getRandomAvatar(tecnico.id)"
+          alt="Avatar técnico"
+        />
       </div>
       <div class="tecnico-info">
         <h3>{{ tecnico.nombre }}</h3>

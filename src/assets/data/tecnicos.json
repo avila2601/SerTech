@@ -5,7 +5,7 @@
     "especialidad": "Electrodomésticos",
     "calificacion": 4.7,
     "disponible": true,
-    "foto": "",
+    "foto": "https://i.pravatar.cc/150?img=2",
     "contraseña": "clave1"
   },
   {
@@ -14,7 +14,7 @@
     "especialidad": "Refrigeradores y Aires Acondicionados",
     "calificacion": 4.9,
     "disponible": true,
-    "foto": "",
+    "foto": "https://i.pravatar.cc/150?img=3",
     "contraseña": "clave2"
   },
   {
@@ -23,7 +23,7 @@
     "especialidad": "Lavadoras y Secadoras",
     "calificacion": 4.5,
     "disponible": false,
-    "foto": "",
+    "foto": "https://i.pravatar.cc/150?img=4",
     "contraseña": "clave3"
   },
   {
@@ -32,7 +32,7 @@
     "especialidad": "Microondas y Hornos",
     "calificacion": 4.8,
     "disponible": true,
-    "foto": "",
+    "foto": "https://i.pravatar.cc/150?img=5",
     "contraseña": "clave4"
   },
   {
@@ -41,7 +41,7 @@
     "especialidad": "Televisores y Audio",
     "calificacion": 4.6,
     "disponible": true,
-    "foto": "",
+    "foto": "https://i.pravatar.cc/150?img=6",
     "contraseña": "clave5"
   },
   {
@@ -50,7 +50,7 @@
     "especialidad": "Pequeños electrodomésticos",
     "calificacion": 4.4,
     "disponible": false,
-    "foto": "",
+    "foto": "https://i.pravatar.cc/150?img=7",
     "contraseña": "clave6"
   }
 ]
