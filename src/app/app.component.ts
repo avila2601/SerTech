@@ -3,11 +3,12 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { IngresoTecnicosComponent } from './components/tecnicos/ingreso-tecnicos.component';
 import { Router } from '@angular/router';
+import { LoginComponent } from './components/login/login.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, IngresoTecnicosComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, IngresoTecnicosComponent, LoginComponent],
   template: `
     <nav class="navbar">
       <div class="container">
@@ -25,12 +26,20 @@ import { Router } from '@angular/router';
         <ul class="nav-menu" [class.active]="isMenuOpen">
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
           <li><a routerLink="/quienes-somos" routerLinkActive="active" (click)="closeMenu()">¿Quienes Somos?</a></li>
-          <li *ngIf="tecnicoLogueado"><a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a></li>
-          <li *ngIf="!tecnicoLogueado">
+          <li *ngIf="tecnicoLogueado || clienteLogueado">
+            <a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a>
+          </li>
+          <li *ngIf="!tecnicoLogueado && !clienteLogueado">
             <a href="#" routerLinkActive="active" class="" (click)="abrirModalTecnicos(); closeMenu(); $event.preventDefault()">Técnicos</a>
           </li>
           <li *ngIf="tecnicoLogueado">
             <a href="#" (click)="logoutTecnico(); $event.preventDefault()">Cerrar sesión</a>
+          </li>
+          <li *ngIf="clienteLogueado">
+            <a href="#" (click)="logoutCliente(); $event.preventDefault()">Cerrar sesión</a>
+          </li>
+          <li *ngIf="!clienteLogueado && !tecnicoLogueado">
+            <a href="#" (click)="abrirModalLogin(); closeMenu(); $event.preventDefault()">Ingreso clientes</a>
           </li>
         </ul>
       </div>
@@ -41,6 +50,7 @@ import { Router } from '@angular/router';
     </main>
 
     <app-ingreso-tecnicos *ngIf="mostrarModalTecnicos" (close)="cerrarModalTecnicos()" (loginSuccess)="loginTecnico($event)"></app-ingreso-tecnicos>
+    <app-login *ngIf="mostrarModalLogin" (close)="cerrarModalLogin()"></app-login>
 
     <footer class="footer">
       <div class="container">
@@ -219,6 +229,8 @@ export class AppComponent implements OnInit {
   isMenuOpen = false;
   mostrarModalTecnicos = false;
   tecnicoLogueado: string | null = null;
+  mostrarModalLogin = false;
+  clienteLogueado: string | null = null;
 
   constructor(private router: Router) {}
 
@@ -249,7 +261,28 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
+  abrirModalLogin() {
+    this.mostrarModalLogin = true;
+  }
+
+  cerrarModalLogin() {
+    this.mostrarModalLogin = false;
+    this.recargarEstadoUsuario();
+  }
+
+  recargarEstadoUsuario() {
+    this.tecnicoLogueado = localStorage.getItem('tecnicoLogueado');
+    this.clienteLogueado = localStorage.getItem('clienteLogueado');
+  }
+
+  logoutCliente() {
+    this.clienteLogueado = null;
+    localStorage.removeItem('clienteLogueado');
+    this.router.navigate(['/']);
+  }
+
   ngOnInit() {
     this.tecnicoLogueado = localStorage.getItem('tecnicoLogueado');
+    this.clienteLogueado = localStorage.getItem('clienteLogueado');
   }
 }

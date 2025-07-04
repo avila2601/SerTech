@@ -33,7 +33,7 @@ export class MisCitasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Obtener el ID del cliente o del técnico desde query params
+    // Obtener el ID del cliente o del técnico desde query params o localStorage
     this.route.queryParams.subscribe(params => {
       if (params['clienteId']) {
         this.clienteIdActual = params['clienteId'];
@@ -42,8 +42,20 @@ export class MisCitasComponent implements OnInit {
         this.tecnicoIdActual = params['tecnicoId'];
         this.clienteIdActual = null;
       } else {
-        this.clienteIdActual = null;
-        this.tecnicoIdActual = null;
+        // Si no hay query params, verificar localStorage
+        const tecnicoLogueado = localStorage.getItem('tecnicoLogueado');
+        const clienteLogueado = localStorage.getItem('clienteLogueado');
+
+        if (tecnicoLogueado) {
+          this.tecnicoIdActual = tecnicoLogueado;
+          this.clienteIdActual = null;
+        } else if (clienteLogueado) {
+          this.clienteIdActual = clienteLogueado;
+          this.tecnicoIdActual = null;
+        } else {
+          this.clienteIdActual = null;
+          this.tecnicoIdActual = null;
+        }
       }
       this.cargarDatos();
     });

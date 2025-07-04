@@ -73,7 +73,7 @@ export class ResumenCitaComponent implements OnInit {
 
   regresar(): void {
     // Navegar de vuelta al componente información personal preservando todos los datos
-    this.router.navigate(['/informacion-personal'], {
+    this.router.navigate(['/clientes'], {
       queryParams: {
         marca: this.marca,
         producto: this.producto,
