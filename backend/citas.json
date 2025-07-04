@@ -2,59 +2,41 @@
   "citas": [
     {
       "clienteId": "1",
-      "tecnicoId": "5",
-      "servicioId": "2",
-      "fecha": "2025-07-17T05:00:00.000Z",
-      "hora": "14:00",
-      "notas": "{\"marca\":\"Sony\",\"producto\":\"Tostadora\",\"modelo\":\"KA-MX-234\",\"sintomas\":\"\",\"ubicacion\":\"Lo Barnechea\"}",
+      "tecnicoId": "4",
+      "servicioId": "1",
+      "fecha": "2025-07-04T22:52:38.734Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"Philips\",\"producto\":\"Aspiradora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Lo Espejo\"}",
       "direccion": "Calle 75 19a 30",
       "id": "1",
       "estado": "Pendiente"
     },
     {
       "clienteId": "2",
-      "tecnicoId": "2",
-      "servicioId": "1",
-      "fecha": "2025-07-03T00:20:12.418Z",
-      "hora": "Por coordinar",
-      "notas": "{\"marca\":\"Bosch\",\"producto\":\"Batidora\",\"modelo\":\"WH-SD-789\",\"sintomas\":\"\",\"ubicacion\":\"Lo Espejo\"}",
+      "tecnicoId": "4",
+      "servicioId": "2",
+      "fecha": "2025-07-24T05:00:00.000Z",
+      "hora": "13:00",
+      "notas": "{\"marca\":\"Bosch\",\"producto\":\"Licuadora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"La Florida\"}",
       "direccion": "Calle 75 19a 30",
       "id": "2",
-      "estado": "Pendiente"
-    },
-    {
-      "clienteId": "3",
-      "tecnicoId": "2",
-      "servicioId": "2",
-      "fecha": "2025-07-03T01:01:26.163Z",
-      "hora": "Por coordinar",
-      "notas": "{\"marca\":\"GE\",\"producto\":\"Tostadora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Lo Prado\"}",
-      "direccion": "Calle 75 19a 30",
-      "id": "3",
       "estado": "Pendiente"
     }
   ],
   "clientes": [
     {
       "nombre": "Diego",
-      "email": "diego2601@gmail.com",
+      "email": "diego@gmail.com",
       "telefono": "3137478782",
       "direccion": "Calle 75 19a 30",
       "id": "1"
     },
     {
       "nombre": "Juani",
-      "email": "juani@gmail.com",
+      "email": "601@gmail.com",
       "telefono": "3137478782",
       "direccion": "Calle 75 19a 30",
       "id": "2"
-    },
-    {
-      "nombre": "Ragui",
-      "email": "dio2601@gmail.com",
-      "telefono": "3137478782",
-      "direccion": "Calle 75 19a 30",
-      "id": "3"
     }
   ],
   "ultimoIdCliente": 0,

@@ -6,6 +6,7 @@ import { ClienteService } from '../../services/cliente.service';
 import { TecnicoService } from '../../services/tecnico.service';
 import { Cliente, Cita, Tecnico } from '../../models';
 import { switchMap } from 'rxjs/operators';
+import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'app-resumen-cita',
@@ -39,7 +40,8 @@ export class ResumenCitaComponent implements OnInit {
     private router: Router,
     private citaService: CitaService,
     private clienteService: ClienteService,
-    private tecnicoService: TecnicoService
+    private tecnicoService: TecnicoService,
+    private appComponent: AppComponent
   ) {}
 
   ngOnInit(): void {
@@ -138,8 +140,17 @@ export class ResumenCitaComponent implements OnInit {
       })
     ).subscribe(nuevaCita => {
       this.isAgendando = false;
+
+      // Loguear automáticamente al usuario
+      localStorage.setItem('clienteLogueado', nuevaCita.clienteId);
+
+      // Actualizar el navbar inmediatamente
+      this.appComponent.actualizarEstadoUsuario();
+
       alert('¡Cita agendada exitosamente!');
-      this.router.navigate(['/']);
+
+      // Redirigir a mis-citas con el clienteId
+      this.router.navigate(['/mis-citas'], { queryParams: { clienteId: nuevaCita.clienteId } });
     });
   }
 }

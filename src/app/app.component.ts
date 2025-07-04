@@ -270,11 +270,6 @@ export class AppComponent implements OnInit {
     this.recargarEstadoUsuario();
   }
 
-  recargarEstadoUsuario() {
-    this.tecnicoLogueado = localStorage.getItem('tecnicoLogueado');
-    this.clienteLogueado = localStorage.getItem('clienteLogueado');
-  }
-
   logoutCliente() {
     this.clienteLogueado = null;
     localStorage.removeItem('clienteLogueado');
@@ -282,7 +277,23 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.recargarEstadoUsuario();
+
+    // Escuchar cambios en localStorage para actualizar el navbar
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'clienteLogueado' || event.key === 'tecnicoLogueado') {
+        this.recargarEstadoUsuario();
+      }
+    });
+  }
+
+  recargarEstadoUsuario() {
     this.tecnicoLogueado = localStorage.getItem('tecnicoLogueado');
     this.clienteLogueado = localStorage.getItem('clienteLogueado');
+  }
+
+  // Método público para que otros componentes puedan actualizar el navbar
+  public actualizarEstadoUsuario() {
+    this.recargarEstadoUsuario();
   }
 }
