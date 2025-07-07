@@ -6,11 +6,12 @@ import { ServicioService } from '../../services/servicio.service';
 import { TecnicoService } from '../../services/tecnico.service';
 import { ClienteService } from '../../services/cliente.service';
 import { Cita, Servicio, Tecnico, Cliente } from '../../models';
+import { ResenasComponent } from '../resenas/resenas.component';
 
 @Component({
   selector: 'app-mis-citas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ResenasComponent],
   templateUrl: './mis-citas.component.html',
   styleUrls: ['./mis-citas.component.scss']
 })
@@ -22,6 +23,9 @@ export class MisCitasComponent implements OnInit {
   clientes: Cliente[] = [];
   clienteIdActual: string | null = null; // Por defecto, sin filtro
   tecnicoIdActual: string | null = null;
+  mostrarModalResena = false;
+  tecnicoIdResena = '';
+  clienteNombreResena = '';
 
   constructor(
     private citaService: CitaService,
@@ -146,5 +150,33 @@ export class MisCitasComponent implements OnInit {
       console.error('Error parsing service info:', error);
     }
     return {};
+  }
+
+  getEstadoCita(cita: Cita): string {
+    const fechaCita = new Date(cita.fecha);
+    const fechaActual = new Date();
+
+    // Si la fecha de la cita ya pasó, mostrar "Terminada"
+    if (fechaCita < fechaActual) {
+      return 'Terminada';
+    }
+
+    // Si la fecha es futura, mostrar "Pendiente"
+    return 'Pendiente';
+  }
+
+  getEstadoCitaClass(cita: Cita): string {
+    const estado = this.getEstadoCita(cita);
+    return estado === 'Pendiente' ? 'estado-pendiente' : 'estado-terminada';
+  }
+
+  abrirModalResena(cita: Cita) {
+    this.tecnicoIdResena = cita.tecnicoId;
+    this.clienteNombreResena = this.getClienteNombre(cita.clienteId);
+    this.mostrarModalResena = true;
+  }
+
+  cerrarModalResena() {
+    this.mostrarModalResena = false;
   }
 }

@@ -8,7 +8,20 @@
     <div *ngFor="let cita of citasFiltradas" class="cita-card">
       <div class="cita-header">
         <div class="cita-info">
-          <h3>{{ getServicioNombre(cita.servicioId) }}</h3>
+          <div class="servicio-estado-row">
+            <h3>{{ getServicioNombre(cita.servicioId) }}</h3>
+            <span class="estado-badge" [ngClass]="getEstadoCitaClass(cita)">
+              {{ getEstadoCita(cita) }}
+            </span>
+          </div>
+          <div *ngIf="getEstadoCita(cita) === 'Terminada'">
+            <button
+              class="btn btn-primary btn-evaluar"
+              (click)="abrirModalResena(cita)"
+            >
+              Evaluar servicio
+            </button>
+          </div>
           <p>{{ formatDate(cita.fecha) }} - {{ cita.hora }}</p>
         </div>
       </div>
@@ -119,3 +132,10 @@
     <p>Aún no has agendado ningún servicio técnico.</p>
   </div>
 </div>
+
+<app-resenas
+  *ngIf="mostrarModalResena"
+  [tecnicoId]="tecnicoIdResena"
+  [cliente]="clienteNombreResena"
+  (close)="cerrarModalResena()"
+></app-resenas>

@@ -2,22 +2,22 @@
   "citas": [
     {
       "clienteId": "1",
-      "tecnicoId": "4",
-      "servicioId": "1",
-      "fecha": "2025-07-04T22:52:38.734Z",
-      "hora": "Por coordinar",
-      "notas": "{\"marca\":\"Philips\",\"producto\":\"Aspiradora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Lo Espejo\"}",
+      "tecnicoId": "2",
+      "servicioId": "2",
+      "fecha": "2025-07-16T05:00:00.000Z",
+      "hora": "13:00",
+      "notas": "{\"marca\":\"Sony\",\"producto\":\"Licuadora\",\"modelo\":\"FG-RF-123\",\"sintomas\":\"\",\"ubicacion\":\"Lo Barnechea\"}",
       "direccion": "Calle 75 19a 30",
       "id": "1",
       "estado": "Pendiente"
     },
     {
       "clienteId": "2",
-      "tecnicoId": "4",
-      "servicioId": "2",
-      "fecha": "2025-07-24T05:00:00.000Z",
-      "hora": "13:00",
-      "notas": "{\"marca\":\"Bosch\",\"producto\":\"Licuadora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"La Florida\"}",
+      "tecnicoId": "1",
+      "servicioId": "3",
+      "fecha": "2025-07-07T05:00:00.000Z",
+      "hora": "15:00",
+      "notas": "{\"marca\":\"Philips\",\"producto\":\"Tostadora\",\"modelo\":\"EL-MW-567\",\"sintomas\":\"\",\"ubicacion\":\"Maipú\"}",
       "direccion": "Calle 75 19a 30",
       "id": "2",
       "estado": "Pendiente"
@@ -26,14 +26,14 @@
   "clientes": [
     {
       "nombre": "Diego",
-      "email": "diego@gmail.com",
+      "email": "diego2601@gmail.com",
       "telefono": "3137478782",
       "direccion": "Calle 75 19a 30",
       "id": "1"
     },
     {
       "nombre": "Juani",
-      "email": "601@gmail.com",
+      "email": "j2601@gmail.com",
       "telefono": "3137478782",
       "direccion": "Calle 75 19a 30",
       "id": "2"

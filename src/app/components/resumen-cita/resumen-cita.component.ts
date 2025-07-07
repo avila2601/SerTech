@@ -100,16 +100,26 @@ export class ResumenCitaComponent implements OnInit {
 
     this.isAgendando = true;
 
-    // Crear cliente
-    const cliente: Omit<Cliente, 'id'> = {
-      nombre: this.nombre,
-      email: this.email,
-      telefono: this.telefono,
-      direccion: this.direccion
-    };
+    // Primero verificar si el cliente ya existe
+    this.clienteService.getClientes().pipe(
+      switchMap(clientes => {
+        const clienteExistente = clientes.find(c => c.email === this.email);
 
-    this.clienteService.agregarCliente(cliente).pipe(
-      switchMap(nuevoCliente => {
+        if (clienteExistente) {
+          // Si el cliente existe, usar el existente
+          return [clienteExistente];
+        } else {
+          // Si no existe, crear uno nuevo
+          const cliente: Omit<Cliente, 'id'> = {
+            nombre: this.nombre,
+            email: this.email,
+            telefono: this.telefono,
+            direccion: this.direccion
+          };
+          return this.clienteService.agregarCliente(cliente);
+        }
+      }),
+      switchMap(cliente => {
         // Guardar toda la información del servicio en las notas como JSON
         const infoServicio = {
           marca: this.marca,
@@ -128,7 +138,7 @@ export class ResumenCitaComponent implements OnInit {
         }
 
         const cita: Omit<Cita, 'id' | 'estado'> = {
-          clienteId: nuevoCliente.id,
+          clienteId: cliente.id,
           tecnicoId: this.tecnicoId,
           servicioId: this.servicioId,
           fecha: fechaSeleccionada,

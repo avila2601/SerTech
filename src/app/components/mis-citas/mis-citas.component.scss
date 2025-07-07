@@ -284,6 +284,28 @@
   box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4);
 }
 
+.btn-evaluar {
+  margin-top: 0.5rem;
+  margin-bottom: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  border-radius: 16px;
+  font-weight: 600;
+  width: auto;
+  float: right;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-evaluar:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
 .no-citas {
   text-align: center;
   padding: 3rem;
@@ -486,4 +508,40 @@
     border-top: 1px solid rgba(255,255,255,0.1);
     margin-top: 0.3rem;
   }
+}
+
+.servicio-estado-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.servicio-estado-row h3 {
+  margin: 0;
+  flex: 1;
+}
+
+.estado-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: white;
+  border: none;
+  cursor: default;
+  margin-left: 1rem;
+  white-space: nowrap;
+}
+
+.estado-pendiente {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.estado-terminada {
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
 }
