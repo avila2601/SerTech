@@ -285,6 +285,7 @@ export class AppComponent implements OnInit {
   logoutCliente() {
     this.clienteLogueado = null;
     localStorage.removeItem('clienteLogueado');
+    localStorage.removeItem('emailLogin');
     this.router.navigate(['/']);
   }
 

@@ -54,6 +54,28 @@
       "direccion": "Cra 28b 66-10",
       "id": "5",
       "estado": "Pendiente"
+    },
+    {
+      "clienteId": "6",
+      "tecnicoId": "2",
+      "servicioId": "2",
+      "fecha": "2025-07-08T02:04:56.156Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"Philips\",\"producto\":\"Licuadora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"La Reina\"}",
+      "direccion": "Calle 62a 19-02",
+      "id": "6",
+      "estado": "Pendiente"
+    },
+    {
+      "clienteId": "7",
+      "tecnicoId": "5",
+      "servicioId": "1",
+      "fecha": "2025-07-08T02:07:46.163Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"Sony\",\"producto\":\"Tostadora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Lo Espejo\"}",
+      "direccion": "Cra 28b 66-10",
+      "id": "7",
+      "estado": "Pendiente"
     }
   ],
   "clientes": [
@@ -91,6 +113,20 @@
       "telefono": "3137478782",
       "direccion": "Cra 28b 66-10",
       "id": "5"
+    },
+    {
+      "nombre": "Diego",
+      "email": "gt@g.com",
+      "telefono": "3137478782",
+      "direccion": "Calle 62a 19-02",
+      "id": "6"
+    },
+    {
+      "nombre": "Siu",
+      "email": "xq@n.co",
+      "telefono": "3137478782",
+      "direccion": "Cra 28b 66-10",
+      "id": "7"
     }
   ],
   "ultimoIdCliente": 0,
