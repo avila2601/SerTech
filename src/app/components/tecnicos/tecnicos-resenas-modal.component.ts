@@ -1,15 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-
-interface Resena {
-  id: string;
-  tecnicoId: string;
-  cliente: string;
-  comentario: string;
-  calificacion: number;
-  fecha: string;
-}
+import { ResenaService } from '../../services/resena.service';
 
 @Component({
   selector: 'app-tecnicos-resenas-modal',
@@ -19,7 +10,10 @@ interface Resena {
     <div class="modal-backdrop" (click)="cerrar()"></div>
     <div class="modal-resenas" (click)="$event.stopPropagation()">
       <h2>Reseñas de clientes</h2>
-      <div *ngIf="resenas.length === 0" class="sin-resenas">
+      <div *ngIf="cargando" class="cargando">
+        <p>Cargando reseñas...</p>
+      </div>
+      <div *ngIf="!cargando && resenas.length === 0" class="sin-resenas">
         <p>No hay reseñas para este técnico.</p>
       </div>
       <div *ngFor="let resena of resenas" class="resena-card">
@@ -95,7 +89,7 @@ interface Resena {
       margin-top: 1rem;
       width: 100%;
     }
-    .sin-resenas {
+    .sin-resenas, .cargando {
       text-align: center;
       color: #b0b0b0;
       margin-bottom: 1rem;
@@ -105,9 +99,10 @@ interface Resena {
 export class TecnicosResenasModalComponent implements OnInit {
   @Input() tecnicoId: string = '';
   @Output() close = new EventEmitter<void>();
-  resenas: Resena[] = [];
+  resenas: any[] = [];
+  cargando: boolean = true;
 
-  constructor(private http: HttpClient) {}
+  constructor(private resenaService: ResenaService) {}
 
   @HostListener('document:keydown.escape', ['$event'])
   onEsc(event: KeyboardEvent) {
@@ -115,17 +110,32 @@ export class TecnicosResenasModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get<Resena[]>('assets/data/resenas.json').subscribe(resenas => {
-      this.resenas = resenas.filter(r => r.tecnicoId === this.tecnicoId);
+    this.cargarResenas();
+  }
+
+  cargarResenas(): void {
+    this.cargando = true;
+    this.resenaService.getResenasPorTecnico(this.tecnicoId).subscribe({
+      next: (resenas) => {
+        this.resenas = resenas;
+        this.cargando = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar reseñas:', error);
+        this.resenas = [];
+        this.cargando = false;
+      }
     });
   }
 
   getStars(calificacion: number): number[] {
     return Array(calificacion).fill(0);
   }
+
   getEmptyStars(calificacion: number): number[] {
     return Array(5 - calificacion).fill(0);
   }
+
   cerrar() {
     this.close.emit();
   }

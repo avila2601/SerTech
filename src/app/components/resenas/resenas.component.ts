@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { ResenaService } from '../../services/resena.service';
 
 @Component({
   selector: 'app-resenas',
@@ -19,7 +19,9 @@ import { HttpClient } from '@angular/common/http';
           <label for="comentario">Comentario</label>
           <textarea id="comentario" [(ngModel)]="comentario" name="comentario" rows="3" required></textarea>
         </div>
-        <button class="btn btn-primary" type="submit">Enviar</button>
+        <button class="btn btn-primary" type="submit" [disabled]="enviando">
+          {{ enviando ? 'Enviando...' : 'Enviar' }}
+        </button>
       </form>
       <button class="btn btn-secondary cerrar-btn" (click)="cerrar()">Cerrar</button>
     </div>
@@ -87,6 +89,10 @@ import { HttpClient } from '@angular/common/http';
       border-radius: 8px;
       font-weight: 600;
     }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
     .cerrar-btn {
       background: #6c757d;
       color: #fff;
@@ -100,32 +106,36 @@ export class ResenasComponent {
   @Output() close = new EventEmitter<void>();
   calificacion: number = 0;
   comentario: string = '';
+  enviando: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private resenaService: ResenaService) {}
 
   enviarResena() {
     if (!this.calificacion || !this.comentario.trim()) {
       alert('Por favor, califica y escribe un comentario.');
       return;
     }
-    // Obtener las reseñas actuales
-    this.http.get<any[]>('assets/data/resenas.json').subscribe(resenas => {
-      const nuevaResena = {
-        id: (resenas.length + 1).toString(),
-        tecnicoId: this.tecnicoId,
-        cliente: this.cliente,
-        comentario: this.comentario,
-        calificacion: this.calificacion,
-        fecha: new Date().toISOString().split('T')[0]
-      };
-      const nuevasResenas = [...resenas, nuevaResena];
-      // Guardar la nueva reseña (esto requiere backend que acepte PUT)
-      this.http.put('assets/data/resenas.json', nuevasResenas).subscribe(() => {
-        alert('¡Reseña enviada!');
+
+    this.enviando = true;
+
+    const nuevaResena = {
+      tecnicoId: this.tecnicoId,
+      cliente: this.cliente,
+      comentario: this.comentario,
+      calificacion: this.calificacion,
+      fecha: new Date().toISOString().split('T')[0]
+    };
+
+    this.resenaService.agregarResena(nuevaResena).subscribe({
+      next: () => {
+        alert('¡Reseña enviada exitosamente!');
         this.cerrar();
-      }, err => {
-        alert('No se pudo guardar la reseña.');
-      });
+      },
+      error: (error) => {
+        console.error('Error al enviar reseña:', error);
+        alert('No se pudo enviar la reseña. Por favor, intenta de nuevo.');
+        this.enviando = false;
+      }
     });
   }
 

@@ -7,6 +7,7 @@ const path = require('path');
 const app = express();
 const PORT = 3001;
 const DATA_PATH = path.join(__dirname, 'citas.json');
+const RESENAS_PATH = path.join(__dirname, 'resenas.json');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -66,6 +67,28 @@ app.put('/clientes', (req, res) => {
       }
       res.json({ mensaje: 'Clientes actualizados correctamente.' });
     });
+  });
+});
+
+// Endpoint para obtener todas las reseñas
+app.get('/resenas', (req, res) => {
+  fs.readFile(RESENAS_PATH, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'No se pudo leer el archivo de reseñas.' });
+    }
+    const resenas = JSON.parse(data);
+    res.json(resenas);
+  });
+});
+
+// Endpoint para actualizar todas las reseñas (PUT)
+app.put('/resenas', (req, res) => {
+  const nuevasResenas = req.body;
+  fs.writeFile(RESENAS_PATH, JSON.stringify(nuevasResenas, null, 2), 'utf8', err => {
+    if (err) {
+      return res.status(500).json({ error: 'No se pudo guardar el archivo de reseñas.' });
+    }
+    res.json({ mensaje: 'Reseñas actualizadas correctamente.' });
   });
 });
 

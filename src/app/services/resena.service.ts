@@ -1,0 +1,69 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, switchMap } from 'rxjs';
+
+export interface Resena {
+  id: string;
+  tecnicoId: string;
+  cliente: string;
+  comentario: string;
+  calificacion: number;
+  fecha: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ResenaService {
+  private readonly API_URL = 'http://localhost:3001';
+
+  constructor(private http: HttpClient) {}
+
+  // Obtener todas las reseñas
+  getResenas(): Observable<Resena[]> {
+    return this.http.get<Resena[]>(`${this.API_URL}/resenas`);
+  }
+
+  // Obtener reseñas por técnico
+  getResenasPorTecnico(tecnicoId: string): Observable<Resena[]> {
+    return this.getResenas().pipe(
+      switchMap(resenas => {
+        const resenasTecnico = resenas.filter(resena => resena.tecnicoId === tecnicoId);
+        return new Observable<Resena[]>(observer => {
+          observer.next(resenasTecnico);
+          observer.complete();
+        });
+      })
+    );
+  }
+
+  // Agregar una nueva reseña
+  agregarResena(resena: Omit<Resena, 'id'>): Observable<Resena> {
+    return this.getResenas().pipe(
+      switchMap(resenas => {
+        // Calcular el nuevo ID
+        const nuevoId = resenas.length > 0 ?
+          (Math.max(...resenas.map(r => +r.id)) + 1).toString() : '1';
+
+        const nuevaResena: Resena = {
+          ...resena,
+          id: nuevoId
+        };
+
+        const resenasActualizadas = [...resenas, nuevaResena];
+
+        return this.http.put<{mensaje: string}>(
+          `${this.API_URL}/resenas`,
+          resenasActualizadas
+        ).pipe(
+          switchMap(() => {
+            return new Observable<Resena>(observer => {
+              observer.next(nuevaResena);
+              observer.complete();
+            });
+          })
+        );
+      })
+    );
+  }
+}
