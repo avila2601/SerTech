@@ -21,6 +21,28 @@
       "direccion": "Calle 75 19a 30",
       "id": "2",
       "estado": "Pendiente"
+    },
+    {
+      "clienteId": "3",
+      "tecnicoId": "4",
+      "servicioId": "2",
+      "fecha": "2025-07-08T01:43:12.217Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"Bosch\",\"producto\":\"Aspiradora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Lo Barnechea\"}",
+      "direccion": "Calle 75 19a 30",
+      "id": "3",
+      "estado": "Pendiente"
+    },
+    {
+      "clienteId": "4",
+      "tecnicoId": "7",
+      "servicioId": "1",
+      "fecha": "2025-07-08T01:48:20.324Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"Philips\",\"producto\":\"Batidora\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Lo Prado\"}",
+      "direccion": "Calle 75 19a 30",
+      "id": "4",
+      "estado": "Pendiente"
     }
   ],
   "clientes": [
@@ -37,6 +59,20 @@
       "telefono": "3137478782",
       "direccion": "Calle 75 19a 30",
       "id": "2"
+    },
+    {
+      "nombre": "Ragui",
+      "email": "ra@ga.com",
+      "telefono": "3137478782",
+      "direccion": "Calle 75 19a 30",
+      "id": "3"
+    },
+    {
+      "nombre": "Di",
+      "email": "di@gmail.com",
+      "telefono": "3137478782",
+      "direccion": "Calle 75 19a 30",
+      "id": "4"
     }
   ],
   "ultimoIdCliente": 0,

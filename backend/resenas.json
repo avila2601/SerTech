@@ -7,5 +7,23 @@
     "calificacion": 4,
     "fecha": "2025-07-08",
     "id": "1"
+  },
+  {
+    "tecnicoId": "4",
+    "clienteId": "3",
+    "cliente": "Ragui",
+    "comentario": "Excelente!",
+    "calificacion": 5,
+    "fecha": "2025-07-08",
+    "id": "2"
+  },
+  {
+    "tecnicoId": "7",
+    "clienteId": "4",
+    "cliente": "Di",
+    "comentario": "Great!",
+    "calificacion": 5,
+    "fecha": "2025-07-08",
+    "id": "3"
   }
 ]

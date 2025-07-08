@@ -21,9 +21,7 @@ export class ClienteService {
     return this.storageService.agregarCliente(cliente);
   }
 
-  actualizarCliente(id: string, cliente: Partial<Cliente>): boolean {
-    // Por ahora mantenemos la funcionalidad básica
-    // En una implementación completa, agregaríamos el método al StorageService
-    return true;
+  actualizarCliente(id: string, datos: Partial<Cliente>) {
+    return this.storageService.actualizarCliente(id, datos);
   }
 }

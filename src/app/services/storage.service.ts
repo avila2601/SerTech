@@ -77,6 +77,22 @@ export class StorageService {
     return this.data.clientes.find(cliente => cliente.id === id);
   }
 
+  actualizarCliente(id: string, datos: Partial<Cliente>): Observable<Cliente | null> {
+    return this.getClientes().pipe(
+      switchMap((clientes: Cliente[]) => {
+        const idx = clientes.findIndex(c => c.id === id);
+        if (idx === -1) return of(null);
+        const clienteActualizado = { ...clientes[idx], ...datos };
+        const clientesActualizados = [...clientes];
+        clientesActualizados[idx] = clienteActualizado;
+        return this.http.put<Cliente[]>(
+          'http://localhost:3001/clientes',
+          clientesActualizados
+        ).pipe(map(() => clienteActualizado));
+      })
+    );
+  }
+
   // Métodos para citas
   getCitas(): Observable<Cita[]> {
     return this.http.get<Cita[]>('http://localhost:3001/citas');

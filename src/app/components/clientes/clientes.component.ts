@@ -60,6 +60,30 @@ export class ClientesComponent implements OnInit {
         hora: params['hora'] || ''
       });
     });
+
+    // --- NUEVO: Cargar datos del cliente logueado si existe ---
+    const clienteId = localStorage.getItem('clienteLogueado');
+    if (clienteId) {
+      this.clienteService.getClientes().subscribe(clientes => {
+        const cliente = clientes.find(c => c.id === clienteId);
+        if (cliente) {
+          this.informacionForm.patchValue({
+            nombre: cliente.nombre,
+            email: cliente.email,
+            telefono: cliente.telefono,
+            direccion: cliente.direccion
+          });
+        }
+      });
+    } else {
+      // Si no hay cliente logueado pero hay un email en localStorage, prellenar solo el email
+      const emailLogin = localStorage.getItem('emailLogin');
+      if (emailLogin) {
+        this.informacionForm.patchValue({
+          email: emailLogin
+        });
+      }
+    }
   }
 
   onSubmit(): void {
@@ -68,25 +92,42 @@ export class ClientesComponent implements OnInit {
 
       const formValue = this.informacionForm.value;
       const params = this.route.snapshot.queryParams;
+      const clienteId = localStorage.getItem('clienteLogueado');
 
-      // Navegar a resumen-cita pasando todos los datos, incluyendo tecnicoId y servicioId
-      this.router.navigate(['/resumen-cita'], {
-        queryParams: {
-          marca: this.marcaSeleccionada,
-          producto: this.productoSeleccionado,
-          modelo: this.modeloSeleccionado,
-          sintomas: this.sintomasSeleccionados,
-          ubicacion: this.ubicacionSeleccionada,
-          fecha: formValue.fecha,
-          hora: formValue.hora,
+      const navegarAResumen = () => {
+        this.router.navigate(['/resumen-cita'], {
+          queryParams: {
+            marca: this.marcaSeleccionada,
+            producto: this.productoSeleccionado,
+            modelo: this.modeloSeleccionado,
+            sintomas: this.sintomasSeleccionados,
+            ubicacion: this.ubicacionSeleccionada,
+            fecha: formValue.fecha,
+            hora: formValue.hora,
+            nombre: formValue.nombre,
+            email: formValue.email,
+            telefono: formValue.telefono,
+            direccion: formValue.direccion,
+            tecnicoId: params['tecnicoId'] || '',
+            servicioId: params['servicioId'] || ''
+          }
+        });
+      };
+
+      if (clienteId) {
+        // Actualizar datos del cliente en el backend
+        this.clienteService.actualizarCliente(clienteId, {
           nombre: formValue.nombre,
           email: formValue.email,
           telefono: formValue.telefono,
-          direccion: formValue.direccion,
-          tecnicoId: params['tecnicoId'] || '',
-          servicioId: params['servicioId'] || ''
-        }
-      });
+          direccion: formValue.direccion
+        }).subscribe({
+          next: () => navegarAResumen(),
+          error: () => navegarAResumen() // Si falla, igual navega
+        });
+      } else {
+        navegarAResumen();
+      }
     }
   }
 

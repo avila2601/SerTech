@@ -128,11 +128,13 @@ export class LoginComponent {
     this.clienteService.getClientes().subscribe(clientes => {
       const cliente = clientes.find(c => c.email === this.email);
       if (cliente) {
-        // Guardar el clienteId como cliente logueado
+        // Guardar el clienteId como cliente logueado y limpiar emailLogin
         localStorage.setItem('clienteLogueado', cliente.id);
+        localStorage.removeItem('emailLogin');
       } else {
-        // Si el email no existe, guardar el email como cliente logueado
-        localStorage.setItem('clienteLogueado', this.email);
+        // Si el email no existe, guardar el email en emailLogin y limpiar clienteLogueado
+        localStorage.setItem('emailLogin', this.email);
+        localStorage.removeItem('clienteLogueado');
       }
 
       this.errorMsg = '';

@@ -52,5 +52,14 @@
     "disponible": false,
     "foto": "https://i.pravatar.cc/150?img=7",
     "contraseña": "clave6"
+  },
+  {
+    "id": "7",
+    "nombre": "Esteban Amador",
+    "especialidad": "Todos los electros",
+    "calificacion": 4.9,
+    "disponible": true,
+    "foto": "https://i.pravatar.cc/150?img=7",
+    "contraseña": "clave7"
   }
 ]

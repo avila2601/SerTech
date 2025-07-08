@@ -38,7 +38,7 @@ import { LoginComponent } from './components/login/login.component';
           <li *ngIf="clienteLogueado">
             <a href="#" (click)="logoutCliente(); $event.preventDefault()">Cerrar sesión</a>
           </li>
-          <li *ngIf="!clienteLogueado && !tecnicoLogueado">
+          <li *ngIf="!estaLogueadoComoCliente && !tecnicoLogueado">
             <a href="#" (click)="abrirModalLogin(); closeMenu(); $event.preventDefault()">Ingreso clientes</a>
           </li>
         </ul>
@@ -279,6 +279,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.recargarEstadoUsuario();
 
+    // Si no hay cliente logueado, limpiar emailLogin
+    if (!localStorage.getItem('clienteLogueado')) {
+      localStorage.removeItem('emailLogin');
+    }
+
     // Escuchar cambios en localStorage para actualizar el navbar
     window.addEventListener('storage', (event) => {
       if (event.key === 'clienteLogueado' || event.key === 'tecnicoLogueado') {
@@ -295,5 +300,9 @@ export class AppComponent implements OnInit {
   // Método público para que otros componentes puedan actualizar el navbar
   public actualizarEstadoUsuario() {
     this.recargarEstadoUsuario();
+  }
+
+  get estaLogueadoComoCliente(): boolean {
+    return !!localStorage.getItem('clienteLogueado') || !!localStorage.getItem('emailLogin');
   }
 }
