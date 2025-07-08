@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { IngresoTecnicosComponent } from './components/tecnicos/ingreso-tecnicos.component';
 import { Router } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
+import { TecnicosResenasModalComponent } from './components/tecnicos/tecnicos-resenas-modal.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, IngresoTecnicosComponent, LoginComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, IngresoTecnicosComponent, LoginComponent, TecnicosResenasModalComponent],
   template: `
     <nav class="navbar">
       <div class="container">
@@ -32,14 +33,17 @@ import { LoginComponent } from './components/login/login.component';
           <li *ngIf="!tecnicoLogueado && !clienteLogueado">
             <a href="#" routerLinkActive="active" class="" (click)="abrirModalTecnicos(); closeMenu(); $event.preventDefault()">Técnicos</a>
           </li>
+          <li *ngIf="!estaLogueadoComoCliente && !tecnicoLogueado">
+            <a href="#" (click)="abrirModalLogin(); closeMenu(); $event.preventDefault()">Ingreso clientes</a>
+          </li>
+          <li *ngIf="tecnicoLogueado">
+            <a href="#" (click)="abrirModalResenasTecnico(); closeMenu(); $event.preventDefault()">Mis reseñas</a>
+          </li>
           <li *ngIf="tecnicoLogueado">
             <a href="#" (click)="logoutTecnico(); $event.preventDefault()">Cerrar sesión</a>
           </li>
           <li *ngIf="clienteLogueado">
             <a href="#" (click)="logoutCliente(); $event.preventDefault()">Cerrar sesión</a>
-          </li>
-          <li *ngIf="!estaLogueadoComoCliente && !tecnicoLogueado">
-            <a href="#" (click)="abrirModalLogin(); closeMenu(); $event.preventDefault()">Ingreso clientes</a>
           </li>
         </ul>
       </div>
@@ -51,6 +55,12 @@ import { LoginComponent } from './components/login/login.component';
 
     <app-ingreso-tecnicos *ngIf="mostrarModalTecnicos" (close)="cerrarModalTecnicos()" (loginSuccess)="loginTecnico($event)"></app-ingreso-tecnicos>
     <app-login *ngIf="mostrarModalLogin" (close)="cerrarModalLogin()"></app-login>
+
+    <app-tecnicos-resenas-modal
+      *ngIf="mostrarModalResenasTecnico"
+      [tecnicoId]="tecnicoIdResenas"
+      (close)="cerrarModalResenasTecnico()"
+    ></app-tecnicos-resenas-modal>
 
     <footer class="footer">
       <div class="container">
@@ -231,6 +241,8 @@ export class AppComponent implements OnInit {
   tecnicoLogueado: string | null = null;
   mostrarModalLogin = false;
   clienteLogueado: string | null = null;
+  mostrarModalResenasTecnico = false;
+  tecnicoIdResenas: string = '';
 
   constructor(private router: Router) {}
 
@@ -274,6 +286,16 @@ export class AppComponent implements OnInit {
     this.clienteLogueado = null;
     localStorage.removeItem('clienteLogueado');
     this.router.navigate(['/']);
+  }
+
+  abrirModalResenasTecnico() {
+    this.tecnicoIdResenas = this.tecnicoLogueado || '';
+    this.mostrarModalResenasTecnico = true;
+  }
+
+  cerrarModalResenasTecnico() {
+    this.mostrarModalResenasTecnico = false;
+    this.tecnicoIdResenas = '';
   }
 
   ngOnInit() {
