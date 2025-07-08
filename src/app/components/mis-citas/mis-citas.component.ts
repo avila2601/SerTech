@@ -5,6 +5,7 @@ import { CitaService } from '../../services/cita.service';
 import { ServicioService } from '../../services/servicio.service';
 import { TecnicoService } from '../../services/tecnico.service';
 import { ClienteService } from '../../services/cliente.service';
+import { ResenaService } from '../../services/resena.service';
 import { Cita, Servicio, Tecnico, Cliente } from '../../models';
 import { ResenasComponent } from '../resenas/resenas.component';
 
@@ -25,13 +26,16 @@ export class MisCitasComponent implements OnInit {
   tecnicoIdActual: string | null = null;
   mostrarModalResena = false;
   tecnicoIdResena = '';
+  clienteIdResena = '';
   clienteNombreResena = '';
+  citasEvaluadas: Set<string> = new Set(); // Para trackear citas ya evaluadas
 
   constructor(
     private citaService: CitaService,
     private servicioService: ServicioService,
     private tecnicoService: TecnicoService,
     private clienteService: ClienteService,
+    private resenaService: ResenaService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -75,6 +79,7 @@ export class MisCitasComponent implements OnInit {
         this.citas = citas; // Mostrar todas si no hay filtro
       }
       this.citasFiltradas = this.citas;
+      this.verificarCitasEvaluadas();
     });
 
     this.servicioService.getServicios().subscribe(servicios => {
@@ -87,6 +92,23 @@ export class MisCitasComponent implements OnInit {
 
     this.clienteService.getClientes().subscribe(clientes => {
       this.clientes = clientes;
+    });
+  }
+
+  verificarCitasEvaluadas(): void {
+    // Verificar qué citas ya han sido evaluadas
+    this.citasFiltradas.forEach(cita => {
+      if (this.getEstadoCita(cita) === 'Terminada') {
+        const tecnicoId = cita.tecnicoId;
+        const clienteId = cita.clienteId;
+        const clienteNombre = this.getClienteNombre(cita.clienteId);
+
+        this.resenaService.existeResena(tecnicoId, clienteId, clienteNombre).subscribe(existe => {
+          if (existe) {
+            this.citasEvaluadas.add(cita.id);
+          }
+        });
+      }
     });
   }
 
@@ -170,13 +192,32 @@ export class MisCitasComponent implements OnInit {
     return estado === 'Pendiente' ? 'estado-pendiente' : 'estado-terminada';
   }
 
+  yaFueEvaluada(cita: Cita): boolean {
+    return this.citasEvaluadas.has(cita.id);
+  }
+
   abrirModalResena(cita: Cita) {
     this.tecnicoIdResena = cita.tecnicoId;
+    this.clienteIdResena = cita.clienteId;
     this.clienteNombreResena = this.getClienteNombre(cita.clienteId);
     this.mostrarModalResena = true;
   }
 
   cerrarModalResena() {
     this.mostrarModalResena = false;
+    // Recargar las citas evaluadas después de cerrar el modal
+    this.verificarCitasEvaluadas();
+  }
+
+  onResenaEnviada() {
+    // Marcar la cita actual como evaluada
+    const citaActual = this.citasFiltradas.find(cita =>
+      cita.tecnicoId === this.tecnicoIdResena &&
+      cita.clienteId === this.clienteIdResena
+    );
+
+    if (citaActual) {
+      this.citasEvaluadas.add(citaActual.id);
+    }
   }
 }

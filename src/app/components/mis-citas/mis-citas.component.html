@@ -16,10 +16,18 @@
           </div>
           <div *ngIf="getEstadoCita(cita) === 'Terminada'">
             <button
+              *ngIf="!yaFueEvaluada(cita)"
               class="btn btn-primary btn-evaluar"
               (click)="abrirModalResena(cita)"
             >
               Evaluar servicio
+            </button>
+            <button
+              *ngIf="yaFueEvaluada(cita)"
+              class="btn btn-secondary btn-evaluado"
+              disabled
+            >
+              Evaluado
             </button>
           </div>
           <p>{{ formatDate(cita.fecha) }} - {{ cita.hora }}</p>
@@ -136,6 +144,8 @@
 <app-resenas
   *ngIf="mostrarModalResena"
   [tecnicoId]="tecnicoIdResena"
+  [clienteId]="clienteIdResena"
   [cliente]="clienteNombreResena"
   (close)="cerrarModalResena()"
+  (resenaEnviada)="onResenaEnviada()"
 ></app-resenas>

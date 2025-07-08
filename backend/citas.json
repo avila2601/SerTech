@@ -4,20 +4,20 @@
       "clienteId": "1",
       "tecnicoId": "2",
       "servicioId": "2",
-      "fecha": "2025-07-16T05:00:00.000Z",
-      "hora": "13:00",
-      "notas": "{\"marca\":\"Sony\",\"producto\":\"Licuadora\",\"modelo\":\"FG-RF-123\",\"sintomas\":\"\",\"ubicacion\":\"Lo Barnechea\"}",
+      "fecha": "2025-07-08T00:34:31.091Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"Frigidaire\",\"producto\":\"Tostadora\",\"modelo\":\"PH-AC-456\",\"sintomas\":\"\",\"ubicacion\":\"Las Condes\"}",
       "direccion": "Calle 75 19a 30",
       "id": "1",
       "estado": "Pendiente"
     },
     {
       "clienteId": "2",
-      "tecnicoId": "1",
+      "tecnicoId": "4",
       "servicioId": "3",
-      "fecha": "2025-07-07T05:00:00.000Z",
-      "hora": "15:00",
-      "notas": "{\"marca\":\"Philips\",\"producto\":\"Tostadora\",\"modelo\":\"EL-MW-567\",\"sintomas\":\"\",\"ubicacion\":\"Maipú\"}",
+      "fecha": "2025-07-08T01:03:23.850Z",
+      "hora": "Por coordinar",
+      "notas": "{\"marca\":\"Philips\",\"producto\":\"Horno\",\"modelo\":\"\",\"sintomas\":\"\",\"ubicacion\":\"Lo Espejo\"}",
       "direccion": "Calle 75 19a 30",
       "id": "2",
       "estado": "Pendiente"
@@ -33,7 +33,7 @@
     },
     {
       "nombre": "Juani",
-      "email": "j2601@gmail.com",
+      "email": "diego21@gmail.com",
       "telefono": "3137478782",
       "direccion": "Calle 75 19a 30",
       "id": "2"

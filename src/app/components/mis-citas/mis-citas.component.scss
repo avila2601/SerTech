@@ -306,6 +306,32 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
+.btn-evaluado {
+  margin-top: 0.5rem;
+  margin-bottom: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  border-radius: 16px;
+  font-weight: 600;
+  width: auto;
+  float: right;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  cursor: not-allowed;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+}
+
+.btn-evaluado:disabled {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  cursor: not-allowed;
+  opacity: 0.8;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+}
+
 .no-citas {
   text-align: center;
   padding: 3rem;

@@ -102,8 +102,10 @@ import { ResenaService } from '../../services/resena.service';
 })
 export class ResenasComponent {
   @Input() tecnicoId: string = '';
+  @Input() clienteId: string = '';
   @Input() cliente: string = '';
   @Output() close = new EventEmitter<void>();
+  @Output() resenaEnviada = new EventEmitter<void>();
   calificacion: number = 0;
   comentario: string = '';
   enviando: boolean = false;
@@ -120,6 +122,7 @@ export class ResenasComponent {
 
     const nuevaResena = {
       tecnicoId: this.tecnicoId,
+      clienteId: this.clienteId,
       cliente: this.cliente,
       comentario: this.comentario,
       calificacion: this.calificacion,
@@ -129,6 +132,7 @@ export class ResenasComponent {
     this.resenaService.agregarResena(nuevaResena).subscribe({
       next: () => {
         alert('¡Reseña enviada exitosamente!');
+        this.resenaEnviada.emit();
         this.cerrar();
       },
       error: (error) => {
