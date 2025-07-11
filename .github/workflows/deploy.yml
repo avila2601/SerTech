@@ -36,6 +36,10 @@ jobs:
       - name: Build
         run: ng build --configuration production
 
+      - name: Fix base href for GitHub Pages
+        run: |
+          sed -i 's|<base href="/">|<base href="./">|g' dist/ser-tech/browser/index.html
+
       - name: Create 404.html for SPA routing
         run: |
           cat > dist/ser-tech/browser/404.html << 'EOF'
