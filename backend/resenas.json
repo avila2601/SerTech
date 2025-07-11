@@ -25,5 +25,14 @@
     "calificacion": 5,
     "fecha": "2025-07-08",
     "id": "3"
+  },
+  {
+    "tecnicoId": "2",
+    "clienteId": "1",
+    "cliente": "Diego",
+    "comentario": "Todo un monstruo!",
+    "calificacion": 5,
+    "fecha": "2025-07-11",
+    "id": "4"
   }
 ]

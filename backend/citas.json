@@ -76,6 +76,17 @@
       "direccion": "Cra 28b 66-10",
       "id": "7",
       "estado": "Pendiente"
+    },
+    {
+      "clienteId": "1",
+      "tecnicoId": "7",
+      "servicioId": "2",
+      "fecha": "2025-07-11T05:00:00.000Z",
+      "hora": "16:00",
+      "notas": "{\"marca\":\"Philips\",\"producto\":\"Licuadora\",\"modelo\":\"WH-SD-789\",\"sintomas\":\"\",\"ubicacion\":\"Lo Barnechea\"}",
+      "direccion": "Calle 75 19a 30",
+      "id": "8",
+      "estado": "Pendiente"
     }
   ],
   "clientes": [
