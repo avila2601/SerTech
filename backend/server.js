@@ -5,12 +5,17 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const DATA_PATH = path.join(__dirname, 'citas.json');
 const RESENAS_PATH = path.join(__dirname, 'resenas.json');
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// Endpoint de prueba
+app.get('/', (req, res) => {
+  res.json({ mensaje: 'API SerTech funcionando correctamente' });
+});
 
 // Endpoint para obtener todas las citas
 app.get('/citas', (req, res) => {
@@ -93,5 +98,5 @@ app.put('/resenas', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Servidor backend escuchando en http://localhost:${PORT}`);
+  console.log(`Servidor backend escuchando en puerto ${PORT}`);
 });

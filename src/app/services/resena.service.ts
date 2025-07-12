@@ -16,7 +16,7 @@ export interface Resena {
   providedIn: 'root'
 })
 export class ResenaService {
-  private readonly API_URL = 'http://localhost:3001';
+  private readonly API_URL = 'https://sertech-backend.onrender.com';
 
   constructor(private http: HttpClient) {}
 

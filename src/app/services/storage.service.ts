@@ -48,11 +48,11 @@ export class StorageService {
 
   // Métodos para clientes
   getClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>('http://localhost:3001/clientes');
+    return this.http.get<Cliente[]>('https://sertech-backend.onrender.com/clientes');
   }
 
   agregarCliente(cliente: Omit<Cliente, 'id'>): Observable<Cliente> {
-    return this.http.get<Cliente[]>('http://localhost:3001/clientes').pipe(
+    return this.http.get<Cliente[]>('https://sertech-backend.onrender.com/clientes').pipe(
       switchMap((clientes: Cliente[]) => {
         // Asegurar que clientes sea un array
         if (!Array.isArray(clientes)) {
@@ -66,7 +66,7 @@ export class StorageService {
         };
         const clientesActualizados = [...clientes, nuevoCliente];
         return this.http.put<Cliente[]>(
-          'http://localhost:3001/clientes',
+          'https://sertech-backend.onrender.com/clientes',
           clientesActualizados
         ).pipe(map(() => nuevoCliente));
       })
@@ -86,7 +86,7 @@ export class StorageService {
         const clientesActualizados = [...clientes];
         clientesActualizados[idx] = clienteActualizado;
         return this.http.put<Cliente[]>(
-          'http://localhost:3001/clientes',
+          'https://sertech-backend.onrender.com/clientes',
           clientesActualizados
         ).pipe(map(() => clienteActualizado));
       })
@@ -95,7 +95,7 @@ export class StorageService {
 
   // Métodos para citas
   getCitas(): Observable<Cita[]> {
-    return this.http.get<Cita[]>('http://localhost:3001/citas');
+    return this.http.get<Cita[]>('https://sertech-backend.onrender.com/citas');
   }
 
   getCitasPorCliente(clienteId: string): Observable<Cita[]> {
@@ -121,7 +121,7 @@ export class StorageService {
         const citasActualizadas = [...citas, nuevaCita];
         // Hacer PUT al backend con el array actualizado
         return this.http.put<Cita[]>(
-          'http://localhost:3001/citas',
+          'https://sertech-backend.onrender.com/citas',
           citasActualizadas
         ).pipe(map(() => nuevaCita));
       })
