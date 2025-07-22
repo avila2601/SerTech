@@ -27,10 +27,10 @@ import { TecnicosResenasModalComponent } from './components/tecnicos/tecnicos-re
         <ul class="nav-menu" [class.active]="isMenuOpen">
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
           <li><a routerLink="/quienes-somos" routerLinkActive="active" (click)="closeMenu()">¿Quienes Somos?</a></li>
-          <li *ngIf="tecnicoLogueado || clienteLogueado">
+          <li *ngIf="tecnicoLogueado || estaLogueadoComoCliente">
             <a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a>
           </li>
-          <li *ngIf="!tecnicoLogueado && !clienteLogueado">
+          <li *ngIf="!tecnicoLogueado && !estaLogueadoComoCliente">
             <a href="#" routerLinkActive="active" class="" (click)="abrirModalTecnicos(); closeMenu(); $event.preventDefault()">Técnicos</a>
           </li>
           <li *ngIf="!estaLogueadoComoCliente && !tecnicoLogueado">
@@ -42,7 +42,7 @@ import { TecnicosResenasModalComponent } from './components/tecnicos/tecnicos-re
           <li *ngIf="tecnicoLogueado">
             <a href="#" (click)="logoutTecnico(); $event.preventDefault()">Cerrar sesión</a>
           </li>
-          <li *ngIf="clienteLogueado">
+          <li *ngIf="estaLogueadoComoCliente">
             <a href="#" (click)="logoutCliente(); $event.preventDefault()">Cerrar sesión</a>
           </li>
         </ul>
@@ -54,7 +54,7 @@ import { TecnicosResenasModalComponent } from './components/tecnicos/tecnicos-re
     </main>
 
     <app-ingreso-tecnicos *ngIf="mostrarModalTecnicos" (close)="cerrarModalTecnicos()" (loginSuccess)="loginTecnico($event)"></app-ingreso-tecnicos>
-    <app-login *ngIf="mostrarModalLogin" (close)="cerrarModalLogin()"></app-login>
+    <app-login *ngIf="mostrarModalLogin" (close)="cerrarModalLogin()" (loginSuccess)="actualizarEstadoUsuario()"></app-login>
 
     <app-tecnicos-resenas-modal
       *ngIf="mostrarModalResenasTecnico"

@@ -103,6 +103,7 @@ import { ClienteService } from '../../services/cliente.service';
 export class LoginComponent {
   email: string = '';
   @Output() close = new EventEmitter<void>();
+  @Output() loginSuccess = new EventEmitter<void>();
   errorMsg: string = '';
 
   constructor(private router: Router, private clienteService: ClienteService) {}
@@ -138,6 +139,7 @@ export class LoginComponent {
       }
 
       this.errorMsg = '';
+      this.loginSuccess.emit();
       this.cerrar();
       // Siempre redirigir a inicio
       this.router.navigate(['/']);
