@@ -53,6 +53,7 @@ export class MisCitasComponent implements OnInit {
         // Si no hay query params, verificar localStorage
         const tecnicoLogueado = localStorage.getItem('tecnicoLogueado');
         const clienteLogueado = localStorage.getItem('clienteLogueado');
+        const emailLogin = localStorage.getItem('emailLogin');
 
         if (tecnicoLogueado) {
           this.tecnicoIdActual = tecnicoLogueado;
@@ -60,6 +61,14 @@ export class MisCitasComponent implements OnInit {
         } else if (clienteLogueado) {
           this.clienteIdActual = clienteLogueado;
           this.tecnicoIdActual = null;
+        } else if (emailLogin) {
+          // Si hay un email guardado, filtrar por ese email
+          this.clienteService.getClientes().subscribe(clientes => {
+            const clienteConEmail = clientes.find(c => c.email === emailLogin);
+            this.clienteIdActual = clienteConEmail ? clienteConEmail.id : emailLogin;
+            this.tecnicoIdActual = null;
+            this.cargarDatos();
+          });
         } else {
           this.clienteIdActual = null;
           this.tecnicoIdActual = null;
@@ -74,9 +83,19 @@ export class MisCitasComponent implements OnInit {
       if (this.tecnicoIdActual) {
         this.citas = citas.filter(c => String(c.tecnicoId) === String(this.tecnicoIdActual));
       } else if (this.clienteIdActual) {
-        this.citas = citas.filter(c => c.clienteId === this.clienteIdActual);
+        const emailLogin = localStorage.getItem('emailLogin');
+        if (emailLogin) {
+          // Si hay emailLogin, mostrar solo las citas donde el email coincide
+          this.citas = citas.filter(c => {
+            const cliente = this.clientes.find(cl => cl.id === c.clienteId);
+            return cliente?.email === emailLogin;
+          });
+        } else {
+          // Si hay clienteId, mostrar solo las citas de ese cliente
+          this.citas = citas.filter(c => c.clienteId === this.clienteIdActual);
+        }
       } else {
-        this.citas = citas; // Mostrar todas si no hay filtro
+        this.citas = []; // No mostrar citas si no hay filtro válido
       }
       this.citasFiltradas = this.citas;
       this.verificarCitasEvaluadas();
