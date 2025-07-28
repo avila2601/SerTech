@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { Router, ActivatedRoute } from '@angular/router';
 import { CitaService } from '../../services/cita.service';
 import { ClienteService } from '../../services/cliente.service';
-import { Cliente, Cita } from '../../models';
+import { Cliente } from '../../models';
 
 @Component({
   selector: 'app-clientes',
@@ -93,8 +93,16 @@ export class ClientesComponent implements OnInit {
       const formValue = this.informacionForm.value;
       const params = this.route.snapshot.queryParams;
       const clienteId = localStorage.getItem('clienteLogueado');
+      const citaId = localStorage.getItem('citaEnProceso');
+      const emailLogin = localStorage.getItem('emailLogin');
 
-      const navegarAResumen = () => {
+      const navegarAResumen = (nuevoClienteId?: string) => {
+        // Si hay una cita en proceso, actualizar su clienteId
+        if (citaId && nuevoClienteId) {
+          this.citaService.actualizarClienteEnCita(citaId, nuevoClienteId);
+          localStorage.removeItem('citaEnProceso');
+        }
+
         this.router.navigate(['/resumen-cita'], {
           queryParams: {
             marca: this.marcaSeleccionada,
@@ -126,16 +134,15 @@ export class ClientesComponent implements OnInit {
           error: () => navegarAResumen() // Si falla, igual navega
         });
       } else {
+        // Si no hay cliente logueado, simplemente navegar al resumen
+        // Esto permitirá crear el cliente durante la confirmación final de la cita
         navegarAResumen();
       }
     }
   }
 
   regresar(): void {
-    console.log('Regresando a técnicos...');
-    console.log('Marca seleccionada:', this.marcaSeleccionada);
-    console.log('Producto seleccionado:', this.productoSeleccionado);
-
+    // Regresar a la página de técnicos con los datos del servicio y cliente
     this.router.navigate(['/tecnicos'], {
       queryParams: {
         servicio: this.route.snapshot.queryParams['servicio'] || '1',

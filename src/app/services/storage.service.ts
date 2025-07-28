@@ -46,6 +46,16 @@ export class StorageService {
     }
   }
 
+  actualizarCita(citaId: string, actualizacion: Partial<Cita>): Observable<void> {
+    const index = this.data.citas.findIndex(c => c.id === citaId);
+    if (index !== -1) {
+      this.data.citas[index] = { ...this.data.citas[index], ...actualizacion };
+      this.saveData();
+      return of(void 0);
+    }
+    return of(void 0);
+  }
+
   // Métodos para clientes
   getClientes(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>('https://sertech-backend.onrender.com/clientes');

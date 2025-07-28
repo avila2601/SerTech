@@ -151,8 +151,9 @@ export class ResumenCitaComponent implements OnInit {
     ).subscribe(nuevaCita => {
       this.isAgendando = false;
 
-      // Loguear automáticamente al usuario
+      // Guardar IDs en localStorage
       localStorage.setItem('clienteLogueado', nuevaCita.clienteId);
+      localStorage.setItem('citaEnProceso', nuevaCita.id);
 
       // Actualizar el navbar inmediatamente
       this.appComponent.actualizarEstadoUsuario();

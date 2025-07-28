@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { StorageService } from '../../services/storage.service';
 
@@ -73,29 +74,51 @@ import { StorageService } from '../../services/storage.service';
 export class DebugComponent {
   jsonData: string = '';
 
-  constructor(private storageService: StorageService) {
+  constructor(private storageService: StorageService, private http: HttpClient) {
     this.updateJsonData();
   }
 
   updateJsonData(): void {
-    this.jsonData = this.storageService.exportData();
+    // Obtener datos de Render (clientes y citas)
+    Promise.all([
+      this.http.get<any>('https://sertech-backend.onrender.com/clientes').toPromise(),
+      this.http.get<any>('https://sertech-backend.onrender.com/citas').toPromise()
+    ]).then(([clientes, citas]) => {
+      this.jsonData = JSON.stringify({ clientes, citas }, null, 2);
+    }).catch(() => {
+      this.jsonData = 'Error al obtener datos de Render';
+    });
   }
 
   exportData(): void {
-    const data = this.storageService.exportData();
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'sertech_data.json';
-    a.click();
-    window.URL.revokeObjectURL(url);
+    // Descargar datos de Render como JSON
+    Promise.all([
+      this.http.get<any>('https://sertech-backend.onrender.com/clientes').toPromise(),
+      this.http.get<any>('https://sertech-backend.onrender.com/citas').toPromise()
+    ]).then(([clientes, citas]) => {
+      const data = JSON.stringify({ clientes, citas }, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sertech_data_render.json';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
   }
 
   clearData(): void {
-    if (confirm('¿Estás seguro de que quieres limpiar todos los datos?')) {
-      this.storageService.clearData();
-      this.updateJsonData();
+    if (confirm('¿Estás seguro de que quieres borrar TODOS los datos en Render?')) {
+      // Enviar petición para borrar todos los datos en Render
+      this.http.delete('https://sertech-backend.onrender.com/debug/clear-all').subscribe({
+        next: () => {
+          alert('Datos en Render eliminados correctamente');
+          this.updateJsonData();
+        },
+        error: () => {
+          alert('Error al borrar datos en Render');
+        }
+      });
     }
   }
 }

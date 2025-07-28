@@ -100,3 +100,26 @@ app.put('/resenas', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor backend escuchando en puerto ${PORT}`);
 });
+
+// Endpoint para borrar todos los datos (clientes, citas, reseñas)
+app.delete('/debug/clear-all', (req, res) => {
+  // Limpiar citas y clientes
+  const emptyData = {
+    citas: [],
+    clientes: [],
+    ultimoIdCliente: 0,
+    ultimoIdCita: 0
+  };
+  fs.writeFile(DATA_PATH, JSON.stringify(emptyData, null, 2), 'utf8', err => {
+    if (err) {
+      return res.status(500).json({ error: 'No se pudo limpiar citas y clientes.' });
+    }
+    // Limpiar reseñas
+    fs.writeFile(RESENAS_PATH, JSON.stringify([], null, 2), 'utf8', err2 => {
+      if (err2) {
+        return res.status(500).json({ error: 'No se pudo limpiar reseñas.' });
+      }
+      res.json({ mensaje: 'Todos los datos han sido eliminados correctamente.' });
+    });
+  });
+});
