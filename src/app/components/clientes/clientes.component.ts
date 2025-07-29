@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CitaService } from '../../services/cita.service';
-import { ClienteService } from '../../services/cliente.service';
+import { AppointmentService } from '../../services/appointment.service';
+import { ClientService } from '../../services/client.service';
 import { Cliente } from '../../models';
 
 @Component({
@@ -26,8 +26,8 @@ export class ClientesComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private citaService: CitaService,
-    private clienteService: ClienteService,
+    private citaService: AppointmentService,
+    private clienteService: ClientService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -64,8 +64,8 @@ export class ClientesComponent implements OnInit {
     // --- NUEVO: Cargar datos del cliente logueado si existe ---
     const clienteId = localStorage.getItem('clienteLogueado');
     if (clienteId) {
-      this.clienteService.getClientes().subscribe(clientes => {
-        const cliente = clientes.find(c => c.id === clienteId);
+      this.clienteService.getClientes().subscribe((clientes: Cliente[]) => {
+        const cliente = clientes.find((c: Cliente) => c.id === clienteId);
         if (cliente) {
           this.informacionForm.patchValue({
             nombre: cliente.nombre,

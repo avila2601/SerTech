@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CitaService } from '../../services/cita.service';
+import { AppointmentService } from '../../services/appointment.service';
 import { ServicioService } from '../../services/servicio.service';
-import { TecnicoService } from '../../services/tecnico.service';
-import { ClienteService } from '../../services/cliente.service';
-import { ResenaService } from '../../services/resena.service';
+import { TechnicianService } from '../../services/technician.service';
+import { ClientService } from '../../services/client.service';
+import { ReviewService } from '../../services/review.service';
 import { Cita, Servicio, Tecnico, Cliente } from '../../models';
 import { ResenasComponent } from '../resenas/resenas.component';
 
@@ -31,11 +31,11 @@ export class MisCitasComponent implements OnInit {
   citasEvaluadas: Set<string> = new Set(); // Para trackear citas ya evaluadas
 
   constructor(
-    private citaService: CitaService,
+    private citaService: AppointmentService,
     private servicioService: ServicioService,
-    private tecnicoService: TecnicoService,
-    private clienteService: ClienteService,
-    private resenaService: ResenaService,
+    private tecnicoService: TechnicianService,
+    private clienteService: ClientService,
+    private resenaService: ReviewService,
     private router: Router,
     private route: ActivatedRoute
   ) {}

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CitaService } from '../../services/cita.service';
-import { ClienteService } from '../../services/cliente.service';
-import { TecnicoService } from '../../services/tecnico.service';
+import { AppointmentService } from '../../services/appointment.service';
+import { ClientService } from '../../services/client.service';
+import { TechnicianService } from '../../services/technician.service';
 import { Cliente, Cita, Tecnico } from '../../models';
 import { switchMap } from 'rxjs/operators';
 import { AppComponent } from '../../app.component';
@@ -38,9 +38,9 @@ export class ResumenCitaComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private citaService: CitaService,
-    private clienteService: ClienteService,
-    private tecnicoService: TecnicoService,
+    private citaService: AppointmentService,
+    private clienteService: ClientService,
+    private tecnicoService: TechnicianService,
     private appComponent: AppComponent
   ) {}
 
@@ -148,20 +148,28 @@ export class ResumenCitaComponent implements OnInit {
         };
         return this.citaService.crearCita(cita);
       })
-    ).subscribe(nuevaCita => {
-      this.isAgendando = false;
+    ).subscribe({
+      next: (nuevaCita) => {
+        console.log('Cita creada exitosamente:', nuevaCita);
+        this.isAgendando = false;
 
-      // Guardar IDs en localStorage
-      localStorage.setItem('clienteLogueado', nuevaCita.clienteId);
-      localStorage.setItem('citaEnProceso', nuevaCita.id);
+        // Guardar IDs en localStorage
+        localStorage.setItem('clienteLogueado', nuevaCita.clienteId);
+        localStorage.setItem('citaEnProceso', nuevaCita.id);
 
-      // Actualizar el navbar inmediatamente
-      this.appComponent.actualizarEstadoUsuario();
+        // Actualizar el navbar inmediatamente
+        this.appComponent.actualizarEstadoUsuario();
 
-      alert('¡Cita agendada exitosamente!');
+        alert('¡Cita agendada exitosamente!');
 
-      // Redirigir a mis-citas con el clienteId
-      this.router.navigate(['/mis-citas'], { queryParams: { clienteId: nuevaCita.clienteId } });
+        // Redirigir a mis-citas con el clienteId
+        this.router.navigate(['/mis-citas'], { queryParams: { clienteId: nuevaCita.clienteId } });
+      },
+      error: (error) => {
+        console.error('Error al agendar la cita:', error);
+        this.isAgendando = false;
+        alert('Error al agendar la cita. Por favor, intenta de nuevo.');
+      }
     });
   }
 }

@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ClienteService } from '../../services/cliente.service';
+import { ClientService } from '../../services/client.service';
 
 @Component({
   selector: 'app-login',
@@ -106,7 +106,7 @@ export class LoginComponent {
   @Output() loginSuccess = new EventEmitter<void>();
   errorMsg: string = '';
 
-  constructor(private router: Router, private clienteService: ClienteService) {}
+  constructor(private router: Router, private clienteService: ClientService) {}
 
   @HostListener('document:keydown.escape')
   onEscapePress() {

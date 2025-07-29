@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TecnicoService } from '../../services/tecnico.service';
+import { TechnicianService } from '../../services/technician.service';
 import { Tecnico } from '../../models';
 import { TecnicosResenasModalComponent } from './tecnicos-resenas-modal.component';
 
@@ -18,7 +18,7 @@ export class TecnicosComponent implements OnInit {
   tecnicoIdModal: string = '';
 
   constructor(
-    private tecnicoService: TecnicoService,
+    private tecnicoService: TechnicianService,
     private router: Router,
     private route: ActivatedRoute
   ) {}

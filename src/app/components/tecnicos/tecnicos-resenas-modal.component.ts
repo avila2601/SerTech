@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ResenaService } from '../../services/resena.service';
+import { ReviewService } from '../../services/review.service';
 
 @Component({
   selector: 'app-tecnicos-resenas-modal',
@@ -102,7 +102,7 @@ export class TecnicosResenasModalComponent implements OnInit {
   resenas: any[] = [];
   cargando: boolean = true;
 
-  constructor(private resenaService: ResenaService) {}
+  constructor(private resenaService: ReviewService) {}
 
   @HostListener('document:keydown.escape', ['$event'])
   onEsc(event: KeyboardEvent) {

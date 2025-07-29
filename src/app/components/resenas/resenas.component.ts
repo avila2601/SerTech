@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ResenaService } from '../../services/resena.service';
+import { ReviewService } from '../../services/review.service';
 
 @Component({
   selector: 'app-resenas',
@@ -110,7 +110,7 @@ export class ResenasComponent {
   comentario: string = '';
   enviando: boolean = false;
 
-  constructor(private resenaService: ResenaService) {}
+  constructor(private resenaService: ReviewService) {}
 
   enviarResena() {
     if (!this.calificacion || !this.comentario.trim()) {

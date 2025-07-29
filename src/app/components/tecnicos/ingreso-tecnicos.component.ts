@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TecnicoService } from '../../services/tecnico.service';
+import { TechnicianService } from '../../services/technician.service';
 
 @Component({
   selector: 'app-ingreso-tecnicos',
@@ -111,7 +111,7 @@ export class IngresoTecnicosComponent {
   @Output() loginSuccess = new EventEmitter<string>();
   errorMsg: string = '';
 
-  constructor(private router: Router, private tecnicoService: TecnicoService) {}
+  constructor(private router: Router, private tecnicoService: TechnicianService) {}
 
   ingresar() {
     if (this.tecnicoId && this.password) {
