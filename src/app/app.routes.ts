@@ -5,7 +5,7 @@ import { AuthGuard } from './auth.guard';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'quienes-somos', loadComponent: () => import('./components/quienes-somos/quienes-somos.component').then(m => m.QuienesSomosComponent) },
-  { path: 'clientes', loadComponent: () => import('./components/clientes/clientes.component').then(m => m.ClientesComponent) },
+  { path: 'clientes', loadComponent: () => import('./components/clientes/clients.component').then(m => m.ClientsComponent) },
   { path: 'servicios', loadComponent: () => import('./components/servicios/servicios.component').then(m => m.ServiciosComponent) },
   { path: 'tecnicos', loadComponent: () => import('./components/tecnicos/tecnicos.component').then(m => m.TecnicosComponent) },
   { path: 'mis-citas', loadComponent: () => import('./components/mis-citas/mis-citas.component').then(m => m.MisCitasComponent), canActivate: [AuthGuard] },

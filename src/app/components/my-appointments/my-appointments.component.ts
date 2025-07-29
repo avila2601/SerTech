@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppointmentService } from '../../services/appointment.service';
-import { ServicioService } from '../../services/servicio.service';
+import { ServiceService } from '../../services/service.service';
 import { TechnicianService } from '../../services/technician.service';
 import { ClientService } from '../../services/client.service';
 import { ReviewService } from '../../services/review.service';
@@ -32,7 +32,7 @@ export class MisCitasComponent implements OnInit {
 
   constructor(
     private citaService: AppointmentService,
-    private servicioService: ServicioService,
+    private servicioService: ServiceService,
     private tecnicoService: TechnicianService,
     private clienteService: ClientService,
     private resenaService: ReviewService,

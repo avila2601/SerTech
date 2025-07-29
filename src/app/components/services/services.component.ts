@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ServicioService } from '../../services/servicio.service';
+import { ServiceService } from '../../services/service.service';
 import { Servicio, CategoriaServicio } from '../../models';
 
 interface ServicioCard {
@@ -88,7 +88,7 @@ export class ServiciosComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private servicioService: ServicioService
+    private servicioService: ServiceService
   ) {
     // Fecha mínima es hoy
     const today = new Date();

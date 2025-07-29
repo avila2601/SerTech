@@ -7,13 +7,13 @@ import { ClientService } from '../../services/client.service';
 import { Cliente } from '../../models';
 
 @Component({
-  selector: 'app-clientes',
+  selector: 'app-clients',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './clientes.component.html',
-  styleUrls: ['./clientes.component.scss']
+  templateUrl: './clients.component.html',
+  styleUrls: ['./clients.component.scss']
 })
-export class ClientesComponent implements OnInit {
+export class ClientsComponent implements OnInit {
   informacionForm: FormGroup;
   isSubmitting = false;
 
