@@ -47,20 +47,19 @@ export class AppointmentSummaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      // Recoger en inglés o español
-      this.brand        = params['brand']       || params['marca']      || '';
-      this.product      = params['product']     || params['producto']   || '';
-      this.model        = params['model']       || params['modelo']     || '';
-      this.symptoms     = params['symptoms']    || params['sintomas']   || '';
-      this.location     = params['location']    || params['ubicacion']  || '';
-      this.date         = params['date']        || params['fecha']      || '';
-      this.time         = params['time']        || params['hora']       || '';
-      this.clientName   = params['clientName']  || params['clienteNombre'] || '';
-      this.email        = params['email']       || params['correo']     || '';
-      this.phone        = params['phone']       || params['telefono']   || '';
-      this.address      = params['address']     || params['direccion']  || '';
-      this.technicianId = params['technicianId']|| params['tecnicoId']  || '';
-      this.serviceId    = params['serviceId']   || params['servicioId'] || '';
+      this.brand = params['brand'] || '';
+      this.product = params['product'] || '';
+      this.model = params['model'] || '';
+      this.symptoms = params['symptoms'] || '';
+      this.location = params['location'] || '';
+      this.date = params['date'] || '';
+      this.time = params['time'] || '';
+      this.clientName = params['clientName'] || '';
+      this.email = params['email'] || '';
+      this.phone = params['phone'] || '';
+      this.address = params['address'] || '';
+      this.technicianId = params['technicianId'] || '';
+      this.serviceId = params['serviceId'] || '';
 
       // Load technician info if technicianId exists
       if (this.technicianId) {
@@ -130,17 +129,11 @@ export class AppointmentSummaryComponent implements OnInit {
       next: newAppointment => {
         console.log('Appointment successfully created:', newAppointment);
         this.isScheduling = false;
-        localStorage.setItem('clienteLogueado', newAppointment.clientId);
+        localStorage.setItem('clientLoggedIn', newAppointment.clientId);
         localStorage.setItem('appointmentInProgress', newAppointment.id);
         this.userState.updateUserStatus();
         alert('Appointment scheduled successfully!');
-
-        // Navigate after a short delay to ensure the appointment is saved
-        setTimeout(() => {
-          this.router.navigate(['/my-appointments'], {
-            queryParams: { clientId: newAppointment.clientId }
-          });
-        }, 500);
+        this.router.navigate(['/my-appointments'], { queryParams: { clientId: newAppointment.clientId } });
       },
       error: err => {
         console.error('Error scheduling appointment:', err);
