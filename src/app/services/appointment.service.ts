@@ -23,6 +23,10 @@ private appointmentsSubject = new BehaviorSubject<Appointment[]>([]);
     return this.appointmentsSubject.asObservable();
   }
 
+  forceRefresh(): void {
+    this.refreshAppointments();
+  }
+
   getAppointmentsByClient(clientId: string): Observable<Appointment[]> {
     return this.storageService.getAppointmentsByClient(clientId);
   }

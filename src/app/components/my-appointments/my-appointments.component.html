@@ -25,17 +25,28 @@
       </p>
 
       <!-- Show review button below date for completed appointments -->
-      <div *ngIf="getAppointmentStatus(appointment) === 'Completed'" class="review-actions-below">
-        <button *ngIf="!wasReviewed(appointment)" class="btn btn-primary btn-small" (click)="openReviewModal(appointment)">
+      <div
+        *ngIf="getAppointmentStatus(appointment) === 'Completed'"
+        class="review-actions-below"
+      >
+        <button
+          *ngIf="!wasReviewed(appointment)"
+          class="btn btn-primary btn-small"
+          (click)="openReviewModal(appointment)"
+        >
           Evaluar Servicio
         </button>
-        <button *ngIf="wasReviewed(appointment)" class="btn btn-secondary btn-small" disabled>
+        <button
+          *ngIf="wasReviewed(appointment)"
+          class="btn btn-secondary btn-small"
+          disabled
+        >
           Evaluado
         </button>
       </div>
 
-  <!-- Wrap detail sections in appointment-details container for side-by-side layout -->
-  <div class="appointment-details">
+      <!-- Wrap detail sections in appointment-details container for side-by-side layout -->
+      <div class="appointment-details">
         <section class="detail-section">
           <h4>Información Personal</h4>
           <div>
@@ -46,14 +57,16 @@
             {{ getClientEmail(appointment.clientId) }}
           </div>
           <div>
-            <strong>Teléfono:</strong> {{ getClientPhone(appointment.clientId) }}
+            <strong>Teléfono:</strong>
+            {{ getClientPhone(appointment.clientId) }}
           </div>
           <div>
             <strong>Dirección:</strong>
             {{ getClientAddress(appointment.clientId) }}
           </div>
           <div *ngIf="getServiceInfo(appointment).location">
-            <strong>Ubicación:</strong> {{ getServiceInfo(appointment).location }}
+            <strong>Ubicación:</strong>
+            {{ getServiceInfo(appointment).location }}
           </div>
         </section>
 
@@ -85,7 +98,8 @@
             <strong>Modelo:</strong> {{ getServiceInfo(appointment).model }}
           </div>
           <div *ngIf="getServiceInfo(appointment).symptoms">
-            <strong>Síntomas:</strong> {{ getServiceInfo(appointment).symptoms }}
+            <strong>Síntomas:</strong>
+            {{ getServiceInfo(appointment).symptoms }}
           </div>
           <div *ngIf="getServiceInfo(appointment).modelInfo">
             <strong>Información Modelo:</strong>

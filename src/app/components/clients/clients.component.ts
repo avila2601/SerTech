@@ -23,6 +23,9 @@ export class ClientsComponent implements OnInit {
   model: string = '';
   symptoms: string = '';
   location: string = '';
+  // IDs para flujo
+  technicianId: string = '';
+  serviceId: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -44,11 +47,15 @@ export class ClientsComponent implements OnInit {
   ngOnInit(): void {
     // Obtener los datos del servicio seleccionado y personales desde query params
     this.route.queryParams.subscribe(params => {
-      this.brand = params['brand'] || '';
-      this.product = params['product'] || '';
-      this.model = params['model'] || '';
-      this.symptoms = params['symptoms'] || '';
-      this.location = params['location'] || '';
+      // Recoger detalles del servicio (inglés o español)
+      this.brand        = params['brand']     || params['marca']     || '';
+      this.product      = params['product']   || params['producto']  || '';
+      this.model        = params['model']     || params['modelo']    || '';
+      this.symptoms     = params['symptoms']  || params['sintomas']  || '';
+      this.location     = params['location']  || params['ubicacion'] || '';
+      // IDs para flow
+      this.technicianId = params['technicianId'] || params['tecnicoId'] || '';
+      this.serviceId    = params['serviceId']    || params['servicioId']|| '';
 
       // Rellenar el formulario si existen datos personales y de fecha/hora
       this.informacionForm.patchValue({
@@ -116,8 +123,8 @@ export class ClientsComponent implements OnInit {
             email: formValue.email,
             phone: formValue.phone,
             address: formValue.address,
-            technicianId: params['technicianId'] || '',
-            serviceId: params['serviceId'] || ''
+            technicianId: this.technicianId,
+            serviceId: this.serviceId
           }
         });
       };

@@ -97,7 +97,17 @@ export class StorageService {
 
   // Métodos para citas
   getAppointments(): Observable<Appointment[]> {
-    return this.http.get<Appointment[]>('https://sertech-backend.onrender.com/appointments');
+    console.log('Making request to Render backend for appointments...');
+    return this.http.get<Appointment[]>('https://sertech-backend.onrender.com/appointments').pipe(
+      map(appointments => {
+        console.log('Appointments received from Render backend:', appointments);
+        return appointments;
+      }),
+      catchError(error => {
+        console.error('Error fetching appointments from Render backend:', error);
+        return of([]);
+      })
+    );
   }
 
   getAppointmentsByClient(clientId: string): Observable<Appointment[]> {
@@ -122,10 +132,20 @@ export class StorageService {
         };
         const updatedAppointments = [...appointments, newAppointment];
         // PUT updated array to backend
+        console.log('Sending new appointment to Render backend:', newAppointment);
         return this.http.put<Appointment[]>(
           'https://sertech-backend.onrender.com/appointments',
           updatedAppointments
-        ).pipe(map(() => newAppointment));
+        ).pipe(
+          map(() => {
+            console.log('Appointment successfully saved to Render backend');
+            return newAppointment;
+          }),
+          catchError(error => {
+            console.error('Error saving appointment to Render backend:', error);
+            throw error;
+          })
+        );
       })
     );
   }

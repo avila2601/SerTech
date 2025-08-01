@@ -47,18 +47,41 @@ export class TechniciansComponent implements OnInit {
         technicianId: technician.id
       };
 
-      // Preservar todos los parámetros del formulario
-      if (params['servicio']) {
-        preservedParams.servicio = params['servicio'];
-        preservedParams.servicioId = params['servicio'];
+      // Preservar parámetros en inglés (primario)
+      if (params['serviceId']) preservedParams.serviceId = params['serviceId'];
+      if (params['brand']) preservedParams.brand = params['brand'];
+      if (params['product']) preservedParams.product = params['product'];
+      if (params['model']) preservedParams.model = params['model'];
+      if (params['location']) preservedParams.location = params['location'];
+      if (params['symptoms']) preservedParams.symptoms = params['symptoms'];
+      if (params['date']) preservedParams.date = params['date'];
+      if (params['time']) preservedParams.time = params['time'];
+
+      // Fallback: si vienen en español, convertir a inglés
+      if (params['servicio'] && !params['serviceId']) {
+        preservedParams.serviceId = params['servicio'];
       }
-      if (params['marca']) preservedParams.marca = params['marca'];
-      if (params['producto']) preservedParams.producto = params['producto'];
-      if (params['modelo']) preservedParams.modelo = params['modelo'];
-      if (params['ubicacion']) preservedParams.ubicacion = params['ubicacion'];
-      if (params['sintomas']) preservedParams.sintomas = params['sintomas'];
-      if (params['fecha']) preservedParams.fecha = params['fecha'];
-      if (params['hora']) preservedParams.hora = params['hora'];
+      if (params['marca'] && !params['brand']) {
+        preservedParams.brand = params['marca'];
+      }
+      if (params['producto'] && !params['product']) {
+        preservedParams.product = params['producto'];
+      }
+      if (params['modelo'] && !params['model']) {
+        preservedParams.model = params['modelo'];
+      }
+      if (params['ubicacion'] && !params['location']) {
+        preservedParams.location = params['ubicacion'];
+      }
+      if (params['sintomas'] && !params['symptoms']) {
+        preservedParams.symptoms = params['sintomas'];
+      }
+      if (params['fecha'] && !params['date']) {
+        preservedParams.date = params['fecha'];
+      }
+      if (params['hora'] && !params['time']) {
+        preservedParams.time = params['hora'];
+      }
 
       this.router.navigate(['/clients'], {
         queryParams: preservedParams
@@ -69,14 +92,42 @@ export class TechniciansComponent implements OnInit {
   goBackToServices(): void {
     this.route.queryParams.subscribe(params => {
       const preservedParams: any = {};
-      if (params['servicio']) preservedParams.servicio = params['servicio'];
-      if (params['marca']) preservedParams.marca = params['marca'];
-      if (params['producto']) preservedParams.producto = params['producto'];
-      if (params['modelo']) preservedParams.modelo = params['modelo'];
-      if (params['ubicacion']) preservedParams.ubicacion = params['ubicacion'];
-      if (params['sintomas']) preservedParams.sintomas = params['sintomas'];
-      if (params['fecha']) preservedParams.fecha = params['fecha'];
-      if (params['hora']) preservedParams.hora = params['hora'];
+
+      // Preservar parámetros en inglés (primario)
+      if (params['serviceId']) preservedParams.serviceId = params['serviceId'];
+      if (params['brand']) preservedParams.brand = params['brand'];
+      if (params['product']) preservedParams.product = params['product'];
+      if (params['model']) preservedParams.model = params['model'];
+      if (params['location']) preservedParams.location = params['location'];
+      if (params['symptoms']) preservedParams.symptoms = params['symptoms'];
+      if (params['date']) preservedParams.date = params['date'];
+      if (params['time']) preservedParams.time = params['time'];
+
+      // Fallback: si vienen en español, convertir a inglés
+      if (params['servicio'] && !params['serviceId']) {
+        preservedParams.serviceId = params['servicio'];
+      }
+      if (params['marca'] && !params['brand']) {
+        preservedParams.brand = params['marca'];
+      }
+      if (params['producto'] && !params['product']) {
+        preservedParams.product = params['producto'];
+      }
+      if (params['modelo'] && !params['model']) {
+        preservedParams.model = params['modelo'];
+      }
+      if (params['ubicacion'] && !params['location']) {
+        preservedParams.location = params['ubicacion'];
+      }
+      if (params['sintomas'] && !params['symptoms']) {
+        preservedParams.symptoms = params['sintomas'];
+      }
+      if (params['fecha'] && !params['date']) {
+        preservedParams.date = params['fecha'];
+      }
+      if (params['hora'] && !params['time']) {
+        preservedParams.time = params['hora'];
+      }
 
       this.router.navigate(['/services'], {
         queryParams: preservedParams
