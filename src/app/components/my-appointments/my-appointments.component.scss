@@ -1,31 +1,30 @@
+// Styles adapted from commit d35977f with English class names
 .container {
-  /* max-width: 700px; */
   width: 100%;
   margin: 0 auto;
   padding: 0;
 }
 
-.mis-citas-header {
+.header {
   text-align: center;
   margin-bottom: 2rem;
   padding: 1.5rem 0;
 }
-
-.mis-citas-header h1 {
+.header h1 {
   font-size: 2.5rem;
   color: #e0e0e0;
   margin-bottom: 0.5rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
-
-.mis-citas-header p {
+.header p {
   font-size: 1.1rem;
   color: #b0b0b0;
   max-width: 600px;
   margin: 0 auto;
 }
 
-.citas-filtro {
+/* Filter buttons */
+.appointment-filters {
   display: flex;
   justify-content: center;
   gap: 1rem;
@@ -33,7 +32,7 @@
   flex-wrap: wrap;
 }
 
-.estado-btn {
+.filter-btn {
   padding: 0.75rem 1.5rem;
   border: 2px solid rgba(102, 126, 234, 0.3);
   background: rgba(31, 41, 55, 0.8);
@@ -44,9 +43,8 @@
   font-weight: 500;
   backdrop-filter: blur(10px);
 }
-
-.estado-btn:hover,
-.estado-btn.active {
+.filter-btn:hover,
+.filter-btn.active {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border-color: #667eea;
@@ -54,34 +52,34 @@
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
-.citas-grid {
+/* Grid for appointments */
+.appointments-grid {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-.cita-card {
-  width: 100%;
-  /* Puedes ajustar el max-width si quieres un límite en pantallas muy grandes */
-  /* max-width: 900px; */
-  margin: 0 auto;
+/* Appointment card */
+.appointment-card {
+  max-width: 800px;
+  margin: 1.5rem auto;
+  width: calc(100% - 2rem);
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0.5rem;
-  background: rgba(31, 41, 55, 0.8);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  gap: 0.8rem;
+  background: rgba(31, 41, 55, 0.9);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
   position: relative;
   overflow: hidden;
 }
-
-.cita-card::before {
+.appointment-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -92,76 +90,82 @@
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
-
-.cita-card:hover::before {
+.appointment-card:hover::before {
   transform: scaleX(1);
 }
-
-.cita-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-  border-color: rgba(102, 126, 234, 0.3);
+.appointment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border-color: rgba(102, 126, 234, 0.4);
 }
 
-.cita-header {
-  flex: none;
-  min-width: 220px;
+/* Appointment header */
+.appointment-header {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin-bottom: 0;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-.cita-info h3 {
-  font-size: 1.3rem;
+.appointment-header h3 {
+  font-size: 1.4rem;
   color: #e0e0e0;
-  margin-bottom: 0.5rem;
+  margin: 0;
   font-weight: 600;
 }
 
-.cita-info p {
-  color: #9ca3af;
-  font-size: 0.95rem;
-  margin-bottom: 0.25rem;
-}
-
-.cita-details {
-  flex: none;
+/* Status section with button below */
+.status-section {
   display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.8rem;
 }
 
+/* Review actions below status */
+.review-actions-below {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Small buttons */
+.btn-small {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  min-width: 80px;
+  border-radius: 8px;
+}
+
+/* Status badge */
+.status-badge {
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Date and time */
+.date-time {
+  color: #a5b4fc;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+/* Detail sections */
 .detail-section {
-  flex: 1 1 0;
-  min-width: 200px;
-  margin-bottom: 0;
-  padding: 0.5rem 0.5rem;
-  border-bottom: none;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255,255,255,0.02);
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.1rem 1.2rem;
+  border-radius: 16px;
+  margin-bottom: 0.8rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-.detail-section.costo {
-  flex: 0 0 100%;
-  min-width: 0;
-  border-right: none;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  margin-top: -1rem;
-  background: rgba(255,255,255,0.04);
-}
-
-.detail-section:last-child {
-  border-right: none;
-}
-
 .detail-section h4 {
   color: #a5b4fc;
   font-size: 1.08rem;
@@ -171,24 +175,17 @@
   letter-spacing: 0.5px;
   text-align: left;
 }
-
 .detail-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
-
-.detail-row:last-child {
-  margin-bottom: 0;
-}
-
 .detail-label {
   color: #8ca0b3;
   font-size: 1rem;
   font-weight: 500;
   text-align: left;
 }
-
 .detail-value {
   color: #e0e0e0;
   font-weight: 600;
@@ -198,92 +195,87 @@
   word-break: break-word;
 }
 
-.estado {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.estado.pendiente {
+/* Status badges */
+.status-pending {
   background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
-
-.estado.en-proceso {
+.status-in-progress {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
-
-.estado.completada {
+.status-completed {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
-
-.estado.cancelada {
+.status-cancelled {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
-.cita-actions {
+/* Review actions */
+.review-actions {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin-left: 2rem;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Buttons */
 .btn {
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1.5rem;
   border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
-  font-weight: 500;
-  min-width: 80px;
+  font-weight: 600;
+  min-width: 120px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
 .btn-primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
-
 .btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
-
 .btn-secondary {
   background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
   color: white;
   box-shadow: 0 4px 15px rgba(74, 85, 104, 0.3);
 }
-
 .btn-secondary:hover {
   background: linear-gradient(135deg, #3a4557 0%, #1a202c 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(74, 85, 104, 0.4);
 }
-
 .btn-danger {
   background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
   color: white;
   box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3);
 }
-
 .btn-danger:hover {
   background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4);
 }
-
 .btn-evaluar {
   margin-top: 0.5rem;
   margin-bottom: 0.8rem;
@@ -299,13 +291,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .btn-evaluar:hover {
   background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
-
 .btn-evaluado {
   margin-top: 0.5rem;
   margin-bottom: 0.8rem;
@@ -322,7 +312,6 @@
   transition: all 0.3s ease;
   opacity: 0.8;
 }
-
 .btn-evaluado:disabled {
   background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
   color: white;
@@ -332,242 +321,77 @@
   box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
 }
 
-.no-citas {
-  text-align: center;
-  padding: 3rem;
-  color: #9ca3af;
-  font-size: 1.1rem;
-}
-
-.no-citas h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #e0e0e0;
-}
-
-.no-citas p {
-  margin-bottom: 1.5rem;
-}
-
-/* Responsive para tablets */
+/* Responsive for tablets */
 @media (max-width: 768px) {
-  .container {
-    padding: 0 15px;
-  }
-
-  .mis-citas-header {
-    margin-bottom: 2rem;
-    padding: 1.5rem 0;
-  }
-
-  .mis-citas-header h1 {
-    font-size: 2rem;
-  }
-
-  .mis-citas-header p {
-    font-size: 1rem;
-  }
-
-  .citas-filtro {
-    gap: 0.8rem;
-    margin-bottom: 2rem;
-  }
-
-  .estado-btn {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
-  }
-
-  .citas-grid {
-    gap: 1.5rem;
-  }
-
-  .cita-card {
+  .container { padding: 0 15px; }
+  .header { margin-bottom: 2rem; padding: 1.5rem 0; }
+  .header h1 { font-size: 2rem; }
+  .header p { font-size: 1rem; }
+  .appointment-filters { gap: 0.8rem; margin-bottom: 2rem; }
+  .filter-btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+  .appointments-grid { gap: 1.5rem; }
+  .appointment-card {
     padding: 1.5rem;
+    margin: 1rem auto;
+    width: calc(100% - 2rem);
   }
-
-  .cita-header {
-    margin-bottom: 1rem;
-  }
-
-  .cita-info h3 {
-    font-size: 1.1rem;
-  }
-
-  .cita-info p {
-    font-size: 0.9rem;
-  }
-
-  .estado {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.75rem;
-  }
-
-  .cita-details {
-    padding: 0.8rem;
-    margin-bottom: 1rem;
-  }
-
-  .detail-row {
-    margin-bottom: 0.4rem;
-  }
-
-  .detail-label,
-  .detail-value {
-    font-size: 0.85rem;
-  }
-
-  .cita-actions {
+  .appointment-header {
     flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .btn {
-    width: 100%;
-    padding: 0.6rem 1rem;
-    font-size: 0.85rem;
-  }
-}
-
-/* Responsive para móviles pequeños */
-@media (max-width: 480px) {
-  .container {
-    padding: 0 10px;
-  }
-
-  .mis-citas-header {
-    margin-bottom: 1.5rem;
-    padding: 1rem 0;
-  }
-
-  .mis-citas-header h1 {
-    font-size: 1.6rem;
-  }
-
-  .mis-citas-header p {
-    font-size: 0.9rem;
-  }
-
-  .citas-filtro {
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .estado-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-  }
-
-  .citas-grid {
+    align-items: flex-start;
     gap: 1rem;
   }
-
-  .cita-card {
-    padding: 1rem;
+  .appointment-header h3 { font-size: 1.2rem; }
+  .date-time { font-size: 0.95rem; }
+  .detail-section { padding: 1.2rem; }
+  .detail-row { margin-bottom: 0.6rem; }
+  .detail-label, .detail-value { font-size: 0.9rem; }
+  .review-actions {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: center;
   }
-
-  .cita-header {
-    margin-bottom: 0.8rem;
-  }
-
-  .cita-info h3 {
-    font-size: 1rem;
-    margin-bottom: 0.3rem;
-  }
-
-  .cita-info p {
-    font-size: 0.85rem;
-    margin-bottom: 0.2rem;
-  }
-
-  .estado {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.7rem;
-  }
-
-  .cita-details {
-    padding: 0.6rem;
-    margin-bottom: 0.8rem;
-  }
-
-  .detail-row {
-    margin-bottom: 0.3rem;
-  }
-
-  .detail-label,
-  .detail-value {
-    font-size: 0.8rem;
-  }
-
   .btn {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.8rem;
+    width: 100%;
+    max-width: 200px;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
   }
+}
 
-  .no-citas {
-    padding: 2rem;
-  }
-
-  .no-citas h3 {
-    font-size: 1.3rem;
-  }
-
-  .no-citas p {
-    font-size: 1rem;
-  }
+/* Responsive for small mobiles */
+@media (max-width: 480px) {
+  .container { padding: 0 10px; }
+  .header { margin-bottom: 1.5rem; padding: 1rem 0; }
+  .header h1 { font-size: 1.6rem; }
+  .header p { font-size: 0.9rem; }
+  .appointment-filters { gap: 0.5rem; margin-bottom: 1.5rem; }
+  .filter-btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
+  .appointments-grid { gap: 1rem; }
+  .appointment-card { padding: 1rem; }
+  .appointment-header h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+  .date-time { font-size: 0.85rem; }
+  .detail-row { margin-bottom: 0.3rem; }
+  .detail-label, .detail-value { font-size: 0.8rem; }
+  .btn { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+  .no-appointments { padding: 2rem; }
+  .no-appointments h3 { font-size: 1.3rem; }
+  .no-appointments p { font-size: 1rem; }
 }
 
 @media (max-width: 900px) {
-  .cita-details {
+  .detail-section { flex-direction: column; gap: 1rem; }
+}
+
+/* Grid layout for wide screens */
+@media (min-width: 1024px) {
+  .appointments-grid {
+    display: flex;
     flex-direction: column;
-    gap: 1rem;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
   }
-  .detail-section {
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    min-width: 0;
+  .appointment-card {
+    margin: 0;
   }
-  .detail-section:last-child {
-    border-bottom: none;
-  }
-  .detail-section.costo {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    margin-top: 0.3rem;
-  }
-}
-
-.servicio-estado-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.servicio-estado-row h3 {
-  margin: 0;
-  flex: 1;
-}
-
-.estado-badge {
-  padding: 0.4rem 0.8rem;
-  border-radius: 16px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  color: white;
-  border: none;
-  cursor: default;
-  margin-left: 1rem;
-  white-space: nowrap;
-}
-
-.estado-pendiente {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-}
-
-.estado-terminada {
-  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
 }

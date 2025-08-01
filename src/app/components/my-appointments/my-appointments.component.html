@@ -11,31 +11,33 @@
     >
       <div class="appointment-header">
         <h3>{{ getServiceName(appointment.serviceId) }}</h3>
-        <span
-          class="status-badge"
-          [ngClass]="getAppointmentStatusClass(appointment)"
-        >
-          {{ getAppointmentStatus(appointment) }}
-        </span>
-      </div>
-      <div
-        *ngIf="getAppointmentStatus(appointment) === 'Completed'"
-        class="review-actions"
-      >
-        <button
-          *ngIf="!wasReviewed(appointment)"
-          class="btn btn-primary"
-          (click)="openReviewModal(appointment)"
-        >
-          Evaluar Servicio
-        </button>
-        <button
-          *ngIf="wasReviewed(appointment)"
-          class="btn btn-secondary"
-          disabled
-        >
-          Evaluado
-        </button>
+        <div class="status-section">
+          <span
+            class="status-badge"
+            [ngClass]="getAppointmentStatusClass(appointment)"
+          >
+            {{ getAppointmentStatus(appointment) }}
+          </span>
+          <div
+            *ngIf="getAppointmentStatus(appointment) === 'Completed'"
+            class="review-actions-below"
+          >
+            <button
+              *ngIf="!wasReviewed(appointment)"
+              class="btn btn-primary btn-small"
+              (click)="openReviewModal(appointment)"
+            >
+              Evaluar Servicio
+            </button>
+            <button
+              *ngIf="wasReviewed(appointment)"
+              class="btn btn-secondary btn-small"
+              disabled
+            >
+              Evaluado
+            </button>
+          </div>
+        </div>
       </div>
       <p class="date-time">
         {{ formatDate(appointment.date) }} - {{ appointment.time }}

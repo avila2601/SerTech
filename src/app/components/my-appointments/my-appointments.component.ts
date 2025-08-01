@@ -14,7 +14,7 @@ import { ReviewsComponent } from '../reviews/reviews.component';
   standalone: true,
   imports: [CommonModule, ReviewsComponent],
   templateUrl: './my-appointments.component.html',
-  styles: []
+  styleUrls: ['./my-appointments.component.scss']
 })
 export class MyAppointmentsComponent implements OnInit {
   appointments: Appointment[] = [];
