@@ -1,0 +1,65 @@
+[
+  {
+    "id": "1",
+    "name": "Juan Pérez",
+    "specialty": "Electrodomésticos",
+    "rating": 4.7,
+    "available": true,
+    "photo": "https://i.pravatar.cc/150?img=2",
+    "password": "clave1"
+  },
+  {
+    "id": "2",
+    "name": "María López",
+    "specialty": "Refrigeradores y Aires Acondicionados",
+    "rating": 4.9,
+    "available": true,
+    "photo": "https://i.pravatar.cc/150?img=3",
+    "password": "clave2"
+  },
+  {
+    "id": "3",
+    "name": "Carlos Ramírez",
+    "specialty": "Lavadoras y Secadoras",
+    "rating": 4.5,
+    "available": false,
+    "photo": "https://i.pravatar.cc/150?img=4",
+    "password": "clave3"
+  },
+  {
+    "id": "4",
+    "name": "Ana Torres",
+    "specialty": "Microondas y Hornos",
+    "rating": 4.8,
+    "available": true,
+    "photo": "https://i.pravatar.cc/150?img=5",
+    "password": "clave4"
+  },
+  {
+    "id": "5",
+    "name": "Luis Fernández",
+    "specialty": "Televisores y Audio",
+    "rating": 4.6,
+    "available": true,
+    "photo": "https://i.pravatar.cc/150?img=6",
+    "password": "clave5"
+  },
+  {
+    "id": "6",
+    "name": "Patricia Soto",
+    "specialty": "Pequeños electrodomésticos",
+    "rating": 4.4,
+    "available": false,
+    "photo": "https://i.pravatar.cc/150?img=7",
+    "password": "clave6"
+  },
+  {
+    "id": "7",
+    "name": "Esteban Amador",
+    "specialty": "Todos los electros",
+    "rating": 4.9,
+    "available": true,
+    "photo": "https://i.pravatar.cc/150?img=7",
+    "password": "clave7"
+  }
+]
