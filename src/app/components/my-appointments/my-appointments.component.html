@@ -18,91 +18,86 @@
           >
             {{ getAppointmentStatus(appointment) }}
           </span>
-          <div
-            *ngIf="getAppointmentStatus(appointment) === 'Completed'"
-            class="review-actions-below"
-          >
-            <button
-              *ngIf="!wasReviewed(appointment)"
-              class="btn btn-primary btn-small"
-              (click)="openReviewModal(appointment)"
-            >
-              Evaluar Servicio
-            </button>
-            <button
-              *ngIf="wasReviewed(appointment)"
-              class="btn btn-secondary btn-small"
-              disabled
-            >
-              Evaluado
-            </button>
-          </div>
         </div>
       </div>
       <p class="date-time">
         {{ formatDate(appointment.date) }} - {{ appointment.time }}
       </p>
 
-      <section class="detail-section">
-        <h4>Información Personal</h4>
-        <div>
-          <strong>Nombre:</strong> {{ getClientName(appointment.clientId) }}
-        </div>
-        <div>
-          <strong>Correo electrónico:</strong>
-          {{ getClientEmail(appointment.clientId) }}
-        </div>
-        <div>
-          <strong>Teléfono:</strong> {{ getClientPhone(appointment.clientId) }}
-        </div>
-        <div>
-          <strong>Dirección:</strong>
-          {{ getClientAddress(appointment.clientId) }}
-        </div>
-        <div *ngIf="getServiceInfo(appointment).location">
-          <strong>Ubicación:</strong> {{ getServiceInfo(appointment).location }}
-        </div>
-      </section>
+      <!-- Show review button below date for completed appointments -->
+      <div *ngIf="getAppointmentStatus(appointment) === 'Completed'" class="review-actions-below">
+        <button *ngIf="!wasReviewed(appointment)" class="btn btn-primary btn-small" (click)="openReviewModal(appointment)">
+          Evaluar Servicio
+        </button>
+        <button *ngIf="wasReviewed(appointment)" class="btn btn-secondary btn-small" disabled>
+          Evaluado
+        </button>
+      </div>
 
-      <section class="detail-section">
-        <h4>Información del Técnico</h4>
-        <div>
-          <strong>Técnico:</strong>
-          {{ getTechnicianName(appointment.technicianId) }}
-        </div>
-        <div>
-          <strong>Especialidad:</strong>
-          {{ getTechnicianSpecialty(appointment.technicianId) }}
-        </div>
-      </section>
+  <!-- Wrap detail sections in appointment-details container for side-by-side layout -->
+  <div class="appointment-details">
+        <section class="detail-section">
+          <h4>Información Personal</h4>
+          <div>
+            <strong>Nombre:</strong> {{ getClientName(appointment.clientId) }}
+          </div>
+          <div>
+            <strong>Correo electrónico:</strong>
+            {{ getClientEmail(appointment.clientId) }}
+          </div>
+          <div>
+            <strong>Teléfono:</strong> {{ getClientPhone(appointment.clientId) }}
+          </div>
+          <div>
+            <strong>Dirección:</strong>
+            {{ getClientAddress(appointment.clientId) }}
+          </div>
+          <div *ngIf="getServiceInfo(appointment).location">
+            <strong>Ubicación:</strong> {{ getServiceInfo(appointment).location }}
+          </div>
+        </section>
 
-      <section class="detail-section">
-        <h4>Información del Servicio</h4>
-        <div *ngIf="getServiceInfo(appointment).brand">
-          <strong>Marca:</strong> {{ getServiceInfo(appointment).brand }}
-        </div>
-        <div *ngIf="getServiceInfo(appointment).product">
-          <strong>Producto:</strong> {{ getServiceInfo(appointment).product }}
-        </div>
-        <div>
-          <strong>Referencia:</strong>
-          {{ getServiceInfo(appointment).reference || "N/A" }}
-        </div>
-        <div *ngIf="getServiceInfo(appointment).model">
-          <strong>Modelo:</strong> {{ getServiceInfo(appointment).model }}
-        </div>
-        <div *ngIf="getServiceInfo(appointment).symptoms">
-          <strong>Síntomas:</strong> {{ getServiceInfo(appointment).symptoms }}
-        </div>
-        <div *ngIf="getServiceInfo(appointment).modelInfo">
-          <strong>Información Modelo:</strong>
-          {{ getServiceInfo(appointment).modelInfo }}
-        </div>
-      </section>
+        <section class="detail-section">
+          <h4>Información del Técnico</h4>
+          <div>
+            <strong>Técnico:</strong>
+            {{ getTechnicianName(appointment.technicianId) }}
+          </div>
+          <div>
+            <strong>Especialidad:</strong>
+            {{ getTechnicianSpecialty(appointment.technicianId) }}
+          </div>
+        </section>
 
-      <section class="detail-section">
-        <h4>Costo del Servicio</h4>
-        <div><strong>Cost:</strong> TBD</div>
+        <section class="detail-section">
+          <h4>Información del Servicio</h4>
+          <div *ngIf="getServiceInfo(appointment).brand">
+            <strong>Marca:</strong> {{ getServiceInfo(appointment).brand }}
+          </div>
+          <div *ngIf="getServiceInfo(appointment).product">
+            <strong>Producto:</strong> {{ getServiceInfo(appointment).product }}
+          </div>
+          <div>
+            <strong>Referencia:</strong>
+            {{ getServiceInfo(appointment).reference || "N/A" }}
+          </div>
+          <div *ngIf="getServiceInfo(appointment).model">
+            <strong>Modelo:</strong> {{ getServiceInfo(appointment).model }}
+          </div>
+          <div *ngIf="getServiceInfo(appointment).symptoms">
+            <strong>Síntomas:</strong> {{ getServiceInfo(appointment).symptoms }}
+          </div>
+          <div *ngIf="getServiceInfo(appointment).modelInfo">
+            <strong>Información Modelo:</strong>
+            {{ getServiceInfo(appointment).modelInfo }}
+          </div>
+        </section>
+      </div>
+
+      <!-- Cost section remains full width below -->
+      <section class="detail-section cost">
+        <h4>Valor del Servicio</h4>
+        <div><strong>$</strong></div>
       </section>
     </div>
   </div>
