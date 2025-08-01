@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { Servicio, CategoriaServicio } from '../models';
+import { Service, ServiceCategory } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -8,48 +8,48 @@ import { Servicio, CategoriaServicio } from '../models';
 export class ServiceService {
   constructor() {}
 
-  getServicios(): Observable<Servicio[]> {
-    return of([
+  getServices(): Observable<Service[]> {
+    return of<Service[]>([
       {
         id: '1',
-        nombre: 'Mantenimiento Preventivo',
-        descripcion: 'Mantenimiento para asegurar el óptimo funcionamiento de tus electrodomésticos, prolongar su vida útil y prevenir futuras fallas. Incluye limpieza, revisión técnica y pruebas de operación.',
-        precio: 50,
-        duracionEstimada: 60,
-        categoria: CategoriaServicio.MANTENIMIENTO
+        name: 'Preventive Maintenance',
+        description: 'Service to ensure optimal performance of your appliances, extend lifespan, and prevent future breakdowns. Includes cleaning, technical inspection, and operational testing.',
+        price: 50,
+        estimatedDuration: 60,
+        category: ServiceCategory.MAINTENANCE
       },
       {
         id: '2',
-        nombre: 'Reparación de Electrodomésticos',
-        descripcion: 'Visita de diagnóstico para detectar fallas y si es necesario, cotizar el cambio de piezas.',
-        precio: 80,
-        duracionEstimada: 120,
-        categoria: CategoriaServicio.REPARACION
+        name: 'Appliance Repair',
+        description: 'Diagnostic visit to identify malfunctions and, if necessary, provide a quote for part replacements.',
+        price: 80,
+        estimatedDuration: 120,
+        category: ServiceCategory.REPAIR
       },
       {
         id: '3',
-        nombre: 'Instalación y Configuración',
-        descripcion: 'Instalación profesional de electrodomésticos, asegurando una conexión segura y funcional. Verificación del correcto montaje, nivelación y puesta en marcha del equipo.',
-        precio: 40,
-        duracionEstimada: 90,
-        categoria: CategoriaServicio.INSTALACION
+        name: 'Installation and Configuration',
+        description: 'Professional appliance installation, ensuring safe and functional connections. Includes proper mounting, leveling, and system startup verification.',
+        price: 40,
+        estimatedDuration: 90,
+        category: ServiceCategory.INSTALLATION
       }
     ]);
   }
 
-  getServicioById(id: string): Observable<Servicio | undefined> {
-    return new Observable(observer => {
-      this.getServicios().subscribe(servicios => {
-        observer.next(servicios.find(servicio => servicio.id === id));
+  getServiceById(id: string): Observable<Service | undefined> {
+    return new Observable<Service | undefined>(observer => {
+      this.getServices().subscribe(list => {
+        observer.next(list.find(s => s.id === id));
         observer.complete();
       });
     });
   }
 
-  getServiciosPorCategoria(categoria: CategoriaServicio): Observable<Servicio[]> {
-    return new Observable(observer => {
-      this.getServicios().subscribe(servicios => {
-        observer.next(servicios.filter(s => s.categoria === categoria));
+  getServicesByCategory(category: ServiceCategory): Observable<Service[]> {
+    return new Observable<Service[]>(observer => {
+      this.getServices().subscribe(list => {
+        observer.next(list.filter(s => s.category === category));
         observer.complete();
       });
     });

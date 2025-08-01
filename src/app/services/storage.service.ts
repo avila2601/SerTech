@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
-import { Cita, Cliente, EstadoCita } from '../models';
+import { Appointment, Client, AppointmentStatus } from '../models';
 
 interface DataStorage {
-  citas: Cita[];
-  clientes: Cliente[];
-  ultimoIdCliente: number;
-  ultimoIdCita: number;
+  appointments: Appointment[];
+  clients: Client[];
+  lastClientId: number;
+  lastAppointmentId: number;
 }
 
 @Injectable({
@@ -17,10 +17,10 @@ interface DataStorage {
 export class StorageService {
   private readonly STORAGE_KEY = 'sertech_data';
   private data: DataStorage = {
-    citas: [],
-    clientes: [],
-    ultimoIdCliente: 0,
-    ultimoIdCita: 0
+    appointments: [],
+    clients: [],
+    lastClientId: 0,
+    lastAppointmentId: 0
   };
 
   constructor(private http: HttpClient) {
@@ -46,10 +46,10 @@ export class StorageService {
     }
   }
 
-  actualizarCita(citaId: string, actualizacion: Partial<Cita>): Observable<void> {
-    const index = this.data.citas.findIndex(c => c.id === citaId);
+  updateAppointment(appointmentId: string, update: Partial<Appointment>): Observable<void> {
+    const index = this.data.appointments.findIndex(a => a.id === appointmentId);
     if (index !== -1) {
-      this.data.citas[index] = { ...this.data.citas[index], ...actualizacion };
+      this.data.appointments[index] = { ...this.data.appointments[index], ...update } as Appointment;
       this.saveData();
       return of(void 0);
     }
@@ -57,110 +57,102 @@ export class StorageService {
   }
 
   // Métodos para clientes
-  getClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>('https://sertech-backend.onrender.com/clientes');
+  getClients(): Observable<Client[]> {
+    return this.http.get<Client[]>('https://sertech-backend.onrender.com/clients');
   }
 
-  agregarCliente(cliente: Omit<Cliente, 'id'>): Observable<Cliente> {
-    return this.http.get<Cliente[]>('https://sertech-backend.onrender.com/clientes').pipe(
-      switchMap((clientes: Cliente[]) => {
-        // Asegurar que clientes sea un array
-        if (!Array.isArray(clientes)) {
-          clientes = [];
-        }
-        // Calcular el nuevo ID
-        const nuevoId = clientes.length > 0 ? (Math.max(...clientes.map(c => +c.id)) + 1).toString() : '1';
-        const nuevoCliente: Cliente = {
-          ...cliente,
-          id: nuevoId
-        };
-        const clientesActualizados = [...clientes, nuevoCliente];
-        return this.http.put<Cliente[]>(
-          'https://sertech-backend.onrender.com/clientes',
-          clientesActualizados
-        ).pipe(map(() => nuevoCliente));
+  addClient(client: Omit<Client, 'id'>): Observable<Client> {
+    return this.http.get<Client[]>('https://sertech-backend.onrender.com/clients').pipe(
+      switchMap((clients: Client[]) => {
+        const list = Array.isArray(clients) ? clients : [];
+        const newId = list.length > 0 ? (Math.max(...list.map(c => +c.id)) + 1).toString() : '1';
+        const newClient: Client = { ...client, id: newId };
+        const updatedClients = [...list, newClient];
+        return this.http.put<Client[]>(
+          'https://sertech-backend.onrender.com/clients',
+          updatedClients
+        ).pipe(map(() => newClient));
       })
     );
   }
 
-  getClienteById(id: string): Cliente | undefined {
-    return this.data.clientes.find(cliente => cliente.id === id);
+  getClientById(id: string): Client | undefined {
+    return this.data.clients.find(client => client.id === id);
   }
 
-  actualizarCliente(id: string, datos: Partial<Cliente>): Observable<Cliente | null> {
-    return this.getClientes().pipe(
-      switchMap((clientes: Cliente[]) => {
-        const idx = clientes.findIndex(c => c.id === id);
+  updateClient(id: string, data: Partial<Client>): Observable<Client | null> {
+    return this.getClients().pipe(
+      switchMap((clients: Client[]) => {
+        const idx = clients.findIndex(c => c.id === id);
         if (idx === -1) return of(null);
-        const clienteActualizado = { ...clientes[idx], ...datos };
-        const clientesActualizados = [...clientes];
-        clientesActualizados[idx] = clienteActualizado;
-        return this.http.put<Cliente[]>(
-          'https://sertech-backend.onrender.com/clientes',
-          clientesActualizados
-        ).pipe(map(() => clienteActualizado));
+        const updatedClient = { ...clients[idx], ...data };
+        const updatedList = [...clients]; updatedList[idx] = updatedClient;
+        return this.http.put<Client[]>(
+          'https://sertech-backend.onrender.com/clients',
+          updatedList
+        ).pipe(map(() => updatedClient));
       })
     );
   }
 
   // Métodos para citas
-  getCitas(): Observable<Cita[]> {
-    return this.http.get<Cita[]>('https://sertech-backend.onrender.com/citas');
+  getAppointments(): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>('https://sertech-backend.onrender.com/appointments');
   }
 
-  getCitasPorCliente(clienteId: string): Observable<Cita[]> {
-    const citasCliente = this.data.citas.filter(cita => cita.clienteId === clienteId);
-    return of(citasCliente);
+  getAppointmentsByClient(clientId: string): Observable<Appointment[]> {
+    const clientAppointments = this.data.appointments.filter(a => a.clientId === clientId);
+    return of(clientAppointments);
   }
 
-  crearCita(cita: Omit<Cita, 'id' | 'estado'>): Observable<Cita> {
+  createAppointment(appointment: Omit<Appointment, 'id' | 'status'>): Observable<Appointment> {
     // Obtener todas las citas actuales del backend
-    return this.getCitas().pipe(
-      switchMap((citas: Cita[]) => {
-        // Asegurar que citas sea un array
-        if (!Array.isArray(citas)) {
-          citas = [];
+    return this.getAppointments().pipe(
+      switchMap((appointments: Appointment[]) => {
+        // Ensure array
+        if (!Array.isArray(appointments)) {
+          appointments = [];
         }
-        // Calcular el nuevo ID
-        const nuevoId = citas.length > 0 ? (Math.max(...citas.map(c => +c.id)) + 1).toString() : '1';
-        const nuevaCita: Cita = {
-          ...cita,
-          id: nuevoId,
-          estado: EstadoCita.PENDIENTE
+        // Compute new ID
+        const newId = appointments.length > 0 ? (Math.max(...appointments.map(a => +a.id)) + 1).toString() : '1';
+        const newAppointment: Appointment = {
+          ...appointment,
+          id: newId,
+          status: AppointmentStatus.PENDING
         };
-        const citasActualizadas = [...citas, nuevaCita];
-        // Hacer PUT al backend con el array actualizado
-        return this.http.put<Cita[]>(
-          'https://sertech-backend.onrender.com/citas',
-          citasActualizadas
-        ).pipe(map(() => nuevaCita));
+        const updatedAppointments = [...appointments, newAppointment];
+        // PUT updated array to backend
+        return this.http.put<Appointment[]>(
+          'https://sertech-backend.onrender.com/appointments',
+          updatedAppointments
+        ).pipe(map(() => newAppointment));
       })
     );
   }
 
   /**
-   * Envía el JSON actualizado de citas al archivo assets/data/citas.json usando PUT
-   * (esto solo funcionará si hay un backend que acepte la petición)
+   * Sends the updated appointments JSON to assets/data/appointments.json via PUT
+   * (works only if there is a backend endpoint that accepts the request)
    */
-  putCitasJson(): void {
-    const url = 'assets/data/citas.json';
+  putAppointmentsJson(): void {
+    const url = 'assets/data/appointments.json';
     this.http.put(url, this.data).subscribe({
-      next: () => console.log('Archivo citas.json actualizado'),
-      error: err => console.error('Error al actualizar citas.json:', err)
+      next: () => console.log('appointments.json file updated successfully'),
+      error: err => console.error('Error updating appointments.json:', err)
     });
   }
 
-  cancelarCita(citaId: string): void {
-    const citaIndex = this.data.citas.findIndex(cita => cita.id === citaId);
-    if (citaIndex !== -1) {
-      this.data.citas[citaIndex].estado = EstadoCita.CANCELADA;
+  cancelAppointment(appointmentId: string): void {
+    const idx = this.data.appointments.findIndex(a => a.id === appointmentId);
+    if (idx !== -1) {
+      this.data.appointments[idx].status = AppointmentStatus.CANCELED;
       this.saveData();
     }
   }
 
   // Método para obtener datos del archivo JSON inicial (opcional)
   loadInitialData(): Observable<DataStorage> {
-    return this.http.get<DataStorage>('assets/data/citas.json').pipe(
+    return this.http.get<DataStorage>('assets/data/appointments.json').pipe(
       map(data => {
         this.data = data;
         this.saveData();
@@ -181,10 +173,10 @@ export class StorageService {
   // Método para limpiar datos (útil para testing)
   clearData(): void {
     this.data = {
-      citas: [],
-      clientes: [],
-      ultimoIdCliente: 0,
-      ultimoIdCita: 0
+      appointments: [],
+      clients: [],
+      lastClientId: 0,
+      lastAppointmentId: 0
     };
     this.saveData();
   }

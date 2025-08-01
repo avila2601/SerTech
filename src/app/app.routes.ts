@@ -1,16 +1,21 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { AuthGuard } from './auth.guard';
+import { AboutUsComponent } from './components/about-us/about-us.component';
+import { MyAppointmentsComponent } from './components/my-appointments/my-appointments.component';
+import { AppointmentSummaryComponent } from './components/appointment-summary/appointment-summary.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'quienes-somos', loadComponent: () => import('./components/quienes-somos/quienes-somos.component').then(m => m.QuienesSomosComponent) },
-  { path: 'clientes', loadComponent: () => import('./components/clientes/clients.component').then(m => m.ClientsComponent) },
-  { path: 'servicios', loadComponent: () => import('./components/servicios/servicios.component').then(m => m.ServiciosComponent) },
-  { path: 'tecnicos', loadComponent: () => import('./components/tecnicos/tecnicos.component').then(m => m.TecnicosComponent) },
-  { path: 'mis-citas', loadComponent: () => import('./components/mis-citas/mis-citas.component').then(m => m.MisCitasComponent), canActivate: [AuthGuard] },
+  { path: 'about-us', component: AboutUsComponent },
+  // Redirigir ruta antigua en español a la nueva en inglés
+  { path: 'quienes-somos', redirectTo: 'about-us', pathMatch: 'full' },
+  { path: 'clients', loadComponent: () => import('./components/clients/clients.component').then(m => m.ClientsComponent) },
+  { path: 'services', loadComponent: () => import('./components/services/services.component').then(m => m.ServicesComponent) },
+  { path: 'technicians', loadComponent: () => import('./components/technicians/technicians.component').then(m => m.TechniciansComponent) },
+  { path: 'my-appointments', component: MyAppointmentsComponent, canActivate: [AuthGuard] },
   { path: 'debug', loadComponent: () => import('./components/debug/debug.component').then(m => m.DebugComponent) },
-  { path: 'resumen-cita', loadComponent: () => import('./components/resumen-cita/resumen-cita.component').then(m => m.ResumenCitaComponent) },
+  { path: 'appointment-summary', component: AppointmentSummaryComponent },
   { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
   { path: '**', redirectTo: '' }
 ];

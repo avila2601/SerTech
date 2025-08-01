@@ -1,100 +1,87 @@
 <div class="container">
   <div class="servicios-header">
-    <h1>Servicio Seleccionado</h1>
+    <h1>Selected Service</h1>
   </div>
 
-  <div class="servicio-seleccionado" *ngIf="servicioSeleccionado">
+  <div class="servicio-seleccionado" *ngIf="selectedService">
     <div class="service-card">
       <div class="service-icon">{{ iconoServicio }}</div>
-      <h3>{{ servicioSeleccionado.nombre }}</h3>
-      <p>{{ servicioSeleccionado.descripcion }}</p>
+      <h3>{{ selectedService.name }}</h3>
+      <p>{{ selectedService.description }}</p>
 
       <div class="marca-selector">
         <select
           class="marca-select"
-          [(ngModel)]="marcaSeleccionada"
-          (change)="onMarcaChange()"
+          [(ngModel)]="brand"
+          (change)="onBrandChange()"
         >
-          <option value="" disabled selected>
-            Selecciona la marca del producto
-          </option>
-          <option *ngFor="let marca of marcas" [value]="marca">
-            {{ marca }}
-          </option>
+          <option value="" disabled selected>Select a brand</option>
+          <option *ngFor="let b of brands" [value]="b">{{ b }}</option>
         </select>
       </div>
 
-      <div class="producto-selector" *ngIf="marcaSeleccionada">
+      <div class="producto-selector" *ngIf="brand">
         <select
           class="producto-select"
-          [(ngModel)]="productoSeleccionado"
-          (change)="onProductoChange()"
+          [(ngModel)]="product"
+          (change)="onProductChange()"
         >
-          <option value="" disabled selected>Tipo de producto</option>
-          <option *ngFor="let producto of productos" [value]="producto">
-            {{ producto }}
-          </option>
+          <option value="" disabled selected>Select product type</option>
+          <option *ngFor="let p of products" [value]="p">{{ p }}</option>
         </select>
       </div>
 
-      <div class="modelo-selector" *ngIf="productoSeleccionado">
-        <select class="modelo-select" [(ngModel)]="modeloSeleccionado">
-          <option value="" disabled selected>Modelo (opcional)</option>
-          <option *ngFor="let modelo of modelos" [value]="modelo">
-            {{ modelo }}
-          </option>
+      <div class="modelo-selector" *ngIf="product">
+        <select class="model-select" [(ngModel)]="model">
+          <option value="" disabled selected>Model (optional)</option>
+          <option *ngFor="let m of models" [value]="m">{{ m }}</option>
         </select>
         <div class="modelo-ayuda">
-          <span class="ayuda-link" (click)="abrirModalModelo()"
-            >¿Cómo se encuentra el número de modelo?</span
-          >
+          <span class="ayuda-link" (click)="abrirModalModelo()">
+            How to find your model number?
+          </span>
         </div>
         <div class="modelo-info">
-          * Ingresar el modelo del producto y los síntomas presentados nos
-          permitirá solucionar tu requerimiento de forma más rápida y eficiente
+          Providing your model and symptoms helps us resolve your issue faster.
         </div>
-        <div class="sintomas-box" *ngIf="productoSeleccionado">
+        <div class="sintomas-box" *ngIf="product">
           <textarea
             class="sintomas-textarea"
-            [(ngModel)]="sintomas"
+            [(ngModel)]="symptoms"
             rows="3"
-            placeholder="Describe los síntomas que presenta tu equipo..."
+            placeholder="Describe the symptoms of your device..."
           ></textarea>
         </div>
         <div class="ubicacion-selector">
-          <select class="ubicacion-select" [(ngModel)]="ubicacionSeleccionada">
-            <option value="" disabled selected>Donde te encuentras?</option>
-            <option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion">
-              {{ ubicacion }}
+          <select class="ubicacion-select" [(ngModel)]="location">
+            <option value="" disabled selected>Select your location</option>
+            <option *ngFor="let loc of locations" [value]="loc">
+              {{ loc }}
             </option>
           </select>
         </div>
 
         <!-- Fecha y Hora -->
-        <div class="fecha-hora-selector" *ngIf="ubicacionSeleccionada">
+        <div class="fecha-hora-selector" *ngIf="location">
           <div class="fecha-hora-inputs">
             <div class="fecha-selector">
-              <label for="fecha">Fecha del servicio (opcional)</label>
+              <label for="fecha">Service Date (optional)</label>
               <input
                 type="date"
                 id="fecha"
-                [(ngModel)]="fechaSeleccionada"
+                [(ngModel)]="date"
                 [min]="minDate"
                 class="fecha-input"
               />
             </div>
             <div class="hora-selector">
               <label for="hora" class="hora-label"
-                >Hora del servicio (opcional)</label
+                >Service Time (optional)</label
               >
-              <select
-                id="hora"
-                [(ngModel)]="horaSeleccionada"
-                class="hora-select"
-              >
-                <option value="">Selecciona una hora</option>
-                <option *ngFor="let hora of horasDisponibles" [value]="hora">
-                  {{ hora }}
+              <select id="hora" [(ngModel)]="time" class="hora-select">
+                <option value="">Select a time</option>
+                <option *ngFor="let t of availableTimes" [value]="t">
+                  {{ t }}
                 </option>
               </select>
             </div>
@@ -104,41 +91,33 @@
     </div>
 
     <div class="servicio-actions">
-      <button class="btn btn-secondary" (click)="volverAHome()">
-        Volver al Inicio
-      </button>
-      <button class="btn btn-primary" (click)="agendarServicio()">
-        Seleccionar Técnico
+      <button class="btn btn-secondary" (click)="goHome()">Home</button>
+      <button class="btn btn-primary" (click)="scheduleService()">
+        Select Technician
       </button>
     </div>
   </div>
 
-  <div class="no-servicio" *ngIf="!servicioSeleccionado">
-    <p>No se ha seleccionado ningún servicio.</p>
-    <button class="btn btn-primary" (click)="volverAHome()">
-      Volver al Inicio
-    </button>
+  <div class="no-servicio" *ngIf="!selectedService">
+    <p>No service selected.</p>
+    <button class="btn btn-primary" (click)="goHome()">Home</button>
   </div>
 
   <!-- Modal de ayuda para modelo -->
-  <div class="modal-modelo" *ngIf="mostrarModalModelo">
+  <div class="modal-modelo" *ngIf="showModelModal">
     <div class="modal-content">
       <button class="cerrar-modal" (click)="cerrarModalModelo()">
         &times;
       </button>
-      <h2 class="modal-titulo">Encuentra el modelo</h2>
+      <h2 class="modal-titulo">Find Your Model Number</h2>
       <p class="modal-descripcion">
-        Este número normalmente se encuentra en una etiqueta o placa ubicada en
-        alguna parte del electrodoméstico.
+        You can usually find this number on a label or plate on your device.
       </p>
-      <div class="modal-subtitulo">¿Dónde buscar?</div>
+      <div class="modal-subtitulo">Where to Look</div>
       <ul class="modal-lista">
-        <li>En la parte trasera o lateral del electrodoméstico.</li>
-        <li>En el interior, cerca de los compartimientos o controles.</li>
-        <li>
-          En la parte inferior o en una etiqueta adhesiva visible al mover el
-          equipo.
-        </li>
+        <li>On the back or side of the device.</li>
+        <li>Inside near compartments or controls.</li>
+        <li>On the bottom or on a sticker visible when moving the unit.</li>
       </ul>
     </div>
   </div>

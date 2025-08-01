@@ -1,0 +1,826 @@
+diff --cc src/app/app.routes.ts
+index c94058b,bd3c517..0000000
+--- a/src/app/app.routes.ts
++++ b/src/app/app.routes.ts
+@@@ -4,13 -7,15 +7,23 @@@ import { AppointmentSummaryComponent } 
+  
+  export const routes: Routes = [
+    { path: '', component: HomeComponent },
+++<<<<<<< Updated upstream
+ +  { path: 'quienes-somos', loadComponent: () => import('./components/quienes-somos/quienes-somos.component').then(m => m.QuienesSomosComponent) },
+ +  { path: 'clientes', loadComponent: () => import('./components/clientes/clientes.component').then(m => m.ClientesComponent) },
+ +  { path: 'servicios', loadComponent: () => import('./components/servicios/servicios.component').then(m => m.ServiciosComponent) },
+ +  { path: 'tecnicos', loadComponent: () => import('./components/tecnicos/tecnicos.component').then(m => m.TecnicosComponent) },
+ +  { path: 'mis-citas', loadComponent: () => import('./components/mis-citas/mis-citas.component').then(m => m.MisCitasComponent), canActivate: [AuthGuard] },
+++=======
++   { path: 'about-us', component: AboutUsComponent },
++   // Redirigir ruta antigua en español a la nueva en inglés
++   { path: 'quienes-somos', redirectTo: 'about-us', pathMatch: 'full' },
++   { path: 'clients', loadComponent: () => import('./components/clients/clients.component').then(m => m.ClientsComponent) },
++   { path: 'services', loadComponent: () => import('./components/services/services.component').then(m => m.ServicesComponent) },
++   { path: 'technicians', loadComponent: () => import('./components/technicians/technicians.component').then(m => m.TechniciansComponent) },
++   { path: 'my-appointments', component: MyAppointmentsComponent, canActivate: [AuthGuard] },
+++>>>>>>> Stashed changes
+    { path: 'debug', loadComponent: () => import('./components/debug/debug.component').then(m => m.DebugComponent) },
+-   { path: 'resumen-cita', loadComponent: () => import('./components/resumen-cita/resumen-cita.component').then(m => m.ResumenCitaComponent) },
++   { path: 'appointment-summary', component: AppointmentSummaryComponent },
+    { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
+    { path: '**', redirectTo: '' }
+  ];
+diff --cc src/app/components/clientes/clientes.component.ts
+index 4b97900,76905d3..0000000
+--- a/src/app/components/clientes/clientes.component.ts
++++ b/src/app/components/clientes/clientes.component.ts
+@@@ -1,19 -1,19 +1,32 @@@
+  import { Component, OnInit } from '@angular/core';
+  import { CommonModule } from '@angular/common';
+  import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+++<<<<<<< Updated upstream:src/app/components/clientes/clientes.component.ts
+ +import { Router, ActivatedRoute } from '@angular/router';
+ +import { CitaService } from '../../services/cita.service';
+ +import { ClienteService } from '../../services/cliente.service';
+ +import { Cliente } from '../../models';
+++=======
++ import { Router, ActivatedRoute, RouterModule } from '@angular/router';
++ import { AppointmentService } from '../../services/appointment.service';
++ import { ClientService } from '../../services/client.service';
++ import { Client } from '../../models';
+++>>>>>>> Stashed changes:src/app/components/clients/clients.component.ts
+  
+  @Component({
+ -  selector: 'app-clients',
+ +  selector: 'app-clientes',
+    standalone: true,
+++<<<<<<< Updated upstream:src/app/components/clientes/clientes.component.ts
+ +  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+ +  templateUrl: './clientes.component.html',
+ +  styleUrls: ['./clientes.component.scss']
+++=======
++   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
++   templateUrl: './clients.component.html',
++   styleUrls: ['./clients.component.scss']
+++>>>>>>> Stashed changes:src/app/components/clients/clients.component.ts
+  })
+ -export class ClientsComponent implements OnInit {
+ +export class ClientesComponent implements OnInit {
+    informacionForm: FormGroup;
+    isSubmitting = false;
+  
+@@@ -26,8 -26,8 +39,13 @@@
+  
+    constructor(
+      private fb: FormBuilder,
+++<<<<<<< Updated upstream:src/app/components/clientes/clientes.component.ts
+ +    private citaService: CitaService,
+ +    private clienteService: ClienteService,
+++=======
++     private appointmentService: AppointmentService,
++     private clientService: ClientService,
+++>>>>>>> Stashed changes:src/app/components/clients/clients.component.ts
+      private router: Router,
+      private route: ActivatedRoute
+    ) {
+@@@ -62,16 -62,16 +80,24 @@@
+      });
+  
+      // --- NUEVO: Cargar datos del cliente logueado si existe ---
+++<<<<<<< Updated upstream:src/app/components/clientes/clientes.component.ts
+ +    const clienteId = localStorage.getItem('clienteLogueado');
+ +    if (clienteId) {
+ +      this.clienteService.getClientes().subscribe(clientes => {
+ +        const cliente = clientes.find(c => c.id === clienteId);
+ +        if (cliente) {
+++=======
++     const clientId = localStorage.getItem('clientLoggedIn');
++     if (clientId) {
++       this.clientService.getClients().subscribe((clients: Client[]) => {
++         const client = clients.find(c => c.id === clientId);
++         if (client) {
+++>>>>>>> Stashed changes:src/app/components/clients/clients.component.ts
+            this.informacionForm.patchValue({
+-             nombre: cliente.nombre,
+-             email: cliente.email,
+-             telefono: cliente.telefono,
+-             direccion: cliente.direccion
++             clientName: client.name,
++             email: client.email,
++             phone: client.phone,
++             address: client.address
+            });
+          }
+        });
+diff --cc src/app/components/login/login.component.ts
+index 37793b8,0103aa2..0000000
+--- a/src/app/components/login/login.component.ts
++++ b/src/app/components/login/login.component.ts
+@@@ -106,7 -106,7 +106,11 @@@ export class LoginComponent 
+    @Output() loginSuccess = new EventEmitter<void>();
+    errorMsg: string = '';
+  
+++<<<<<<< Updated upstream
+ +  constructor(private router: Router, private clienteService: ClienteService) {}
+++=======
++   constructor(private router: Router, private clientService: ClientService) {}
+++>>>>>>> Stashed changes
+  
+    @HostListener('document:keydown.escape')
+    onEscapePress() {
+diff --cc src/app/components/mis-citas/mis-citas.component.ts
+index 27b607a,f57e427..0000000
+--- a/src/app/components/mis-citas/mis-citas.component.ts
++++ b/src/app/components/mis-citas/mis-citas.component.ts
+@@@ -1,41 -1,41 +1,59 @@@
+  import { Component, OnInit } from '@angular/core';
+  import { CommonModule } from '@angular/common';
+  import { Router, ActivatedRoute } from '@angular/router';
+++<<<<<<< Updated upstream:src/app/components/mis-citas/mis-citas.component.ts
+ +import { CitaService } from '../../services/cita.service';
+ +import { ServicioService } from '../../services/servicio.service';
+ +import { TecnicoService } from '../../services/tecnico.service';
+ +import { ClienteService } from '../../services/cliente.service';
+ +import { ResenaService } from '../../services/resena.service';
+ +import { Cita, Servicio, Tecnico, Cliente } from '../../models';
+ +import { ResenasComponent } from '../resenas/resenas.component';
+++=======
++ import { AppointmentService } from '../../services/appointment.service';
++ import { ServiceService } from '../../services/service.service';
++ import { TechnicianService } from '../../services/technician.service';
++ import { ClientService } from '../../services/client.service';
++ import { ReviewService } from '../../services/review.service';
++ import { Appointment, Service, Technician, Client } from '../../models';
++ import { ReviewsComponent } from '../reviews/reviews.component';
+++>>>>>>> Stashed changes:src/app/components/my-appointments/my-appointments.component.ts
+  
+  @Component({
+-   selector: 'app-mis-citas',
++   selector: 'app-my-appointments',
+    standalone: true,
+-   imports: [CommonModule, ResenasComponent],
+-   templateUrl: './mis-citas.component.html',
+-   styleUrls: ['./mis-citas.component.scss']
++   imports: [CommonModule, ReviewsComponent],
++   templateUrl: './my-appointments.component.html',
++   styles: []
+  })
+- export class MisCitasComponent implements OnInit {
+-   citas: Cita[] = [];
+-   citasFiltradas: Cita[] = [];
+-   servicios: Servicio[] = [];
+-   tecnicos: Tecnico[] = [];
+-   clientes: Cliente[] = [];
+-   clienteIdActual: string | null = null; // Por defecto, sin filtro
+-   tecnicoIdActual: string | null = null;
+-   mostrarModalResena = false;
+-   tecnicoIdResena = '';
+-   clienteIdResena = '';
+-   clienteNombreResena = '';
+-   citasEvaluadas: Set<string> = new Set(); // Para trackear citas ya evaluadas
++ export class MyAppointmentsComponent implements OnInit {
++   appointments: Appointment[] = [];
++   filteredAppointments: Appointment[] = [];
++   services: Service[] = [];
++   technicians: Technician[] = [];
++   clients: Client[] = [];
++   clientIdCurrent: string | null = null; // By default, no filter
++   technicianIdCurrent: string | null = null;
++   showReviewModal = false;
++   technicianIdReview = '';
++   clientIdReview = '';
++   clientNameReview = '';
++   reviewedAppointments: Set<string> = new Set(); // Track reviewed appointments
+  
+    constructor(
+++<<<<<<< Updated upstream:src/app/components/mis-citas/mis-citas.component.ts
+ +    private citaService: CitaService,
+ +    private servicioService: ServicioService,
+ +    private tecnicoService: TecnicoService,
+ +    private clienteService: ClienteService,
+ +    private resenaService: ResenaService,
+++=======
++     private appointmentService: AppointmentService,
++     private serviceService: ServiceService,
++     private technicianService: TechnicianService,
++     private clientService: ClientService,
++     private reviewService: ReviewService,
+++>>>>>>> Stashed changes:src/app/components/my-appointments/my-appointments.component.ts
+      private router: Router,
+      private route: ActivatedRoute
+    ) {}
+diff --cc src/app/components/resenas/resenas.component.ts
+index c5c6917,21b347e..0000000
+--- a/src/app/components/resenas/resenas.component.ts
++++ b/src/app/components/resenas/resenas.component.ts
+@@@ -1,149 -1,49 +1,53 @@@
+  import { Component, Input, Output, EventEmitter } from '@angular/core';
+  import { CommonModule } from '@angular/common';
+  import { FormsModule } from '@angular/forms';
+ -import { ReviewService } from '../../services/review.service';
+ +import { ResenaService } from '../../services/resena.service';
+  
+  @Component({
+-   selector: 'app-resenas',
++   selector: 'app-reviews',
+    standalone: true,
+    imports: [CommonModule, FormsModule],
+-   template: `
+-     <div class="modal-backdrop" (click)="cerrar()"></div>
+-     <div class="modal-resenas" (click)="$event.stopPropagation()">
+-       <h2>Evaluar servicio</h2>
+-       <form (ngSubmit)="enviarResena()">
+-         <div class="estrellas">
+-           <span *ngFor="let star of [1,2,3,4,5]" (click)="calificacion = star" [class.selected]="star <= calificacion">★</span>
+-         </div>
+-         <div class="form-group">
+-           <label for="comentario">Comentario</label>
+-           <textarea id="comentario" [(ngModel)]="comentario" name="comentario" rows="3" required></textarea>
+-         </div>
+-         <button class="btn btn-primary" type="submit" [disabled]="enviando">
+-           {{ enviando ? 'Enviando...' : 'Enviar' }}
+-         </button>
+-       </form>
+-       <button class="btn btn-secondary cerrar-btn" (click)="cerrar()">Cerrar</button>
+-     </div>
+-   `,
+-   styles: [`
+-     .modal-backdrop {
+-       position: fixed;
+-       top: 0; left: 0; right: 0; bottom: 0;
+-       background: rgba(0,0,0,0.5);
+-       z-index: 1000;
+-     }
+-     .modal-resenas {
+-       position: fixed;
+-       top: 50%; left: 50%;
+-       transform: translate(-50%, -50%);
+-       background: #232946;
+-       color: #fff;
+-       border-radius: 16px;
+-       padding: 2rem 1.5rem 1.5rem 1.5rem;
+-       min-width: 340px;
+-       max-width: 95vw;
+-       z-index: 1001;
+-       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+-       max-height: 80vh;
+-       overflow-y: auto;
+-     }
+-     h2 {
+-       margin-bottom: 1.2rem;
+-       text-align: center;
+-     }
+-     .estrellas {
+-       display: flex;
+-       justify-content: center;
+-       margin-bottom: 1rem;
+-       font-size: 2rem;
+-       color: #6c757d;
+-       cursor: pointer;
+-     }
+-     .estrellas span {
+-       margin: 0 0.2rem;
+-       transition: color 0.2s;
+-     }
+-     .estrellas span.selected {
+-       color: #ffd700;
+-       text-shadow: 0 2px 8px #ffd70099;
+-     }
+-     .form-group {
+-       margin-bottom: 1.2rem;
+-     }
+-     textarea {
+-       width: 100%;
+-       border-radius: 8px;
+-       border: 1px solid #374151;
+-       background: rgba(17, 24, 39, 0.8);
+-       color: #e0e0e0;
+-       font-size: 1rem;
+-       padding: 0.7rem 1rem;
+-       resize: vertical;
+-     }
+-     .btn {
+-       width: 100%;
+-       margin-top: 0.5rem;
+-       padding: 0.7rem 0;
+-       font-size: 1.08rem;
+-       border-radius: 8px;
+-       font-weight: 600;
+-     }
+-     .btn:disabled {
+-       opacity: 0.6;
+-       cursor: not-allowed;
+-     }
+-     .cerrar-btn {
+-       background: #6c757d;
+-       color: #fff;
+-       margin-top: 1rem;
+-     }
+-   `]
++   templateUrl: './reviews.component.html',
++   styleUrls: ['./reviews.component.scss']
+  })
+- export class ResenasComponent {
+-   @Input() tecnicoId: string = '';
+-   @Input() clienteId: string = '';
+-   @Input() cliente: string = '';
++ export class ReviewsComponent {
++   @Input() technicianId: string = '';
+    @Output() close = new EventEmitter<void>();
+-   @Output() resenaEnviada = new EventEmitter<void>();
+-   calificacion: number = 0;
+-   comentario: string = '';
+-   enviando: boolean = false;
++   @Output() reviewSubmitted = new EventEmitter<void>();
+  
+++<<<<<<< Updated upstream:src/app/components/resenas/resenas.component.ts
+ +  constructor(private resenaService: ResenaService) {}
+++=======
++   rating = 0;
++   comment = '';
++   isSubmitting = false;
+++>>>>>>> Stashed changes:src/app/components/reviews/reviews.component.ts
+  
+-   enviarResena() {
+-     if (!this.calificacion || !this.comentario.trim()) {
+-       alert('Por favor, califica y escribe un comentario.');
+-       return;
+-     }
++   constructor(private reviewService: ReviewService) {}
+  
+-     this.enviando = true;
+- 
+-     const nuevaResena = {
+-       tecnicoId: this.tecnicoId,
+-       clienteId: this.clienteId,
+-       cliente: this.cliente,
+-       comentario: this.comentario,
+-       calificacion: this.calificacion,
+-       fecha: new Date().toISOString().split('T')[0]
+-     };
+- 
+-     this.resenaService.agregarResena(nuevaResena).subscribe({
+-       next: () => {
+-         alert('¡Reseña enviada exitosamente!');
+-         this.resenaEnviada.emit();
+-         this.cerrar();
+-       },
+-       error: (error) => {
+-         console.error('Error al enviar reseña:', error);
+-         alert('No se pudo enviar la reseña. Por favor, intenta de nuevo.');
+-         this.enviando = false;
+-       }
+-     });
++   closeModal(): void {
++     this.close.emit();
+    }
+  
+-   cerrar() {
+-     this.close.emit();
++   submitReview(): void {
++     if (!this.technicianId) return;
++     this.isSubmitting = true;
++     this.reviewService
++       .addReview({
++         technicianId: this.technicianId,
++         clientName: '',
++         comment: this.comment,
++         rating: this.rating,
++         date: new Date().toISOString()
++       })
++       .subscribe(
++         () => {
++           this.reviewSubmitted.emit();
++           this.isSubmitting = false;
++         },
++         () => {
++           this.isSubmitting = false;
++         }
++       );
+    }
+  }
+diff --cc src/app/components/resumen-cita/resumen-cita.component.ts
+index bc7dac6,01944d4..0000000
+--- a/src/app/components/resumen-cita/resumen-cita.component.ts
++++ b/src/app/components/resumen-cita/resumen-cita.component.ts
+@@@ -1,47 -1,48 +1,63 @@@
+  import { Component, OnInit } from '@angular/core';
+  import { CommonModule } from '@angular/common';
+++<<<<<<< Updated upstream:src/app/components/resumen-cita/resumen-cita.component.ts
+ +import { ActivatedRoute, Router } from '@angular/router';
+ +import { CitaService } from '../../services/cita.service';
+ +import { ClienteService } from '../../services/cliente.service';
+ +import { TecnicoService } from '../../services/tecnico.service';
+ +import { Cliente, Cita, Tecnico } from '../../models';
+++=======
++ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
++ import { AppointmentService } from '../../services/appointment.service';
++ import { ClientService } from '../../services/client.service';
++ import { TechnicianService } from '../../services/technician.service';
++ import { Client, Appointment, Technician } from '../../models';
++ import { of } from 'rxjs';
+++>>>>>>> Stashed changes:src/app/components/appointment-summary/appointment-summary.component.ts
+  import { switchMap } from 'rxjs/operators';
+- import { AppComponent } from '../../app.component';
++ import { UserStateService } from '../../services/user-state.service';
+  
+  @Component({
+-   selector: 'app-resumen-cita',
++   selector: 'app-appointment-summary',
+    standalone: true,
+-   imports: [CommonModule],
+-   templateUrl: './resumen-cita.component.html',
+-   styleUrls: ['./resumen-cita.component.scss']
++   imports: [CommonModule, RouterModule],
++   templateUrl: './appointment-summary.component.html',
++   styleUrls: ['./appointment-summary.component.scss']
+  })
+- export class ResumenCitaComponent implements OnInit {
+-   // Datos del servicio y personales
+-   marca: string = '';
+-   producto: string = '';
+-   modelo: string = '';
+-   sintomas: string = '';
+-   ubicacion: string = '';
+-   fecha: string = '';
+-   hora: string = '';
+-   nombre: string = '';
++ export class AppointmentSummaryComponent implements OnInit {
++   // Service and personal details
++   brand: string = '';
++   product: string = '';
++   model: string = '';
++   symptoms: string = '';
++   location: string = '';
++   date: string = '';
++   time: string = '';
++   clientName: string = '';
+    email: string = '';
+-   telefono: string = '';
+-   direccion: string = '';
+-   isAgendando: boolean = false;
+-   tecnicoId: string = '';
+-   servicioId: string = '';
++   phone: string = '';
++   address: string = '';
++   isScheduling: boolean = false;
++   technicianId: string = '';
++   serviceId: string = '';
+  
+-   // Información del técnico
+-   tecnico: Tecnico | null = null;
++   // Technician information
++   technician: Technician | null = null;
+  
+    constructor(
+      private route: ActivatedRoute,
+      private router: Router,
+++<<<<<<< Updated upstream:src/app/components/resumen-cita/resumen-cita.component.ts
+ +    private citaService: CitaService,
+ +    private clienteService: ClienteService,
+ +    private tecnicoService: TecnicoService,
+ +    private appComponent: AppComponent
+++=======
++     private appointmentService: AppointmentService,
++     private clientService: ClientService,
++     private technicianService: TechnicianService,
++     private userState: UserStateService
+++>>>>>>> Stashed changes:src/app/components/appointment-summary/appointment-summary.component.ts
+    ) {}
+  
+    ngOnInit(): void {
+@@@ -98,70 -101,45 +116,62 @@@
+        return;
+      }
+  
+-     this.isAgendando = true;
+- 
+-     // Primero verificar si el cliente ya existe
+-     this.clienteService.getClientes().pipe(
+-       switchMap(clientes => {
+-         const clienteExistente = clientes.find(c => c.email === this.email);
++     this.isScheduling = true;
+  
+-         if (clienteExistente) {
+-           // Si el cliente existe, usar el existente
+-           return [clienteExistente];
+-         } else {
+-           // Si no existe, crear uno nuevo
+-           const cliente: Omit<Cliente, 'id'> = {
+-             nombre: this.nombre,
+-             email: this.email,
+-             telefono: this.telefono,
+-             direccion: this.direccion
+-           };
+-           return this.clienteService.agregarCliente(cliente);
+-         }
++     // Check if client exists or create new
++     this.clientService.getClients().pipe(
++       switchMap(clients => {
++         const existingClient = clients.find(c => c.email === this.email);
++         return existingClient
++           ? of(existingClient)
++           : this.clientService.addClient({ name: this.clientName, email: this.email, phone: this.phone, address: this.address });
+        }),
+-       switchMap(cliente => {
+-         // Guardar toda la información del servicio en las notas como JSON
+-         const infoServicio = {
+-           marca: this.marca,
+-           producto: this.producto,
+-           modelo: this.modelo,
+-           sintomas: this.sintomas,
+-           ubicacion: this.ubicacion
+-         };
+- 
+-         // Manejar fecha y hora opcionales
+-         let fechaSeleccionada: Date;
+-         if (this.fecha) {
+-           fechaSeleccionada = new Date(this.fecha + 'T00:00:00');
+-         } else {
+-           fechaSeleccionada = new Date();
+-         }
+- 
+-         const cita: Omit<Cita, 'id' | 'estado'> = {
+-           clienteId: cliente.id,
+-           tecnicoId: this.tecnicoId,
+-           servicioId: this.servicioId,
+-           fecha: fechaSeleccionada,
+-           hora: this.hora || 'Por coordinar',
+-           notas: JSON.stringify(infoServicio),
+-           direccion: this.direccion
++       switchMap(client => {
++         const serviceInfo = { brand: this.brand, product: this.product, model: this.model, symptoms: this.symptoms, location: this.location };
++         const selectedDate = this.date ? new Date(this.date + 'T00:00:00') : new Date();
++         const appointmentData: Omit<Appointment, 'id' | 'status'> = {
++           clientId: client.id,
++           technicianId: this.technicianId,
++           serviceId: this.serviceId,
++           date: selectedDate,
++           time: this.time || 'To be scheduled',
++           notes: JSON.stringify(serviceInfo),
++           address: this.address
+          };
+-         return this.citaService.crearCita(cita);
++         return this.appointmentService.createAppointment(appointmentData);
+        })
+++<<<<<<< Updated upstream:src/app/components/resumen-cita/resumen-cita.component.ts
+ +    ).subscribe(nuevaCita => {
+ +      this.isAgendando = false;
+ +
+ +      // Guardar IDs en localStorage
+ +      localStorage.setItem('clienteLogueado', nuevaCita.clienteId);
+ +      localStorage.setItem('citaEnProceso', nuevaCita.id);
+ +
+ +      // Actualizar el navbar inmediatamente
+ +      this.appComponent.actualizarEstadoUsuario();
+ +
+ +      alert('¡Cita agendada exitosamente!');
+ +
+ +      // Redirigir a mis-citas con el clienteId
+ +      this.router.navigate(['/mis-citas'], { queryParams: { clienteId: nuevaCita.clienteId } });
+++=======
++     ).subscribe({
++       next: newAppointment => {
++         console.log('Appointment successfully created:', newAppointment);
++         this.isScheduling = false;
++         localStorage.setItem('clientLoggedIn', newAppointment.clientId);
++         localStorage.setItem('appointmentInProgress', newAppointment.id);
++         this.userState.updateUserStatus();
++         alert('Appointment scheduled successfully!');
++         this.router.navigate(['/my-appointments'], { queryParams: { clientId: newAppointment.clientId } });
++       },
++       error: err => {
++         console.error('Error scheduling appointment:', err);
++         this.isScheduling = false;
++         alert('Error scheduling appointment. Please try again.');
++       }
+++>>>>>>> Stashed changes:src/app/components/appointment-summary/appointment-summary.component.ts
+      });
+    }
+  }
+diff --cc src/app/components/servicios/servicios.component.ts
+index 34a9658,c6a717b..0000000
+--- a/src/app/components/servicios/servicios.component.ts
++++ b/src/app/components/servicios/servicios.component.ts
+@@@ -1,15 -1,15 +1,21 @@@
+  import { Component, OnInit } from '@angular/core';
+  import { CommonModule } from '@angular/common';
+  import { FormsModule } from '@angular/forms';
+++<<<<<<< Updated upstream:src/app/components/servicios/servicios.component.ts
+ +import { Router, ActivatedRoute } from '@angular/router';
+ +import { ServicioService } from '../../services/servicio.service';
+ +import { Servicio, CategoriaServicio } from '../../models';
+- 
+- interface ServicioCard {
+-   tipo: string;
+-   titulo: string;
+-   descripcion: string;
+-   icono: string;
+++=======
++ import { Router, ActivatedRoute, RouterModule } from '@angular/router';
++ import { ServiceService } from '../../services/service.service';
++ import { Service, ServiceCategory } from '../../models';
+++>>>>>>> Stashed changes:src/app/components/services/services.component.ts
++ 
++ interface ServiceCard {
++   type: string;
++   title: string;
++   description: string;
++   icon: string;
+  }
+  
+  @Component({
+@@@ -88,7 -88,7 +94,11 @@@ export class ServicesComponent implemen
+    constructor(
+      private router: Router,
+      private route: ActivatedRoute,
+++<<<<<<< Updated upstream:src/app/components/servicios/servicios.component.ts
+ +    private servicioService: ServicioService
+++=======
++     private serviceService: ServiceService
+++>>>>>>> Stashed changes:src/app/components/services/services.component.ts
+    ) {
+      // Fecha mínima es hoy
+      const today = new Date();
+diff --cc src/app/components/tecnicos/ingreso-tecnicos.component.ts
+index 95681ca,7694710..0000000
+--- a/src/app/components/tecnicos/ingreso-tecnicos.component.ts
++++ b/src/app/components/tecnicos/ingreso-tecnicos.component.ts
+@@@ -2,10 -2,10 +2,10 @@@ import { Component, Output, EventEmitte
+  import { CommonModule } from '@angular/common';
+  import { FormsModule } from '@angular/forms';
+  import { Router } from '@angular/router';
+ -import { TechnicianService } from '../../services/technician.service';
+ +import { TecnicoService } from '../../services/tecnico.service';
+  
+  @Component({
+-   selector: 'app-ingreso-tecnicos',
++   selector: 'app-technician-login',
+    standalone: true,
+    imports: [CommonModule, FormsModule],
+    template: `
+@@@ -111,20 -111,31 +111,35 @@@ export class TechnicianLoginComponent 
+    @Output() loginSuccess = new EventEmitter<string>();
+    errorMsg: string = '';
+  
+++<<<<<<< Updated upstream:src/app/components/tecnicos/ingreso-tecnicos.component.ts
+ +  constructor(private router: Router, private tecnicoService: TecnicoService) {}
+++=======
++   @HostListener('window:keydown.escape', ['$event'])
++   onEsc(event: KeyboardEvent) {
++     this.onClose();
++   }
+++>>>>>>> Stashed changes:src/app/components/technicians/technician-login.component.ts
++ 
++   constructor(private router: Router, private technicianService: TechnicianService) {}
+  
+-   ingresar() {
+-     if (this.tecnicoId && this.password) {
+-       this.tecnicoService.getTecnicoById(this.tecnicoId).subscribe(tecnico => {
+-         if (tecnico && tecnico.contraseña === this.password) {
+-           this.errorMsg = '';
+-           this.loginSuccess.emit(this.tecnicoId);
+-           this.cerrar();
+-           this.router.navigate(['/mis-citas'], { queryParams: { tecnicoId: this.tecnicoId } });
+-         } else {
+-           this.errorMsg = 'ID o contraseña incorrectos';
++   login() {
++     if (this.technicianId && this.password) {
++       this.technicianService.authenticateTechnician(this.technicianId, this.password).subscribe(
++         (valid: boolean) => {
++           if (valid) {
++             this.errorMsg = '';
++             this.loginSuccess.emit(this.technicianId);
++             this.onClose();
++             this.router.navigate(['/my-appointments'], { queryParams: { technicianId: this.technicianId } });
++           } else {
++             this.errorMsg = 'Incorrect ID or password';
++           }
++         },
++         (error: any) => {
++           console.error('Error authenticating technician:', error);
++           this.errorMsg = 'Authentication error';
+          }
+-       });
++       );
+      }
+    }
+  
+diff --cc src/app/components/tecnicos/tecnicos-resenas-modal.component.ts
+index fe5733c,965ee1c..0000000
+--- a/src/app/components/tecnicos/tecnicos-resenas-modal.component.ts
++++ b/src/app/components/tecnicos/tecnicos-resenas-modal.component.ts
+@@@ -1,9 -1,10 +1,10 @@@
+  import { Component, Input, OnInit, Output, EventEmitter, HostListener } from '@angular/core';
++ import { Review } from '../../services/review.service';
+  import { CommonModule } from '@angular/common';
+ -import { ReviewService } from '../../services/review.service';
+ +import { ResenaService } from '../../services/resena.service';
+  
+  @Component({
+-   selector: 'app-tecnicos-resenas-modal',
++   selector: 'app-technician-reviews-modal',
+    standalone: true,
+    imports: [CommonModule],
+    template: `
+@@@ -96,13 -97,13 +97,17 @@@
+      }
+    `]
+  })
+- export class TecnicosResenasModalComponent implements OnInit {
+-   @Input() tecnicoId: string = '';
+-   @Output() close = new EventEmitter<void>();
+-   resenas: any[] = [];
+-   cargando: boolean = true;
++ export class TechnicianReviewsModalComponent implements OnInit {
++   @Input() technicianId: string = '';
++   @Output() close = new EventEmitter<void>(); // Emitted when modal closes
++   reviews: Review[] = [];
++   loading: boolean = true;
+  
+++<<<<<<< Updated upstream:src/app/components/tecnicos/tecnicos-resenas-modal.component.ts
+ +  constructor(private resenaService: ResenaService) {}
+++=======
++   constructor(private reviewService: ReviewService) {}
+++>>>>>>> Stashed changes:src/app/components/technicians/technician-reviews-modal.component.ts
+  
+    @HostListener('document:keydown.escape', ['$event'])
+    onEsc(event: KeyboardEvent) {
+diff --cc src/app/components/tecnicos/tecnicos.component.ts
+index 72b227c,583585a..0000000
+--- a/src/app/components/tecnicos/tecnicos.component.ts
++++ b/src/app/components/tecnicos/tecnicos.component.ts
+@@@ -1,24 -1,24 +1,35 @@@
+  import { Component, OnInit } from '@angular/core';
+  import { CommonModule } from '@angular/common';
+++<<<<<<< Updated upstream:src/app/components/tecnicos/tecnicos.component.ts
+ +import { Router, ActivatedRoute } from '@angular/router';
+ +import { TecnicoService } from '../../services/tecnico.service';
+ +import { Tecnico } from '../../models';
+ +import { TecnicosResenasModalComponent } from './tecnicos-resenas-modal.component';
+++=======
++ import { Router, ActivatedRoute, RouterModule } from '@angular/router';
++ import { TechnicianService } from '../../services/technician.service';
++ import { Technician } from '../../models';
++ import { TechnicianReviewsModalComponent } from './technician-reviews-modal.component';
+++>>>>>>> Stashed changes:src/app/components/technicians/technicians.component.ts
+  
+  @Component({
+-   selector: 'app-tecnicos',
++   selector: 'app-technicians',
+    standalone: true,
+-   imports: [CommonModule, TecnicosResenasModalComponent],
+-   templateUrl: './tecnicos.component.html',
+-   styleUrls: ['./tecnicos.component.scss']
++ imports: [CommonModule, RouterModule, TechnicianReviewsModalComponent],
++   templateUrl: './technicians.component.html',
++   styleUrls: ['./technicians.component.scss']
+  })
+- export class TecnicosComponent implements OnInit {
+-   tecnicos: Tecnico[] = [];
+-   mostrarModalResenas: boolean = false;
+-   tecnicoIdModal: string = '';
++ export class TechniciansComponent implements OnInit {
++   technicians: Technician[] = [];
++   showReviewModal: boolean = false;
++   technicianIdModal: string = '';
+  
+    constructor(
+++<<<<<<< Updated upstream:src/app/components/tecnicos/tecnicos.component.ts
+ +    private tecnicoService: TecnicoService,
+++=======
++     private technicianService: TechnicianService,
+++>>>>>>> Stashed changes:src/app/components/technicians/technicians.component.ts
+      private router: Router,
+      private route: ActivatedRoute
+    ) {}
+diff --cc src/app/services/cita.service.ts
+index b260b1d,3ad2df5..0000000
+--- a/src/app/services/cita.service.ts
++++ b/src/app/services/cita.service.ts
+@@@ -6,16 -6,16 +6,21 @@@ import { StorageService } from './stora
+  @Injectable({
+    providedIn: 'root'
+  })
+++<<<<<<< Updated upstream:src/app/services/cita.service.ts
+ +export class CitaService {
+ +  private citasSubject = new BehaviorSubject<Cita[]>([]);
+++=======
++ export class AppointmentService {
++ private appointmentsSubject = new BehaviorSubject<Appointment[]>([]);
+++>>>>>>> Stashed changes:src/app/services/appointment.service.ts
+  
+    constructor(private storageService: StorageService) {
+-     this.refreshCitas();
++     this.refreshAppointments();
+    }
+  
+-   private refreshCitas(): void {
+-     this.storageService.getCitas().subscribe(citas => {
+-       this.citasSubject.next(citas);
++   private refreshAppointments(): void {
++     this.storageService.getAppointments().subscribe((appointments: Appointment[]) => {
++       this.appointmentsSubject.next(appointments);
+      });
+    }
+  
+* Unmerged path src/app/services/client.service.ts
+* Unmerged path src/app/services/review.service.ts
+* Unmerged path src/app/services/technician.service.ts

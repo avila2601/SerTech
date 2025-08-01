@@ -1,79 +1,74 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject, map } from 'rxjs';
-import { Tecnico } from '../models';
+import { Technician } from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TechnicianService {
-  private readonly API_URL = 'https://sertech-backend.onrender.com';
-  private tecnicos: Tecnico[] = [];
-  private tecnicosSubject = new BehaviorSubject<Tecnico[]>([]);
+  // Remove external API, always load from local JSON
+  private technicians: Technician[] = [];
+  private techniciansSubject = new BehaviorSubject<Technician[]>([]);
 
   constructor(private http: HttpClient) {
-    this.cargarTecnicos();
+    this.loadTechnicians();
   }
 
-  cargarTecnicos() {
-    this.http.get<Tecnico[]>(`${this.API_URL}/tecnicos`).subscribe({
-      next: (tecnicos) => {
-        this.tecnicos = tecnicos;
-        this.tecnicosSubject.next(this.tecnicos);
+  loadTechnicians() {
+    // Load technicians from local JSON file
+    this.http.get<Technician[]>('assets/data/technicians.json').subscribe({
+      next: (techs) => {
+        this.technicians = techs;
+        this.techniciansSubject.next(this.technicians);
       },
       error: (error) => {
-        console.error('Error cargando técnicos:', error);
-        // Si falla la carga desde la API, usar datos locales de respaldo
-        this.http.get<Tecnico[]>('assets/data/tecnicos.json').subscribe(tecnicos => {
-          this.tecnicos = tecnicos;
-          this.tecnicosSubject.next(this.tecnicos);
-        });
+        console.error('Error loading technicians from local JSON:', error);
       }
     });
   }
 
-  getTecnicos(): Observable<Tecnico[]> {
-    if (this.tecnicos.length > 0) {
-      return of(this.tecnicos);
+  getTechnicians(): Observable<Technician[]> {
+    if (this.technicians.length > 0) {
+      return of(this.technicians);
     }
-    return this.tecnicosSubject.asObservable();
+    return this.techniciansSubject.asObservable();
   }
 
-  getTecnicoById(id: string): Observable<Tecnico | undefined> {
-    if (this.tecnicos.length > 0) {
-      return of(this.tecnicos.find(tecnico => tecnico.id === id));
+  getTechnicianById(id: string): Observable<Technician | undefined> {
+    if (this.technicians.length > 0) {
+      return of(this.technicians.find(tech => tech.id === id));
     }
-    return this.tecnicosSubject.asObservable().pipe(
-      map(tecnicos => tecnicos.find(tecnico => tecnico.id === id))
+    return this.techniciansSubject.asObservable().pipe(
+      map(techs => techs.find(tech => tech.id === id))
     );
   }
 
-  getTecnicosPorEspecialidad(especialidad: string): Observable<Tecnico[]> {
-    return this.getTecnicos().pipe(
-      map(tecnicos => tecnicos.filter(tecnico =>
-        tecnico.especialidad.toLowerCase().includes(especialidad.toLowerCase()))
-      )
+  getTechniciansBySpecialty(specialty: string): Observable<Technician[]> {
+    return this.getTechnicians().pipe(
+      map(techs => techs.filter(tech =>
+        tech.specialty.toLowerCase().includes(specialty.toLowerCase())))
     );
   }
 
   // Método para actualizar calificación de un técnico
-  actualizarCalificacion(tecnicoId: string, calificacion: number): Observable<void> {
-    return this.getTecnicoById(tecnicoId).pipe(
-      map(tecnico => {
-        if (tecnico) {
-          tecnico.calificacion = calificacion;
-          this.tecnicosSubject.next(this.tecnicos);
+  updateRating(technicianId: string, rating: number): Observable<void> {
+    return this.getTechnicianById(technicianId).pipe(
+        map(tech => {
+        if (tech) {
+          tech.rating = rating;
+          this.techniciansSubject.next(this.technicians);
         }
         return;
       })
     );
   }
 
-  autenticarTecnico(id: string, contraseña: string): Observable<boolean> {
-    return this.getTecnicos().pipe(
-      map(tecnicos => {
-        const tecnico = tecnicos.find(t => t.id === id && t.contraseña === contraseña);
-        return !!tecnico;
+  authenticateTechnician(id: string, password: string): Observable<boolean> {
+    return this.getTechnicians().pipe(
+      map(techs => {
+        const tech = techs.find(t => t.id === id && t.password === password);
+        return !!tech;
       })
     );
   }

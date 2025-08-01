@@ -1,18 +1,19 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-quienes-somos',
+  selector: 'app-about-us',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './quienes-somos.component.html',
-  styleUrls: ['./quienes-somos.component.scss']
+  imports: [CommonModule, RouterModule],
+  templateUrl: './about-us.component.html',
+  styleUrls: ['./about-us.component.scss']
 })
-export class QuienesSomosComponent {
+export class AboutUsComponent {
   constructor(private router: Router) {}
 
-  volverAHome(): void {
+  goHome(): void {
     this.router.navigate(['/']);
   }
 }

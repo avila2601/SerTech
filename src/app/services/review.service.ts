@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, map } from 'rxjs';
 
-export interface Resena {
+export interface Review {
   id: string;
-  tecnicoId: string;
-  clienteId?: string;
-  cliente: string;
-  comentario: string;
-  calificacion: number;
-  fecha: string;
+  technicianId: string;
+  clientId?: string;
+  clientName: string;
+  comment: string;
+  rating: number;
+  date: string;
 }
 
 @Injectable({
@@ -20,46 +20,43 @@ export class ReviewService {
 
   constructor(private http: HttpClient) {}
 
-  getResenas(): Observable<Resena[]> {
-    return this.http.get<Resena[]>(`${this.API_URL}/resenas`);
+  getReviews(): Observable<Review[]> {
+    return this.http.get<Review[]>(`${this.API_URL}/reviews`);
   }
 
-  getResenasPorTecnico(tecnicoId: string): Observable<Resena[]> {
-    return this.getResenas().pipe(
-      map(resenas => resenas.filter(r => r.tecnicoId === tecnicoId))
+  getReviewsByTechnician(technicianId: string): Observable<Review[]> {
+    return this.getReviews().pipe(
+      map(reviews => reviews.filter(r => r.technicianId === technicianId))
     );
   }
 
-  agregarResena(resena: Omit<Resena, 'id'>): Observable<Resena> {
-    return this.getResenas().pipe(
-      map(resenas => {
-        const nuevoId = resenas.length > 0
-          ? (Math.max(...resenas.map(r => parseInt(r.id))) + 1).toString()
+  addReview(review: Omit<Review, 'id'>): Observable<Review> {
+    return this.getReviews().pipe(
+      map(reviews => {
+        const newId = reviews.length > 0
+          ? (Math.max(...reviews.map(r => parseInt(r.id))) + 1).toString()
           : '1';
 
-        const nuevaResena: Resena = {
-          ...resena,
-          id: nuevoId
+        const newReview: Review = {
+          ...review,
+          id: newId
         };
 
-        const resenasActualizadas = [...resenas, nuevaResena];
-
-        this.http.put(`${this.API_URL}/resenas`, resenasActualizadas)
-          .subscribe();
-
-        return nuevaResena;
+        const updated = [...reviews, newReview];
+        this.http.put(`${this.API_URL}/reviews`, updated).subscribe();
+        return newReview;
       })
     );
   }
 
-  existeResena(tecnicoId: string, clienteId: string, clienteNombre: string): Observable<boolean> {
-    return this.getResenas().pipe(
-      map(resenas => {
-        return resenas.some(r =>
-          r.tecnicoId === tecnicoId &&
-          (r.clienteId === clienteId || r.cliente === clienteNombre)
-        );
-      })
+  reviewExists(technicianId: string, clientId: string, clientName: string): Observable<boolean> {
+    return this.getReviews().pipe(
+      map(reviews =>
+        reviews.some(r =>
+          r.technicianId === technicianId &&
+          (r.clientId === clientId || r.clientName === clientName)
+        )
+      )
     );
   }
 }

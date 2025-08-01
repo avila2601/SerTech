@@ -1,27 +1,27 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TechnicianService } from '../../services/technician.service';
 
 @Component({
-  selector: 'app-ingreso-tecnicos',
+  selector: 'app-technician-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="modal-backdrop" (click)="cerrar()"></div>
-    <div class="modal-ingreso" (click)="$event.stopPropagation()">
-      <h2>Ingreso de Técnicos</h2>
-      <form (ngSubmit)="ingresar()" autocomplete="off">
+    <div class="modal-backdrop" (click)="onClose()"></div>
+    <div class="modal-login" (click)="$event.stopPropagation()">
+      <h2>Technician Login</h2>
+      <form (ngSubmit)="login()" autocomplete="off">
         <div class="form-group">
-          <label for="tecnicoId">ID de Técnico</label>
-          <input id="tecnicoId" name="tecnicoId" [(ngModel)]="tecnicoId" required autocomplete="off" />
+          <label for="technicianId">Technician ID</label>
+          <input id="technicianId" name="technicianId" [(ngModel)]="technicianId" required autocomplete="off" />
         </div>
         <div class="form-group">
-          <label for="password">Contraseña</label>
+          <label for="password">Password</label>
           <input id="password" name="password" type="password" [(ngModel)]="password" required autocomplete="off" />
         </div>
-        <button class="btn btn-primary btn-ingresar" type="submit">Ingresar</button>
+        <button class="btn btn-primary btn-login" type="submit">Login</button>
       </form>
       <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
     </div>
@@ -33,7 +33,7 @@ import { TechnicianService } from '../../services/technician.service';
       background: rgba(0,0,0,0.5);
       z-index: 1000;
     }
-    .modal-ingreso {
+    .modal-login {
       position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
@@ -87,7 +87,7 @@ import { TechnicianService } from '../../services/technician.service';
       border-color: #667eea;
       background: rgba(17, 24, 39, 0.9);
     }
-    .btn-ingresar {
+    .btn-login {
       width: 100%;
       margin-top: 0.5rem;
       padding: 0.7rem 0;
@@ -104,31 +104,42 @@ import { TechnicianService } from '../../services/technician.service';
     }
   `]
 })
-export class IngresoTecnicosComponent {
-  tecnicoId: string = '';
+export class TechnicianLoginComponent {
+  technicianId: string = '';
   password: string = '';
   @Output() close = new EventEmitter<void>();
   @Output() loginSuccess = new EventEmitter<string>();
   errorMsg: string = '';
 
-  constructor(private router: Router, private tecnicoService: TechnicianService) {}
+  @HostListener('window:keydown.escape', ['$event'])
+  onEsc(event: KeyboardEvent) {
+    this.onClose();
+  }
 
-  ingresar() {
-    if (this.tecnicoId && this.password) {
-      this.tecnicoService.getTecnicoById(this.tecnicoId).subscribe(tecnico => {
-        if (tecnico && tecnico.contraseña === this.password) {
-          this.errorMsg = '';
-          this.loginSuccess.emit(this.tecnicoId);
-          this.cerrar();
-          this.router.navigate(['/mis-citas'], { queryParams: { tecnicoId: this.tecnicoId } });
-        } else {
-          this.errorMsg = 'ID o contraseña incorrectos';
+  constructor(private router: Router, private technicianService: TechnicianService) {}
+
+  login() {
+    if (this.technicianId && this.password) {
+      this.technicianService.authenticateTechnician(this.technicianId, this.password).subscribe(
+        (valid: boolean) => {
+          if (valid) {
+            this.errorMsg = '';
+            this.loginSuccess.emit(this.technicianId);
+            this.onClose();
+            this.router.navigate(['/my-appointments'], { queryParams: { technicianId: this.technicianId } });
+          } else {
+            this.errorMsg = 'Incorrect ID or password';
+          }
+        },
+        (error: any) => {
+          console.error('Error authenticating technician:', error);
+          this.errorMsg = 'Authentication error';
         }
-      });
+      );
     }
   }
 
-  cerrar() {
+  onClose() {
     this.close.emit();
   }
 }

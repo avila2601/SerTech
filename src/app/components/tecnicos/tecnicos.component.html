@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="tecnicos-header">
+    <h1>Profesionales expertos en equipos</h1>
+    <p>Selecciona el técnico de tu preferencia</p>
+  </div>
+
+  <div class="tecnicos-grid">
+    <div *ngFor="let tecnico of tecnicos" class="tecnico-card">
+      <div class="tecnico-avatar">
+        <img
+          [src]="tecnico.foto || getRandomAvatar(tecnico.id)"
+          alt="Avatar técnico"
+        />
+      </div>
+      <div class="tecnico-info">
+        <h3>{{ tecnico.nombre }}</h3>
+        <p class="especialidad">{{ tecnico.especialidad }}</p>
+        <div class="rating-section">
+          <div class="rating-info">
+            <div class="stars">
+              <span class="star">★</span>
+            </div>
+            <span class="rating-value">{{ tecnico.calificacion }}</span>
+          </div>
+          <button
+            class="btn btn-primary btn-comentarios"
+            (click)="abrirModalResenas(tecnico.id)"
+          >
+            Ver comentarios
+          </button>
+        </div>
+        <!-- <p class="experiencia">{{ tecnico.experiencia }} años de experiencia</p> -->
+      </div>
+      <div class="tecnico-actions">
+        <button
+          class="btn btn-primary"
+          [disabled]="!tecnico.disponible"
+          (click)="seleccionarTecnico(tecnico)"
+        >
+          {{ tecnico.disponible ? "Seleccionar" : "No disponible" }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="tecnicos.length === 0" class="no-tecnicos">
+    <p>No hay técnicos disponibles en este momento.</p>
+  </div>
+
+  <div class="tecnicos-actions">
+    <button class="btn btn-secondary" (click)="volverAServicios()">
+      Volver a Servicios
+    </button>
+  </div>
+
+  <app-tecnicos-resenas-modal
+    *ngIf="mostrarModalResenas"
+    [tecnicoId]="tecnicoIdModal"
+    (close)="cerrarModalResenas()"
+  ></app-tecnicos-resenas-modal>
+</div>

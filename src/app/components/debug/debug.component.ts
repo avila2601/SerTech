@@ -1,75 +1,15 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-debug',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="debug-container">
-      <h2>Debug - Datos Almacenados</h2>
-
-      <div class="debug-actions">
-        <button (click)="exportData()" class="btn btn-primary">Exportar Datos</button>
-        <button (click)="clearData()" class="btn btn-danger">Limpiar Datos</button>
-      </div>
-
-      <div class="debug-data">
-        <h3>Datos JSON:</h3>
-        <pre>{{ jsonData }}</pre>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .debug-container {
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .debug-actions {
-      margin-bottom: 20px;
-    }
-
-    .debug-actions button {
-      margin-right: 10px;
-    }
-
-    .debug-data {
-      background: rgba(31, 41, 55, 0.8);
-      border-radius: 8px;
-      padding: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .debug-data pre {
-      color: #e0e0e0;
-      font-size: 12px;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-
-    .btn {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .btn-primary {
-      background: #667eea;
-      color: white;
-    }
-
-    .btn-danger {
-      background: #e53e3e;
-      color: white;
-    }
-  `]
+  imports: [CommonModule, HttpClientModule],
+  templateUrl: './debug.component.html',
+  styleUrls: ['./debug.component.scss']
 })
 export class DebugComponent {
   jsonData: string = '';
@@ -79,24 +19,24 @@ export class DebugComponent {
   }
 
   updateJsonData(): void {
-    // Obtener datos de Render (clientes y citas)
+    // Fetch data from server (clients and appointments)
     Promise.all([
-      this.http.get<any>('https://sertech-backend.onrender.com/clientes').toPromise(),
-      this.http.get<any>('https://sertech-backend.onrender.com/citas').toPromise()
-    ]).then(([clientes, citas]) => {
-      this.jsonData = JSON.stringify({ clientes, citas }, null, 2);
+      this.http.get<any>('https://sertech-backend.onrender.com/clients').toPromise(),
+      this.http.get<any>('https://sertech-backend.onrender.com/appointments').toPromise()
+    ]).then(([clients, appointments]) => {
+      this.jsonData = JSON.stringify({ clients, appointments }, null, 2);
     }).catch(() => {
-      this.jsonData = 'Error al obtener datos de Render';
+      this.jsonData = 'Error fetching data from server';
     });
   }
 
   exportData(): void {
-    // Descargar datos de Render como JSON
+    // Export data from server as JSON
     Promise.all([
-      this.http.get<any>('https://sertech-backend.onrender.com/clientes').toPromise(),
-      this.http.get<any>('https://sertech-backend.onrender.com/citas').toPromise()
-    ]).then(([clientes, citas]) => {
-      const data = JSON.stringify({ clientes, citas }, null, 2);
+      this.http.get<any>('https://sertech-backend.onrender.com/clients').toPromise(),
+      this.http.get<any>('https://sertech-backend.onrender.com/appointments').toPromise()
+    ]).then(([clients, appointments]) => {
+      const data = JSON.stringify({ clients, appointments }, null, 2);
       const blob = new Blob([data], { type: 'application/json' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -108,15 +48,15 @@ export class DebugComponent {
   }
 
   clearData(): void {
-    if (confirm('¿Estás seguro de que quieres borrar TODOS los datos en Render?')) {
-      // Enviar petición para borrar todos los datos en Render
+    if (confirm('Are you sure you want to delete ALL data on the server?')) {
+      // Send request to clear all server data
       this.http.delete('https://sertech-backend.onrender.com/debug/clear-all').subscribe({
         next: () => {
-          alert('Datos en Render eliminados correctamente');
+          alert('Server data cleared successfully');
           this.updateJsonData();
         },
         error: () => {
-          alert('Error al borrar datos en Render');
+          alert('Error clearing server data');
         }
       });
     }

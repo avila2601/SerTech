@@ -1,54 +1,50 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Cliente } from '../models';
+import { Client } from '../models';
 import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientService {
-  private clientesSubject = new BehaviorSubject<Cliente[]>([]);
+  private clientsSubject = new BehaviorSubject<Client[]>([]);
 
   constructor(private storageService: StorageService) {
-    this.refreshClientes();
+    this.refreshClients();
   }
 
-  private refreshClientes(): void {
-    this.storageService.getClientes().subscribe(clientes => {
-      this.clientesSubject.next(clientes);
+  private refreshClients(): void {
+    this.storageService.getClients().subscribe((clients: Client[]) => {
+      this.clientsSubject.next(clients);
     });
   }
 
-  getClientes(): Observable<Cliente[]> {
-    return this.clientesSubject.asObservable();
+  getClients(): Observable<Client[]> {
+    return this.clientsSubject.asObservable();
   }
 
-  agregarCliente(cliente: Omit<Cliente, 'id'>): Observable<Cliente> {
+  addClient(client: Omit<Client, 'id'>): Observable<Client> {
     return new Observable(observer => {
-      this.storageService.agregarCliente(cliente).subscribe({
-        next: (nuevoCliente) => {
-          observer.next(nuevoCliente);
-          this.refreshClientes();
+      this.storageService.addClient(client).subscribe({
+        next: (newClient) => {
+          observer.next(newClient);
+          this.refreshClients();
           observer.complete();
         },
-        error: (error) => {
-          observer.error(error);
-        }
+        error: (error) => observer.error(error)
       });
     });
   }
 
-  actualizarCliente(id: string, datos: Partial<Cliente>): Observable<Cliente | null> {
+  updateClient(id: string, data: Partial<Client>): Observable<Client | null> {
     return new Observable(observer => {
-      this.storageService.actualizarCliente(id, datos).subscribe({
-        next: (cliente) => {
-          observer.next(cliente);
-          this.refreshClientes();
+      this.storageService.updateClient(id, data).subscribe({
+        next: (updated) => {
+          observer.next(updated);
+          this.refreshClients();
           observer.complete();
         },
-        error: (error) => {
-          observer.error(error);
-        }
+        error: (error) => observer.error(error)
       });
     });
   }

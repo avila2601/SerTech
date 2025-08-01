@@ -1,0 +1,15 @@
+<div class="debug-container">
+  <h2>Debug - Datos Almacenados</h2>
+
+  <div class="debug-actions">
+    <button (click)="exportData()" class="btn btn-primary">
+      Exportar Datos
+    </button>
+    <button (click)="clearData()" class="btn btn-danger">Limpiar Datos</button>
+  </div>
+
+  <div class="debug-data">
+    <h3>Datos JSON:</h3>
+    <pre>{{ jsonData }}</pre>
+  </div>
+</div>

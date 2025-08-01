@@ -1,0 +1,101 @@
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand">
+      <h2>SerTech</h2>
+    </div>
+
+    <div class="hamburger" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <ul class="nav-menu" [class.active]="isMenuOpen">
+      <li>
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMenu()"
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/about-us"
+          routerLinkActive="active"
+          (click)="closeMenu()"
+          >About Us</a
+        >
+      </li>
+      <li *ngIf="tecnicoLogueado || estaLogueadoComoCliente">
+        <a
+          routerLink="/my-appointments"
+          routerLinkActive="active"
+          (click)="closeMenu()"
+          >My Appointments</a
+        >
+      </li>
+      <li *ngIf="!tecnicoLogueado && !estaLogueadoComoCliente">
+        <a
+          href="#"
+          (click)="abrirModalTecnicos(); closeMenu(); $event.preventDefault()"
+          >Technicians</a
+        >
+      </li>
+      <li *ngIf="!estaLogueadoComoCliente && !tecnicoLogueado">
+        <a
+          href="#"
+          (click)="abrirModalLogin(); closeMenu(); $event.preventDefault()"
+          >Client Login</a
+        >
+      </li>
+      <li *ngIf="tecnicoLogueado">
+        <a
+          href="#"
+          (click)="
+            abrirModalResenasTecnico(); closeMenu(); $event.preventDefault()
+          "
+          >My Reviews</a
+        >
+      </li>
+      <li *ngIf="tecnicoLogueado">
+        <a href="#" (click)="logoutTecnico(); $event.preventDefault()"
+          >Logout</a
+        >
+      </li>
+      <li *ngIf="estaLogueadoComoCliente">
+        <a href="#" (click)="logoutCliente(); $event.preventDefault()"
+          >Logout</a
+        >
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<app-technician-login
+  *ngIf="mostrarModalTecnicos"
+  (close)="cerrarModalTecnicos()"
+  (loginSuccess)="loginTecnico($event)"
+></app-technician-login>
+<app-login
+  *ngIf="mostrarModalLogin"
+  (close)="cerrarModalLogin()"
+  (loginSuccess)="updateUserStatus()"
+></app-login>
+
+<app-technician-reviews-modal
+  *ngIf="mostrarModalResenasTecnico"
+  [technicianId]="tecnicoIdResenas"
+  (close)="cerrarModalResenasTecnico()"
+></app-technician-reviews-modal>
+
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2024 SerTech. All rights reserved.</p>
+  </div>
+</footer>

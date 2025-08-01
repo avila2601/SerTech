@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { AppointmentService } from '../../services/appointment.service';
 import { ClientService } from '../../services/client.service';
-import { Cliente } from '../../models';
+import { Client } from '../../models';
 
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.scss']
 })
@@ -17,61 +17,61 @@ export class ClientsComponent implements OnInit {
   informacionForm: FormGroup;
   isSubmitting = false;
 
-  // Información del servicio seleccionado
-  marcaSeleccionada: string = '';
-  productoSeleccionado: string = '';
-  modeloSeleccionado: string = '';
-  sintomasSeleccionados: string = '';
-  ubicacionSeleccionada: string = '';
+  // Selected service info
+  brand: string = '';
+  product: string = '';
+  model: string = '';
+  symptoms: string = '';
+  location: string = '';
 
   constructor(
     private fb: FormBuilder,
-    private citaService: AppointmentService,
-    private clienteService: ClientService,
+    private appointmentService: AppointmentService,
+    private clientService: ClientService,
     private router: Router,
     private route: ActivatedRoute
   ) {
     this.informacionForm = this.fb.group({
-      nombre: ['', Validators.required],
+      clientName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      telefono: ['', Validators.required],
-      direccion: ['', Validators.required],
-      fecha: [''],
-      hora: ['']
+      phone: ['', Validators.required],
+      address: ['', Validators.required],
+      date: [''],
+      time: ['']
     });
   }
 
   ngOnInit(): void {
     // Obtener los datos del servicio seleccionado y personales desde query params
     this.route.queryParams.subscribe(params => {
-      this.marcaSeleccionada = params['marca'] || '';
-      this.productoSeleccionado = params['producto'] || '';
-      this.modeloSeleccionado = params['modelo'] || '';
-      this.sintomasSeleccionados = params['sintomas'] || '';
-      this.ubicacionSeleccionada = params['ubicacion'] || '';
+      this.brand = params['brand'] || '';
+      this.product = params['product'] || '';
+      this.model = params['model'] || '';
+      this.symptoms = params['symptoms'] || '';
+      this.location = params['location'] || '';
 
       // Rellenar el formulario si existen datos personales y de fecha/hora
       this.informacionForm.patchValue({
-        nombre: params['nombre'] || '',
+        clientName: params['clientName'] || '',
         email: params['email'] || '',
-        telefono: params['telefono'] || '',
-        direccion: params['direccion'] || '',
-        fecha: params['fecha'] || '',
-        hora: params['hora'] || ''
+        phone: params['phone'] || '',
+        address: params['address'] || '',
+        date: params['date'] || '',
+        time: params['time'] || ''
       });
     });
 
     // --- NUEVO: Cargar datos del cliente logueado si existe ---
-    const clienteId = localStorage.getItem('clienteLogueado');
-    if (clienteId) {
-      this.clienteService.getClientes().subscribe((clientes: Cliente[]) => {
-        const cliente = clientes.find((c: Cliente) => c.id === clienteId);
-        if (cliente) {
+    const clientId = localStorage.getItem('clientLoggedIn');
+    if (clientId) {
+      this.clientService.getClients().subscribe((clients: Client[]) => {
+        const client = clients.find(c => c.id === clientId);
+        if (client) {
           this.informacionForm.patchValue({
-            nombre: cliente.nombre,
-            email: cliente.email,
-            telefono: cliente.telefono,
-            direccion: cliente.direccion
+            clientName: client.name,
+            email: client.email,
+            phone: client.phone,
+            address: client.address
           });
         }
       });
@@ -92,67 +92,67 @@ export class ClientsComponent implements OnInit {
 
       const formValue = this.informacionForm.value;
       const params = this.route.snapshot.queryParams;
-      const clienteId = localStorage.getItem('clienteLogueado');
-      const citaId = localStorage.getItem('citaEnProceso');
+      const clientId = localStorage.getItem('clientLoggedIn');
+      const appointmentId = localStorage.getItem('appointmentInProgress');
       const emailLogin = localStorage.getItem('emailLogin');
 
-      const navegarAResumen = (nuevoClienteId?: string) => {
+      const navigateToSummary = (newClientId?: string) => {
         // Si hay una cita en proceso, actualizar su clienteId
-        if (citaId && nuevoClienteId) {
-          this.citaService.actualizarClienteEnCita(citaId, nuevoClienteId);
-          localStorage.removeItem('citaEnProceso');
+        if (appointmentId && newClientId) {
+          this.appointmentService.updateClientInAppointment(appointmentId, newClientId);
+          localStorage.removeItem('appointmentInProgress');
         }
 
-        this.router.navigate(['/resumen-cita'], {
+        this.router.navigate(['/appointment-summary'], {
           queryParams: {
-            marca: this.marcaSeleccionada,
-            producto: this.productoSeleccionado,
-            modelo: this.modeloSeleccionado,
-            sintomas: this.sintomasSeleccionados,
-            ubicacion: this.ubicacionSeleccionada,
-            fecha: formValue.fecha,
-            hora: formValue.hora,
-            nombre: formValue.nombre,
+            brand: this.brand,
+            product: this.product,
+            model: this.model,
+            symptoms: this.symptoms,
+            location: this.location,
+            date: formValue.date,
+            time: formValue.time,
+            clientName: formValue.clientName,
             email: formValue.email,
-            telefono: formValue.telefono,
-            direccion: formValue.direccion,
-            tecnicoId: params['tecnicoId'] || '',
-            servicioId: params['servicioId'] || ''
+            phone: formValue.phone,
+            address: formValue.address,
+            technicianId: params['technicianId'] || '',
+            serviceId: params['serviceId'] || ''
           }
         });
       };
 
-      if (clienteId) {
-        // Actualizar datos del cliente en el backend
-        this.clienteService.actualizarCliente(clienteId, {
-          nombre: formValue.nombre,
+      if (clientId) {
+        // Update client data in backend
+        this.clientService.updateClient(clientId, {
+          name: formValue.clientName,
           email: formValue.email,
-          telefono: formValue.telefono,
-          direccion: formValue.direccion
+          phone: formValue.phone,
+          address: formValue.address
         }).subscribe({
-          next: () => navegarAResumen(),
-          error: () => navegarAResumen() // Si falla, igual navega
+          next: () => navigateToSummary(),
+          error: () => navigateToSummary() // If error, still navigate
         });
       } else {
-        // Si no hay cliente logueado, simplemente navegar al resumen
-        // Esto permitirá crear el cliente durante la confirmación final de la cita
-        navegarAResumen();
+        // No logged-in client: just navigate to summary
+        // Client creation happens on final confirmation
+        navigateToSummary();
       }
     }
   }
 
-  regresar(): void {
-    // Regresar a la página de técnicos con los datos del servicio y cliente
-    this.router.navigate(['/tecnicos'], {
+  goBack(): void {
+    // Navigate back to technicians page with service and client data
+    this.router.navigate(['/technicians'], {
       queryParams: {
-        servicio: this.route.snapshot.queryParams['servicio'] || '1',
-        marca: this.marcaSeleccionada,
-        producto: this.productoSeleccionado,
-        modelo: this.modeloSeleccionado,
-        sintomas: this.sintomasSeleccionados,
-        ubicacion: this.ubicacionSeleccionada,
-        fecha: this.informacionForm.get('fecha')?.value || '',
-        hora: this.informacionForm.get('hora')?.value || ''
+        serviceId: this.route.snapshot.queryParams['serviceId'] || '',
+        brand: this.brand,
+        product: this.product,
+        model: this.model,
+        symptoms: this.symptoms,
+        location: this.location,
+        date: this.informacionForm.get('date')?.value || '',
+        time: this.informacionForm.get('time')?.value || ''
       }
     });
   }

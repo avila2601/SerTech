@@ -4,12 +4,12 @@
   padding: 0 20px;
 }
 
-.tecnicos-container {
+.technicians-container {
   padding: 2rem 0;
   min-height: calc(100vh - 140px);
 }
 
-.tecnicos-header {
+.technicians-header {
   text-align: center;
   margin-bottom: 3rem;
   padding: 2rem 0;
@@ -19,14 +19,14 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.tecnicos-header h1 {
+.technicians-header h1 {
   font-size: 2.5rem;
   color: #e0e0e0;
   margin-bottom: 1rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.tecnicos-header p {
+.technicians-header p {
   font-size: 1.1rem;
   color: #b0b0b0;
   max-width: 600px;
@@ -91,17 +91,23 @@
   color: #9ca3af;
 }
 
-.tecnicos-grid {
+.technicians-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
+/* On large screens, restrict to max 3 cards per row */
+@media (min-width: 1200px) {
+  .technicians-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 
-.tecnico-card {
+.technician-card {
   background: rgba(31, 41, 55, 0.8);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -110,7 +116,7 @@
   overflow: hidden;
 }
 
-.tecnico-card::before {
+.technician-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -122,27 +128,27 @@
   transition: transform 0.3s ease;
 }
 
-.tecnico-card:hover::before {
+.technician-card:hover::before {
   transform: scaleX(1);
 }
 
-.tecnico-card:hover {
+.technician-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
   border-color: rgba(102, 126, 234, 0.3);
 }
 
-.tecnico-header {
+.technician-header {
   display: flex;
   align-items: center;
   margin-bottom: 1.5rem;
   gap: 1rem;
 }
 
-.tecnico-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+.technician-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   align-items: center;
@@ -154,28 +160,44 @@
   overflow: hidden;
 }
 
-.tecnico-avatar img {
+.technician-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 12px;
   display: block;
 }
+/* Technician info container: left-align text and add vertical padding */
+.technician-info {
+  text-align: left;
+  padding: 0.5rem 0;
+}
 
-.tecnico-info h3 {
+.technician-info h3 {
   font-size: 1.3rem;
   color: #e0e0e0;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
-.tecnico-info p {
+.technician-info p {
   color: #9ca3af;
   font-size: 0.95rem;
   margin-bottom: 0.5rem;
 }
+/* Specialty text styling */
+.technician-info .specialty {
+  color: #9ca3af;
+  font-size: 0.95rem;
+  margin: 0;
+}
+/* Add spacing below specialty */
+.technician-card .specialty {
+  display: block;
+  margin: 0.5rem 0 1rem;
+}
 
-.tecnico-rating {
+.technician-rating {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -212,9 +234,9 @@
   gap: 0.3rem;
 }
 
-.rating-section .btn-comentarios {
+.rating-section .btn-comments {
   margin: 0;
-  padding: 0.5rem 1.2rem;
+  padding: 0 1.2rem;
   font-size: 0.93rem;
   height: auto;
   min-width: unset;
@@ -230,22 +252,48 @@
   border: none;
   transition: background 0.2s, box-shadow 0.2s;
   justify-content: center;
+  height: 2.2rem;
+}
+.technician-actions {
+  text-align: center;
+  margin-top: 1rem;
 }
 
-.rating-section .btn-comentarios:hover, .rating-section .btn-comentarios:focus {
+/* Gradient style for Select button */
+.technician-actions .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.technician-actions .btn-primary:hover,
+.technician-actions .btn-primary:focus {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.18);
+  outline: none;
+}
+/* Unavailable button style */
+.technician-actions .btn-primary:disabled {
+  background: #6b7280;
+  color: #fff;
+  box-shadow: none;
+}
+
+.rating-section .btn-comments:hover, .rating-section .btn-comments:focus {
   background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
   color: #fff;
   box-shadow: 0 4px 16px rgba(102, 126, 234, 0.18);
   outline: none;
 }
 
-.experiencia {
+.experience {
   color: #9ca3af;
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
-.tecnico-details {
+.technician-details {
   background: rgba(0, 0, 0, 0.2);
   padding: 1rem;
   border-radius: 8px;
@@ -273,8 +321,23 @@
   font-size: 0.9rem;
 }
 
-.tecnico-actions {
+.technician-actions {
   text-align: center;
+}
+
+/* Gradient style for Select button */
+.technician-actions .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.technician-actions .btn-primary:hover,
+.technician-actions .btn-primary:focus {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.18);
+  outline: none;
 }
 
 .btn {
@@ -326,14 +389,14 @@
   box-shadow: none;
 }
 
-.no-tecnicos {
+.no-technicians {
   text-align: center;
   padding: 3rem;
   color: #9ca3af;
   font-size: 1.1rem;
 }
 
-.no-tecnicos i {
+.no-technicians i {
   font-size: 3rem;
   margin-bottom: 1rem;
   color: #667eea;
@@ -346,47 +409,47 @@
     padding: 0 15px;
   }
 
-  .tecnicos-header {
+  .technicians-header {
     margin-bottom: 2rem;
     padding: 1.5rem 0;
   }
 
-  .tecnicos-header h1 {
+  .technicians-header h1 {
     font-size: 2rem;
   }
 
-  .tecnicos-header p {
+  .technicians-header p {
     font-size: 1rem;
   }
 
-  .tecnicos-grid {
+  .technicians-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
-  .tecnico-card {
+  .technician-card {
     padding: 1.5rem;
   }
 
-  .tecnico-header {
+  .technician-header {
     margin-bottom: 1rem;
   }
 
-  .tecnico-avatar {
+  .technician-avatar {
     width: 50px;
     height: 50px;
     font-size: 1.2rem;
   }
 
-  .tecnico-info h3 {
+  .technician-info h3 {
     font-size: 1.1rem;
   }
 
-  .tecnico-info p {
+  .technician-info p {
     font-size: 0.9rem;
   }
 
-  .tecnico-details {
+  .technician-details {
     padding: 0.8rem;
     margin-bottom: 1rem;
   }
@@ -407,49 +470,49 @@
     padding: 0 10px;
   }
 
-  .tecnicos-header {
+  .technicians-header {
     margin-bottom: 1.5rem;
     padding: 1rem 0;
   }
 
-  .tecnicos-header h1 {
+  .technicians-header h1 {
     font-size: 1.6rem;
   }
 
-  .tecnicos-header p {
+  .technicians-header p {
     font-size: 0.9rem;
   }
 
-  .tecnicos-grid {
+  .technicians-grid {
     gap: 1rem;
   }
 
-  .tecnico-card {
+  .technician-card {
     padding: 1rem;
   }
 
-  .tecnico-header {
+  .technician-header {
     margin-bottom: 0.8rem;
     gap: 0.8rem;
   }
 
-  .tecnico-avatar {
+  .technician-avatar {
     width: 45px;
     height: 45px;
     font-size: 1.1rem;
   }
 
-  .tecnico-info h3 {
+  .technician-info h3 {
     font-size: 1rem;
     margin-bottom: 0.3rem;
   }
 
-  .tecnico-info p {
+  .technician-info p {
     font-size: 0.85rem;
     margin-bottom: 0.3rem;
   }
 
-  .tecnico-rating {
+  .technician-rating {
     margin-bottom: 0.8rem;
   }
 
@@ -458,12 +521,12 @@
     font-size: 0.8rem;
   }
 
-  .experiencia {
+  .experience {
     font-size: 0.8rem;
     margin-bottom: 0.8rem;
   }
 
-  .tecnico-details {
+  .technician-details {
     padding: 0.6rem;
     margin-bottom: 0.8rem;
   }
@@ -483,14 +546,14 @@
   }
 }
 
-.tecnicos-actions {
+.technicians-actions {
   display: flex;
   justify-content: center;
   margin-top: 2rem;
   padding: 1rem 0;
 }
 
-.tecnicos-actions .btn {
+.technicians-actions .btn {
   min-width: 200px;
   padding: 0.75rem 2rem;
   font-size: 1rem;

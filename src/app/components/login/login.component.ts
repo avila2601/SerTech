@@ -9,15 +9,15 @@ import { ClientService } from '../../services/client.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="modal-backdrop" (click)="cerrar()"></div>
-    <div class="modal-ingreso" (click)="$event.stopPropagation()">
-      <h2>Iniciar Sesión</h2>
-      <form (ngSubmit)="ingresar()" autocomplete="off">
+    <div class="modal-backdrop" (click)="close()"></div>
+    <div class="modal-login" (click)="$event.stopPropagation()">
+      <h2>Login</h2>
+      <form (ngSubmit)="login()" autocomplete="off">
         <div class="form-group">
-          <label for="email">Ingresa tu e-mail</label>
+          <label for="email">Enter your email</label>
           <input id="email" name="email" type="email" [(ngModel)]="email" required autocomplete="off" />
         </div>
-        <button class="btn btn-primary btn-ingresar" type="submit">Ingresar</button>
+        <button class="btn btn-primary btn-login" type="submit">Login</button>
       </form>
       <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
     </div>
@@ -29,7 +29,7 @@ import { ClientService } from '../../services/client.service';
       background: rgba(0,0,0,0.5);
       z-index: 1000;
     }
-    .modal-ingreso {
+    .modal-login {
       position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
@@ -83,7 +83,7 @@ import { ClientService } from '../../services/client.service';
       border-color: #667eea;
       background: rgba(17, 24, 39, 0.9);
     }
-    .btn-ingresar {
+    .btn-login {
       width: 100%;
       margin-top: 0.5rem;
       padding: 0.7rem 0;
@@ -102,51 +102,51 @@ import { ClientService } from '../../services/client.service';
 })
 export class LoginComponent {
   email: string = '';
-  @Output() close = new EventEmitter<void>();
+  @Output() closeModal = new EventEmitter<void>();
   @Output() loginSuccess = new EventEmitter<void>();
   errorMsg: string = '';
 
-  constructor(private router: Router, private clienteService: ClientService) {}
+  constructor(private router: Router, private clientService: ClientService) {}
 
   @HostListener('document:keydown.escape')
   onEscapePress() {
-    this.cerrar();
+    this.close();
   }
 
-  ingresar() {
+  login() {
     if (!this.email) {
-      this.errorMsg = 'Por favor, ingresa tu e-mail.';
+      this.errorMsg = 'Please enter your email.';
       return;
     }
 
     // Validar formato de e-mail
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(this.email)) {
-      this.errorMsg = 'Por favor, ingresa un e-mail válido.';
+      this.errorMsg = 'Please enter a valid email.';
       return;
     }
 
-    this.clienteService.getClientes().subscribe(clientes => {
-      const cliente = clientes.find(c => c.email === this.email);
-      if (cliente) {
-        // Guardar el clienteId como cliente logueado y limpiar emailLogin
-        localStorage.setItem('clienteLogueado', cliente.id);
+    this.clientService.getClients().subscribe(clients => {
+      const client = clients.find(c => c.email === this.email);
+      if (client) {
+        // Store logged-in client and clear emailLogin
+        localStorage.setItem('clientLoggedIn', client.id);
         localStorage.removeItem('emailLogin');
       } else {
-        // Si el email no existe, guardar el email en emailLogin y limpiar clienteLogueado
+        // If email not found, store emailLogin and clear clientLoggedIn
         localStorage.setItem('emailLogin', this.email);
-        localStorage.removeItem('clienteLogueado');
+        localStorage.removeItem('clientLoggedIn');
       }
 
       this.errorMsg = '';
       this.loginSuccess.emit();
-      this.cerrar();
+      this.close();
       // Siempre redirigir a inicio
       this.router.navigate(['/']);
     });
   }
 
-  cerrar() {
-    this.close.emit();
+  close() {
+    this.closeModal.emit();
   }
 }

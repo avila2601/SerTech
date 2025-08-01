@@ -1,33 +1,34 @@
 import { Component, Input, OnInit, Output, EventEmitter, HostListener } from '@angular/core';
+import { Review } from '../../services/review.service';
 import { CommonModule } from '@angular/common';
 import { ReviewService } from '../../services/review.service';
 
 @Component({
-  selector: 'app-tecnicos-resenas-modal',
+  selector: 'app-technician-reviews-modal',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="modal-backdrop" (click)="cerrar()"></div>
-    <div class="modal-resenas" (click)="$event.stopPropagation()">
-      <h2>Reseñas de clientes</h2>
-      <div *ngIf="cargando" class="cargando">
-        <p>Cargando reseñas...</p>
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal-reviews" (click)="$event.stopPropagation()">
+      <h2>Client Reviews</h2>
+      <div *ngIf="loading" class="loading">
+        <p>Loading reviews...</p>
       </div>
-      <div *ngIf="!cargando && resenas.length === 0" class="sin-resenas">
-        <p>No hay reseñas para este técnico.</p>
+      <div *ngIf="!loading && reviews.length === 0" class="no-reviews">
+        <p>No reviews for this technician.</p>
       </div>
-      <div *ngFor="let resena of resenas" class="resena-card">
-        <div class="resena-header">
-          <span class="cliente">{{ resena.cliente }}</span>
-          <span class="calificacion">
-            <ng-container *ngFor="let star of getStars(resena.calificacion)">★</ng-container>
-            <ng-container *ngFor="let star of getEmptyStars(resena.calificacion)">☆</ng-container>
+      <div *ngFor="let review of reviews" class="review-card">
+        <div class="review-header">
+          <span class="client">{{ review.clientName }}</span>
+          <span class="rating">
+            <ng-container *ngFor="let star of getStars(review.rating)">★</ng-container>
+            <ng-container *ngFor="let star of getEmptyStars(review.rating)">☆</ng-container>
           </span>
         </div>
-        <div class="resena-comentario">{{ resena.comentario }}</div>
-        <div class="resena-fecha">{{ resena.fecha | date:'longDate' }}</div>
+        <div class="review-comment">{{ review.comment }}</div>
+        <div class="review-date">{{ review.date | date:'longDate' }}</div>
       </div>
-      <button class="btn btn-secondary cerrar-btn" (click)="cerrar()">Cerrar</button>
+      <button class="btn btn-secondary close-btn" (click)="closeModal()">Close</button>
     </div>
   `,
   styles: [`
@@ -37,7 +38,7 @@ import { ReviewService } from '../../services/review.service';
       background: rgba(0,0,0,0.5);
       z-index: 1000;
     }
-    .modal-resenas {
+    .modal-reviews {
       position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
@@ -52,91 +53,91 @@ import { ReviewService } from '../../services/review.service';
       max-height: 80vh;
       overflow-y: auto;
     }
-    .modal-resenas h2 {
+    .modal-reviews h2 {
       margin-bottom: 1.2rem;
     }
-    .resena-card {
+    .review-card {
       background: rgba(255,255,255,0.05);
       border-radius: 10px;
       margin-bottom: 1.2rem;
       padding: 1rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
-    .resena-header {
+    .review-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 0.5rem;
     }
-    .cliente {
+    .client {
       font-weight: 600;
       color: #a7a9be;
     }
-    .calificacion {
+    .rating {
       color: #ffd700;
       font-size: 1.1rem;
     }
-    .resena-comentario {
+    .review-comment {
       margin-bottom: 0.3rem;
       color: #e0e0e0;
     }
-    .resena-fecha {
+    .review-date {
       font-size: 0.9rem;
       color: #b0b0b0;
       text-align: right;
     }
-    .cerrar-btn {
+    .close-btn {
       margin-top: 1rem;
       width: 100%;
     }
-    .sin-resenas, .cargando {
+    .no-reviews, .loading {
       text-align: center;
       color: #b0b0b0;
       margin-bottom: 1rem;
     }
   `]
 })
-export class TecnicosResenasModalComponent implements OnInit {
-  @Input() tecnicoId: string = '';
-  @Output() close = new EventEmitter<void>();
-  resenas: any[] = [];
-  cargando: boolean = true;
+export class TechnicianReviewsModalComponent implements OnInit {
+  @Input() technicianId: string = '';
+  @Output() close = new EventEmitter<void>(); // Emitted when modal closes
+  reviews: Review[] = [];
+  loading: boolean = true;
 
-  constructor(private resenaService: ReviewService) {}
+  constructor(private reviewService: ReviewService) {}
 
   @HostListener('document:keydown.escape', ['$event'])
   onEsc(event: KeyboardEvent) {
-    this.cerrar();
+    this.closeModal();
   }
 
   ngOnInit(): void {
-    this.cargarResenas();
+    this.loadReviews();
   }
 
-  cargarResenas(): void {
-    this.cargando = true;
-    this.resenaService.getResenasPorTecnico(this.tecnicoId).subscribe({
-      next: (resenas) => {
-        this.resenas = resenas;
-        this.cargando = false;
+  loadReviews(): void {
+    this.loading = true;
+    this.reviewService.getReviewsByTechnician(this.technicianId).subscribe({
+      next: (reviews) => {
+        this.reviews = reviews;
+        this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar reseñas:', error);
-        this.resenas = [];
-        this.cargando = false;
+        console.error('Error loading reviews:', error);
+        this.reviews = [];
+        this.loading = false;
       }
     });
   }
 
-  getStars(calificacion: number): number[] {
-    return Array(calificacion).fill(0);
+  getStars(rating: number): number[] {
+    return Array(rating).fill(0);
   }
 
-  getEmptyStars(calificacion: number): number[] {
-    return Array(5 - calificacion).fill(0);
+  getEmptyStars(rating: number): number[] {
+    return Array(5 - rating).fill(0);
   }
 
-  cerrar() {
+  closeModal() {
     this.close.emit();
   }
 }

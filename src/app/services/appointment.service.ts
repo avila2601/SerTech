@@ -1,38 +1,38 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Cita } from '../models';
+import { Appointment } from '../models';
 import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentService {
-  private citasSubject = new BehaviorSubject<Cita[]>([]);
+private appointmentsSubject = new BehaviorSubject<Appointment[]>([]);
 
   constructor(private storageService: StorageService) {
-    this.refreshCitas();
+    this.refreshAppointments();
   }
 
-  private refreshCitas(): void {
-    this.storageService.getCitas().subscribe(citas => {
-      this.citasSubject.next(citas);
+  private refreshAppointments(): void {
+    this.storageService.getAppointments().subscribe((appointments: Appointment[]) => {
+      this.appointmentsSubject.next(appointments);
     });
   }
 
-  getCitas(): Observable<Cita[]> {
-    return this.citasSubject.asObservable();
+  getAppointments(): Observable<Appointment[]> {
+    return this.appointmentsSubject.asObservable();
   }
 
-  getCitasPorCliente(clienteId: string): Observable<Cita[]> {
-    return this.storageService.getCitasPorCliente(clienteId);
+  getAppointmentsByClient(clientId: string): Observable<Appointment[]> {
+    return this.storageService.getAppointmentsByClient(clientId);
   }
 
-  crearCita(cita: Omit<Cita, 'id' | 'estado'>): Observable<Cita> {
+  createAppointment(appointmentData: Omit<Appointment, 'id' | 'status'>): Observable<Appointment> {
     return new Observable(observer => {
-      this.storageService.crearCita(cita).subscribe({
-        next: (nuevaCita) => {
-          observer.next(nuevaCita);
-          this.refreshCitas();
+      this.storageService.createAppointment(appointmentData).subscribe({
+        next: (newAppointment) => {
+          observer.next(newAppointment);
+          this.refreshAppointments();
           observer.complete();
         },
         error: (error) => observer.error(error)
@@ -40,14 +40,14 @@ export class AppointmentService {
     });
   }
 
-  cancelarCita(citaId: string): void {
-    this.storageService.cancelarCita(citaId);
-    this.refreshCitas();
+  cancelAppointment(appointmentId: string): void {
+    this.storageService.cancelAppointment(appointmentId);
+    this.refreshAppointments();
   }
 
-  actualizarClienteEnCita(citaId: string, clienteId: string): void {
-    this.storageService.actualizarCita(citaId, { clienteId }).subscribe(() => {
-      this.refreshCitas();
+  updateClientInAppointment(appointmentId: string, clientId: string): void {
+    this.storageService.updateAppointment(appointmentId, { clientId }).subscribe(() => {
+      this.refreshAppointments();
     });
   }
 }

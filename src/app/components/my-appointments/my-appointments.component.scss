@@ -97,27 +97,11 @@
   transform: scaleX(1);
 }
 
-.cita-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-  border-color: rgba(102, 126, 234, 0.3);
-}
-
-.cita-header {
-  flex: none;
-  min-width: 220px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin-bottom: 0;
-}
-
-.cita-info h3 {
-  font-size: 1.3rem;
-  color: #e0e0e0;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-}
+  .cita-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    border-color: rgba(102, 126, 234, 0.3);
+  }
 
 .cita-info p {
   color: #9ca3af;
@@ -266,7 +250,7 @@
   box-shadow: 0 4px 15px rgba(74, 85, 104, 0.3);
 }
 
-.btn-secondary:hover {
+.appointment-card {
   background: linear-gradient(135deg, #3a4557 0%, #1a202c 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(74, 85, 104, 0.4);
@@ -283,7 +267,7 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4);
 }
-
+.appointment-card::before {
 .btn-evaluar {
   margin-top: 0.5rem;
   margin-bottom: 0.8rem;
@@ -394,15 +378,15 @@
     font-size: 1.1rem;
   }
 
-  .cita-info p {
+.appointment-card:hover::before {
     font-size: 0.9rem;
   }
-
+.appointment-card:hover {
   .estado {
     padding: 0.4rem 0.8rem;
     font-size: 0.75rem;
   }
-
+.appointment-header {
   .cita-details {
     padding: 0.8rem;
     margin-bottom: 1rem;
@@ -410,18 +394,18 @@
 
   .detail-row {
     margin-bottom: 0.4rem;
-  }
+.appointment-header h3 {
 
   .detail-label,
   .detail-value {
     font-size: 0.85rem;
   }
-
+.appointment-header p {
   .cita-actions {
     flex-direction: column;
     gap: 0.5rem;
   }
-
+.status-badge {
   .btn {
     width: 100%;
     padding: 0.6rem 1rem;
@@ -434,11 +418,11 @@
   .container {
     padding: 0 10px;
   }
-
+.status-pending {
   .mis-citas-header {
     margin-bottom: 1.5rem;
     padding: 1rem 0;
-  }
+.status-completed {
 
   .mis-citas-header h1 {
     font-size: 1.6rem;

@@ -12,6 +12,67 @@ const RESENAS_PATH = path.join(__dirname, 'resenas.json');
 app.use(cors());
 app.use(bodyParser.json());
 
+// English alias endpoints for clients and appointments
+// GET all clients
+app.get('/clients', (req, res) => {
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Unable to read clients file.' });
+    const json = JSON.parse(data);
+    res.json(json.clients);
+  });
+});
+// PUT update all clients
+app.put('/clients', (req, res) => {
+  const newClients = req.body;
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Unable to read clients file.' });
+    let json = JSON.parse(data);
+    json.clients = newClients;
+    fs.writeFile(DATA_PATH, JSON.stringify(json, null, 2), 'utf8', err2 => {
+      if (err2) return res.status(500).json({ error: 'Unable to write clients file.' });
+      res.json({ message: 'Clients updated successfully.' });
+    });
+  });
+});
+// GET all appointments
+app.get('/appointments', (req, res) => {
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Unable to read appointments file.' });
+    const json = JSON.parse(data);
+    res.json(json.appointments);
+  });
+});
+// PUT update all appointments
+app.put('/appointments', (req, res) => {
+  const newAppointments = req.body;
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Unable to read appointments file.' });
+    let json = JSON.parse(data);
+    json.appointments = newAppointments;
+    fs.writeFile(DATA_PATH, JSON.stringify(json, null, 2), 'utf8', err2 => {
+      if (err2) return res.status(500).json({ error: 'Unable to write appointments file.' });
+      res.json({ message: 'Appointments updated successfully.' });
+    });
+  });
+});
+
+// English alias endpoints for reviews
+// GET all reviews
+app.get('/reviews', (req, res) => {
+  fs.readFile(RESENAS_PATH, 'utf8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Unable to read reviews file.' });
+    const reviews = JSON.parse(data);
+    res.json(reviews);
+  });
+});
+// PUT update all reviews
+app.put('/reviews', (req, res) => {
+  const newReviews = req.body;
+  fs.writeFile(RESENAS_PATH, JSON.stringify(newReviews, null, 2), 'utf8', err => {
+    if (err) return res.status(500).json({ error: 'Unable to write reviews file.' });
+    res.json({ message: 'Reviews updated successfully.' });
+  });
+});
 // Endpoint de prueba
 app.get('/', (req, res) => {
   res.json({ mensaje: 'API SerTech funcionando correctamente' });
@@ -24,7 +85,7 @@ app.get('/citas', (req, res) => {
       return res.status(500).json({ error: 'No se pudo leer el archivo de citas.' });
     }
     const json = JSON.parse(data);
-    res.json(json.citas); // Solo el array de citas
+    res.json(json.appointments); // Solo el array de appointments
   });
 });
 
@@ -36,7 +97,7 @@ app.put('/citas', (req, res) => {
       return res.status(500).json({ error: 'No se pudo leer el archivo de citas.' });
     }
     let json = JSON.parse(data);
-    json.citas = nuevasCitas;
+    json.appointments = nuevasCitas;
     fs.writeFile(DATA_PATH, JSON.stringify(json, null, 2), 'utf8', err => {
       if (err) {
         return res.status(500).json({ error: 'No se pudo guardar el archivo de citas.' });
@@ -53,7 +114,7 @@ app.get('/clientes', (req, res) => {
       return res.status(500).json({ error: 'No se pudo leer el archivo de clientes.' });
     }
     const json = JSON.parse(data);
-    res.json(json.clientes); // Solo el array de clientes
+    res.json(json.clients); // Solo el array of clients
   });
 });
 
@@ -65,7 +126,7 @@ app.put('/clientes', (req, res) => {
       return res.status(500).json({ error: 'No se pudo leer el archivo de clientes.' });
     }
     let json = JSON.parse(data);
-    json.clientes = nuevosClientes;
+    json.clients = nuevosClientes;
     fs.writeFile(DATA_PATH, JSON.stringify(json, null, 2), 'utf8', err => {
       if (err) {
         return res.status(500).json({ error: 'No se pudo guardar el archivo de clientes.' });
@@ -105,10 +166,10 @@ app.listen(PORT, () => {
 app.delete('/debug/clear-all', (req, res) => {
   // Limpiar citas y clientes
   const emptyData = {
-    citas: [],
-    clientes: [],
-    ultimoIdCliente: 0,
-    ultimoIdCita: 0
+    appointments: [],
+    clients: [],
+    lastClientId: 0,
+    lastAppointmentId: 0
   };
   fs.writeFile(DATA_PATH, JSON.stringify(emptyData, null, 2), 'utf8', err => {
     if (err) {

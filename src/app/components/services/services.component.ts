@@ -1,40 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { ServiceService } from '../../services/service.service';
-import { Servicio, CategoriaServicio } from '../../models';
+import { Service, ServiceCategory } from '../../models';
 
-interface ServicioCard {
-  tipo: string;
-  titulo: string;
-  descripcion: string;
-  icono: string;
+interface ServiceCard {
+  type: string;
+  title: string;
+  description: string;
+  icon: string;
 }
 
 @Component({
-  selector: 'app-servicios',
+  selector: 'app-services',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './servicios.component.html',
-  styleUrls: ['./servicios.component.scss']
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: './services.component.html',
+  styleUrls: ['./services.component.scss']
 })
-export class ServiciosComponent implements OnInit {
-  servicioSeleccionado: Servicio | null = null;
-  marcaSeleccionada: string = '';
-  productoSeleccionado: string = '';
-  modeloSeleccionado: string = '';
-  mostrarModalModelo: boolean = false;
-  sintomas: string = '';
-  ubicacionSeleccionada: string = '';
-  fechaSeleccionada: string = '';
-  horaSeleccionada: string = '';
+export class ServicesComponent implements OnInit {
+  selectedService: Service | null = null;
+  brand: string = '';
+  product: string = '';
+  model: string = '';
+  showModelModal: boolean = false;
+  symptoms: string = '';
+  location: string = '';
+  date: string = '';
+  time: string = '';
   minDate: string;
-  horasDisponibles = [
+  availableTimes = [
     '08:00', '09:00', '10:00', '11:00', '12:00', '13:00',
     '14:00', '15:00', '16:00', '17:00', '18:00'
   ];
-  ubicaciones: string[] = [
+  locations: string[] = [
     'Cerrillos', 'Cerro Navia', 'Conchalí', 'El Bosque', 'Estación Central',
     'Huechuraba', 'Independencia', 'La Cisterna', 'La Florida', 'La Granja',
     'La Pintana', 'La Reina', 'Las Condes', 'Lo Barnechea', 'Lo Espejo',
@@ -44,42 +44,42 @@ export class ServiciosComponent implements OnInit {
     'San Ramón', 'Santiago (Centro)', 'Vitacura', 'El Monte', 'Padre Hurtado'
   ];
 
-  marcas: string[] = [
+  brands: string[] = [
     'Samsung', 'LG', 'Whirlpool', 'Mabe', 'Electrolux',
     'Panasonic', 'Sony', 'Philips', 'Bosch', 'Frigidaire',
     'GE', 'Maytag', 'KitchenAid', 'Kenmore', 'Amana'
   ];
 
-  productos: string[] = [
+  products: string[] = [
     'Refrigerador', 'Lavadora', 'Secadora', 'Microondas', 'Horno',
     'Lavavajillas', 'Cafetera', 'Licuadora', 'Batidora', 'Tostadora',
     'Aspiradora', 'Ventilador', 'Aire acondicionado', 'Televisor', 'Estéreo'
   ];
 
-  modelos: string[] = [
+  models: string[] = [
     'RF-2023-A', 'LG-WM-4500', 'WH-SD-789', 'MB-FR-321', 'EL-MW-567',
     'PN-TV-890', 'SN-BT-234', 'PH-AC-456', 'BS-DW-789', 'FG-RF-123',
     'GE-LV-567', 'MY-DR-890', 'KA-MX-234', 'KM-WM-456', 'AM-TV-789'
   ];
 
-  private serviciosDisponibles: ServicioCard[] = [
+  private availableServiceCards: ServiceCard[] = [
     {
-      tipo: 'mantenimiento',
-      titulo: 'Mantenimiento',
-      descripcion: 'Mantenimiento preventivo de tu equipo',
-      icono: '🔧'
+      type: 'maintenance',
+      title: 'Mantenimiento',
+      description: 'Mantenimiento preventivo de tu equipo',
+      icon: '🔧'
     },
     {
-      tipo: 'reparacion',
-      titulo: 'Reparación',
-      descripcion: 'Tu equipo tiene un daño? lo reparamos',
-      icono: '🔧'
+      type: 'repair',
+      title: 'Reparación',
+      description: 'Tu equipo tiene un daño? lo reparamos',
+      icon: '🔧'
     },
     {
-      tipo: 'instalacion',
-      titulo: 'Instalación',
-      descripcion: 'Instalación y configuración',
-      icono: '⚙️'
+      type: 'installation',
+      title: 'Instalación',
+      description: 'Instalación y configuración',
+      icon: '⚙️'
     }
   ];
 
@@ -88,7 +88,7 @@ export class ServiciosComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private servicioService: ServiceService
+    private serviceService: ServiceService
   ) {
     // Fecha mínima es hoy
     const today = new Date();
@@ -97,36 +97,34 @@ export class ServiciosComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      // Manejar datos que vienen desde agendar (regresar)
-      if (params['marca']) {
-        this.marcaSeleccionada = params['marca'];
-        this.productoSeleccionado = params['producto'] || '';
-        this.modeloSeleccionado = params['modelo'] || '';
-        this.sintomas = params['sintomas'] || '';
-        this.ubicacionSeleccionada = params['ubicacion'] || '';
-        this.fechaSeleccionada = params['fecha'] || '';
-        this.horaSeleccionada = params['hora'] || '';
+      if (params['brand']) {
+        this.brand = params['brand'];
+        this.product = params['product'] || '';
+        this.model = params['model'] || '';
+        this.symptoms = params['symptoms'] || '';
+        this.location = params['location'] || '';
+        this.date = params['date'] || '';
+        this.time = params['time'] || '';
 
         // Si no hay servicio seleccionado, seleccionar uno por defecto
-        if (!this.servicioSeleccionado) {
-          this.servicioService.getServiciosPorCategoria(CategoriaServicio.REPARACION).subscribe(servicios => {
-            if (servicios && servicios.length > 0) {
-              this.servicioSeleccionado = servicios[0];
+        if (!this.selectedService) {
+          this.serviceService.getServicesByCategory(ServiceCategory.REPAIR).subscribe(services => {
+            if (services && services.length > 0) {
+              this.selectedService = services[0];
             }
           });
         }
       }
 
       // Manejar selección desde home
-      const tipoServicio = params['tipo'];
-      if (tipoServicio) {
-        // Mapear el tipo de servicio a la categoría correspondiente
-        const categoria = this.mapearTipoACategoria(tipoServicio);
-        if (categoria) {
-          // Obtener el primer servicio de esa categoría
-          this.servicioService.getServiciosPorCategoria(categoria).subscribe(servicios => {
-            if (servicios && servicios.length > 0) {
-              this.servicioSeleccionado = servicios[0];
+      const serviceType = params['type'];
+      if (serviceType) {
+        // Map service type to corresponding category
+        const category = this.mapTypeToCategory(serviceType);
+        if (category) {
+          this.serviceService.getServicesByCategory(category).subscribe(services => {
+            if (services && services.length > 0) {
+              this.selectedService = services[0];
             }
           });
         }
@@ -138,75 +136,75 @@ export class ServiciosComponent implements OnInit {
     });
   }
 
-  private mapearTipoACategoria(tipo: string): CategoriaServicio | null {
-    const mapeo: { [key: string]: CategoriaServicio } = {
-      'mantenimiento': CategoriaServicio.MANTENIMIENTO,
-      'reparacion': CategoriaServicio.REPARACION,
-      'instalacion': CategoriaServicio.INSTALACION
+  private mapTypeToCategory(type: string): ServiceCategory | null {
+    const mapping: Record<string, ServiceCategory> = {
+      'maintenance': ServiceCategory.MAINTENANCE,
+      'repair': ServiceCategory.REPAIR,
+      'installation': ServiceCategory.INSTALLATION
     };
-    return mapeo[tipo] || null;
+    return mapping[type] || null;
   }
 
-  onMarcaChange(): void {
-    this.productoSeleccionado = '';
-    this.modeloSeleccionado = '';
+  onBrandChange(): void {
+    this.product = '';
+    this.model = '';
   }
 
-  onProductoChange(): void {
-    this.modeloSeleccionado = '';
+  onProductChange(): void {
+    this.model = '';
   }
 
-  agendarServicio(): void {
-    if (!this.marcaSeleccionada) {
-      alert('Por favor selecciona una marca');
+  scheduleService(): void {
+    if (!this.brand) {
+      alert('Please select a brand');
       return;
     }
-    if (!this.productoSeleccionado) {
-      alert('Por favor selecciona un tipo de producto');
+    if (!this.product) {
+      alert('Please select a product type');
       return;
     }
-    if (!this.ubicacionSeleccionada) {
-      alert('Por favor selecciona tu ubicación');
+    if (!this.location) {
+      alert('Please select your location');
       return;
     }
     // fechaSeleccionada y horaSeleccionada son opcionales
     // modeloSeleccionado es opcional
     // Aquí puedes agregar la lógica para agendar el servicio
-    console.log('Agendando servicio:', {
-      servicio: this.servicioSeleccionado,
-      marca: this.marcaSeleccionada,
-      producto: this.productoSeleccionado,
-      modelo: this.modeloSeleccionado,
-      ubicacion: this.ubicacionSeleccionada,
-      sintomas: this.sintomas,
-      fecha: this.fechaSeleccionada,
-      hora: this.horaSeleccionada
+    console.log('Scheduling service:', {
+      service: this.selectedService,
+      brand: this.brand,
+      product: this.product,
+      model: this.model,
+      location: this.location,
+      symptoms: this.symptoms,
+      date: this.date,
+      time: this.time
     });
 
     // Navegar a la página de técnicos con los datos
-    this.router.navigate(['/tecnicos'], {
+    this.router.navigate(['/technicians'], {
       queryParams: {
-        servicio: this.servicioSeleccionado?.id,
-        marca: this.marcaSeleccionada,
-        producto: this.productoSeleccionado,
-        modelo: this.modeloSeleccionado,
-        ubicacion: this.ubicacionSeleccionada,
-        sintomas: this.sintomas,
-        fecha: this.fechaSeleccionada,
-        hora: this.horaSeleccionada
+        serviceId: this.selectedService?.id,
+        brand: this.brand,
+        product: this.product,
+        model: this.model,
+        location: this.location,
+        symptoms: this.symptoms,
+        date: this.date,
+        time: this.time
       }
     });
   }
 
   abrirModalModelo() {
-    this.mostrarModalModelo = true;
+    this.showModelModal = true;
   }
 
   cerrarModalModelo() {
-    this.mostrarModalModelo = false;
+    this.showModelModal = false;
   }
 
-  volverAHome(): void {
+  goHome(): void {
     this.router.navigate(['/']);
   }
 }

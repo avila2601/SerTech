@@ -1,174 +1,144 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AppointmentService } from '../../services/appointment.service';
 import { ClientService } from '../../services/client.service';
 import { TechnicianService } from '../../services/technician.service';
-import { Cliente, Cita, Tecnico } from '../../models';
+import { Client, Appointment, Technician } from '../../models';
+import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { AppComponent } from '../../app.component';
+import { UserStateService } from '../../services/user-state.service';
 
 @Component({
-  selector: 'app-resumen-cita',
+  selector: 'app-appointment-summary',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './resumen-cita.component.html',
-  styleUrls: ['./resumen-cita.component.scss']
+  imports: [CommonModule, RouterModule],
+  templateUrl: './appointment-summary.component.html',
+  styleUrls: ['./appointment-summary.component.scss']
 })
-export class ResumenCitaComponent implements OnInit {
-  // Datos del servicio y personales
-  marca: string = '';
-  producto: string = '';
-  modelo: string = '';
-  sintomas: string = '';
-  ubicacion: string = '';
-  fecha: string = '';
-  hora: string = '';
-  nombre: string = '';
+export class AppointmentSummaryComponent implements OnInit {
+  // Service and personal details
+  brand: string = '';
+  product: string = '';
+  model: string = '';
+  symptoms: string = '';
+  location: string = '';
+  date: string = '';
+  time: string = '';
+  clientName: string = '';
   email: string = '';
-  telefono: string = '';
-  direccion: string = '';
-  isAgendando: boolean = false;
-  tecnicoId: string = '';
-  servicioId: string = '';
+  phone: string = '';
+  address: string = '';
+  isScheduling: boolean = false;
+  technicianId: string = '';
+  serviceId: string = '';
 
-  // Información del técnico
-  tecnico: Tecnico | null = null;
+  // Technician information
+  technician: Technician | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private citaService: AppointmentService,
-    private clienteService: ClientService,
-    private tecnicoService: TechnicianService,
-    private appComponent: AppComponent
+    private appointmentService: AppointmentService,
+    private clientService: ClientService,
+    private technicianService: TechnicianService,
+    private userState: UserStateService
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.marca = params['marca'] || '';
-      this.producto = params['producto'] || '';
-      this.modelo = params['modelo'] || '';
-      this.sintomas = params['sintomas'] || '';
-      this.ubicacion = params['ubicacion'] || '';
-      this.fecha = params['fecha'] || '';
-      this.hora = params['hora'] || '';
-      this.nombre = params['nombre'] || '';
+      this.brand = params['brand'] || '';
+      this.product = params['product'] || '';
+      this.model = params['model'] || '';
+      this.symptoms = params['symptoms'] || '';
+      this.location = params['location'] || '';
+      this.date = params['date'] || '';
+      this.time = params['time'] || '';
+      this.clientName = params['clientName'] || '';
       this.email = params['email'] || '';
-      this.telefono = params['telefono'] || '';
-      this.direccion = params['direccion'] || '';
-      this.tecnicoId = params['tecnicoId'] || '';
-      this.servicioId = params['servicioId'] || '';
+      this.phone = params['phone'] || '';
+      this.address = params['address'] || '';
+      this.technicianId = params['technicianId'] || '';
+      this.serviceId = params['serviceId'] || '';
 
-      // Cargar información del técnico si hay tecnicoId
-      if (this.tecnicoId) {
-        this.cargarInformacionTecnico();
+      // Load technician info if technicianId exists
+      if (this.technicianId) {
+        this.loadTechnicianInfo();
       }
     });
   }
 
-  cargarInformacionTecnico(): void {
-    this.tecnicoService.getTecnicoById(this.tecnicoId).subscribe(tecnico => {
-      this.tecnico = tecnico || null;
+  loadTechnicianInfo(): void {
+    this.technicianService.getTechnicianById(this.technicianId).subscribe(techn => {
+      this.technician = techn || null;
     });
   }
 
-  regresar(): void {
-    // Navegar de vuelta al componente información personal preservando todos los datos
-    this.router.navigate(['/clientes'], {
+  goBack(): void {
+    // Navigate back to client information preserving all data
+    this.router.navigate(['/clients'], {
       queryParams: {
-        marca: this.marca,
-        producto: this.producto,
-        modelo: this.modelo,
-        sintomas: this.sintomas,
-        ubicacion: this.ubicacion,
-        fecha: this.fecha,
-        hora: this.hora,
-        nombre: this.nombre,
+        brand: this.brand,
+        product: this.product,
+        model: this.model,
+        symptoms: this.symptoms,
+        location: this.location,
+        date: this.date,
+        time: this.time,
+        clientName: this.clientName,
         email: this.email,
-        telefono: this.telefono,
-        direccion: this.direccion
+        phone: this.phone,
+        address: this.address,
+        technicianId: this.technicianId,
+        serviceId: this.serviceId
       }
     });
   }
 
-  agendarCita(): void {
-    if (!this.nombre || !this.email || !this.telefono || !this.direccion) {
-      alert('Por favor completa todos los campos requeridos');
+  scheduleAppointment(): void {
+    if (!this.clientName || !this.email || !this.phone || !this.address) {
+      alert('Please complete all required fields');
       return;
     }
 
-    this.isAgendando = true;
+    this.isScheduling = true;
 
-    // Primero verificar si el cliente ya existe
-    this.clienteService.getClientes().pipe(
-      switchMap(clientes => {
-        const clienteExistente = clientes.find(c => c.email === this.email);
-
-        if (clienteExistente) {
-          // Si el cliente existe, usar el existente
-          return [clienteExistente];
-        } else {
-          // Si no existe, crear uno nuevo
-          const cliente: Omit<Cliente, 'id'> = {
-            nombre: this.nombre,
-            email: this.email,
-            telefono: this.telefono,
-            direccion: this.direccion
-          };
-          return this.clienteService.agregarCliente(cliente);
-        }
+    // Check if client exists or create new
+    this.clientService.getClients().pipe(
+      switchMap(clients => {
+        const existingClient = clients.find(c => c.email === this.email);
+        return existingClient
+          ? of(existingClient)
+          : this.clientService.addClient({ name: this.clientName, email: this.email, phone: this.phone, address: this.address });
       }),
-      switchMap(cliente => {
-        // Guardar toda la información del servicio en las notas como JSON
-        const infoServicio = {
-          marca: this.marca,
-          producto: this.producto,
-          modelo: this.modelo,
-          sintomas: this.sintomas,
-          ubicacion: this.ubicacion
+      switchMap(client => {
+        const serviceInfo = { brand: this.brand, product: this.product, model: this.model, symptoms: this.symptoms, location: this.location };
+        const selectedDate = this.date ? new Date(this.date + 'T00:00:00') : new Date();
+        const appointmentData: Omit<Appointment, 'id' | 'status'> = {
+          clientId: client.id,
+          technicianId: this.technicianId,
+          serviceId: this.serviceId,
+          date: selectedDate,
+          time: this.time || 'To be scheduled',
+          notes: JSON.stringify(serviceInfo),
+          address: this.address
         };
-
-        // Manejar fecha y hora opcionales
-        let fechaSeleccionada: Date;
-        if (this.fecha) {
-          fechaSeleccionada = new Date(this.fecha + 'T00:00:00');
-        } else {
-          fechaSeleccionada = new Date();
-        }
-
-        const cita: Omit<Cita, 'id' | 'estado'> = {
-          clienteId: cliente.id,
-          tecnicoId: this.tecnicoId,
-          servicioId: this.servicioId,
-          fecha: fechaSeleccionada,
-          hora: this.hora || 'Por coordinar',
-          notas: JSON.stringify(infoServicio),
-          direccion: this.direccion
-        };
-        return this.citaService.crearCita(cita);
+        return this.appointmentService.createAppointment(appointmentData);
       })
     ).subscribe({
-      next: (nuevaCita) => {
-        console.log('Cita creada exitosamente:', nuevaCita);
-        this.isAgendando = false;
-
-        // Guardar IDs en localStorage
-        localStorage.setItem('clienteLogueado', nuevaCita.clienteId);
-        localStorage.setItem('citaEnProceso', nuevaCita.id);
-
-        // Actualizar el navbar inmediatamente
-        this.appComponent.actualizarEstadoUsuario();
-
-        alert('¡Cita agendada exitosamente!');
-
-        // Redirigir a mis-citas con el clienteId
-        this.router.navigate(['/mis-citas'], { queryParams: { clienteId: nuevaCita.clienteId } });
+      next: newAppointment => {
+        console.log('Appointment successfully created:', newAppointment);
+        this.isScheduling = false;
+        localStorage.setItem('clientLoggedIn', newAppointment.clientId);
+        localStorage.setItem('appointmentInProgress', newAppointment.id);
+        this.userState.updateUserStatus();
+        alert('Appointment scheduled successfully!');
+        this.router.navigate(['/my-appointments'], { queryParams: { clientId: newAppointment.clientId } });
       },
-      error: (error) => {
-        console.error('Error al agendar la cita:', error);
-        this.isAgendando = false;
-        alert('Error al agendar la cita. Por favor, intenta de nuevo.');
+      error: err => {
+        console.error('Error scheduling appointment:', err);
+        this.isScheduling = false;
+        alert('Error scheduling appointment. Please try again.');
       }
     });
   }

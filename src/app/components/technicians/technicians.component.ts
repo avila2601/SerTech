@@ -1,35 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TechnicianService } from '../../services/technician.service';
-import { Tecnico } from '../../models';
-import { TecnicosResenasModalComponent } from './tecnicos-resenas-modal.component';
+import { Technician } from '../../models';
+import { TechnicianReviewsModalComponent } from './technician-reviews-modal.component';
 
 @Component({
-  selector: 'app-tecnicos',
+  selector: 'app-technicians',
   standalone: true,
-  imports: [CommonModule, TecnicosResenasModalComponent],
-  templateUrl: './tecnicos.component.html',
-  styleUrls: ['./tecnicos.component.scss']
+imports: [CommonModule, RouterModule, TechnicianReviewsModalComponent],
+  templateUrl: './technicians.component.html',
+  styleUrls: ['./technicians.component.scss']
 })
-export class TecnicosComponent implements OnInit {
-  tecnicos: Tecnico[] = [];
-  mostrarModalResenas: boolean = false;
-  tecnicoIdModal: string = '';
+export class TechniciansComponent implements OnInit {
+  technicians: Technician[] = [];
+  showReviewModal: boolean = false;
+  technicianIdModal: string = '';
 
   constructor(
-    private tecnicoService: TechnicianService,
+    private technicianService: TechnicianService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.cargarTecnicos();
+    this.loadTechnicians();
   }
 
-  cargarTecnicos(): void {
-    this.tecnicoService.getTecnicos().subscribe(tecnicos => {
-      this.tecnicos = tecnicos;
+  loadTechnicians(): void {
+    this.technicianService.getTechnicians().subscribe((technicians: Technician[]) => {
+      this.technicians = technicians;
     });
   }
 
@@ -41,10 +41,10 @@ export class TecnicosComponent implements OnInit {
     return Array(5 - Math.floor(calificacion)).fill(0);
   }
 
-  seleccionarTecnico(tecnico: Tecnico): void {
+  selectTechnician(technician: Technician): void {
     this.route.queryParams.subscribe(params => {
       const preservedParams: any = {
-        tecnicoId: tecnico.id
+        technicianId: technician.id
       };
 
       // Preservar todos los parámetros del formulario
@@ -60,13 +60,13 @@ export class TecnicosComponent implements OnInit {
       if (params['fecha']) preservedParams.fecha = params['fecha'];
       if (params['hora']) preservedParams.hora = params['hora'];
 
-      this.router.navigate(['/clientes'], {
+      this.router.navigate(['/clients'], {
         queryParams: preservedParams
       });
     });
   }
 
-  volverAServicios(): void {
+  goBackToServices(): void {
     this.route.queryParams.subscribe(params => {
       const preservedParams: any = {};
       if (params['servicio']) preservedParams.servicio = params['servicio'];
@@ -78,20 +78,20 @@ export class TecnicosComponent implements OnInit {
       if (params['fecha']) preservedParams.fecha = params['fecha'];
       if (params['hora']) preservedParams.hora = params['hora'];
 
-      this.router.navigate(['/servicios'], {
+      this.router.navigate(['/services'], {
         queryParams: preservedParams
       });
     });
   }
 
-  abrirModalResenas(tecnicoId: string): void {
-    this.tecnicoIdModal = tecnicoId;
-    this.mostrarModalResenas = true;
+  openReviewModal(technicianId: string): void {
+    this.technicianIdModal = technicianId;
+    this.showReviewModal = true;
   }
 
-  cerrarModalResenas(): void {
-    this.mostrarModalResenas = false;
-    this.tecnicoIdModal = '';
+  closeReviewModal(): void {
+    this.showReviewModal = false;
+    this.technicianIdModal = '';
   }
 
   getRandomAvatar(id: string): string {

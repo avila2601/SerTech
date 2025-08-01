@@ -1,6 +1,70 @@
 {
-  "citas": [],
-  "clientes": [],
-  "ultimoIdCliente": 0,
-  "ultimoIdCita": 0
+  "appointments": [
+    {
+      "clientId": "1",
+      "technicianId": "2",
+      "serviceId": "",
+      "date": "2025-07-31T22:44:14.094Z",
+      "time": "To be scheduled",
+      "notes": "{\"brand\":\"\",\"product\":\"\",\"model\":\"\",\"symptoms\":\"\",\"location\":\"\"}",
+      "address": "Calle 75 19a 30",
+      "id": "1",
+      "status": "Pending"
+    },
+    {
+      "clientId": "1",
+      "technicianId": "2",
+      "serviceId": "",
+      "date": "2025-07-31T22:44:14.120Z",
+      "time": "To be scheduled",
+      "notes": "{\"brand\":\"\",\"product\":\"\",\"model\":\"\",\"symptoms\":\"\",\"location\":\"\"}",
+      "address": "Calle 75 19a 30",
+      "id": "2",
+      "status": "Pending"
+    },
+    {
+      "clientId": "1",
+      "technicianId": "2",
+      "serviceId": "",
+      "date": "2025-07-31T22:46:02.579Z",
+      "time": "To be scheduled",
+      "notes": "{\"brand\":\"\",\"product\":\"\",\"model\":\"\",\"symptoms\":\"\",\"location\":\"\"}",
+      "address": "Calle 75 19a 30",
+      "id": "3",
+      "status": "Pending"
+    },
+    {
+      "clientId": "1",
+      "technicianId": "2",
+      "serviceId": "",
+      "date": "2025-07-31T22:48:35.292Z",
+      "time": "To be scheduled",
+      "notes": "{\"brand\":\"\",\"product\":\"\",\"model\":\"\",\"symptoms\":\"\",\"location\":\"\"}",
+      "address": "Calle 75 19a 30",
+      "id": "4",
+      "status": "Pending"
+    },
+    {
+      "clientId": "1",
+      "technicianId": "1",
+      "serviceId": "",
+      "date": "2025-07-31T22:51:04.389Z",
+      "time": "To be scheduled",
+      "notes": "{\"brand\":\"\",\"product\":\"\",\"model\":\"\",\"symptoms\":\"\",\"location\":\"\"}",
+      "address": "Calle 75 19a 30",
+      "id": "5",
+      "status": "Pending"
+    }
+  ],
+  "clients": [
+    {
+      "name": "Diego Avila",
+      "email": "diego2601@gmail.com",
+      "phone": "3137478782",
+      "address": "Calle 75 19a 30",
+      "id": "1"
+    }
+  ],
+  "lastClientId": 0,
+  "lastAppointmentId": 0
 }
