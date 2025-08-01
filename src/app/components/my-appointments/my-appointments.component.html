@@ -1,7 +1,7 @@
 <div class="container">
   <div class="header">
-    <h1>My Appointments</h1>
-    <p>Manage your scheduled technical services</p>
+    <h1>Mis Citas</h1>
+    <p>Gestiona tus servicios técnicos agendados</p>
   </div>
 
   <div *ngIf="filteredAppointments.length > 0" class="appointments-grid">
@@ -27,14 +27,14 @@
           class="btn btn-primary"
           (click)="openReviewModal(appointment)"
         >
-          Review Service
+          Evaluar Servicio
         </button>
         <button
           *ngIf="wasReviewed(appointment)"
           class="btn btn-secondary"
           disabled
         >
-          Reviewed
+          Evaluado
         </button>
       </div>
       <p class="date-time">
@@ -42,70 +42,72 @@
       </p>
 
       <section class="detail-section">
-        <h4>Personal Information</h4>
+        <h4>Información Personal</h4>
         <div>
-          <strong>Name:</strong> {{ getClientName(appointment.clientId) }}
+          <strong>Nombre:</strong> {{ getClientName(appointment.clientId) }}
         </div>
         <div>
-          <strong>Email:</strong> {{ getClientEmail(appointment.clientId) }}
+          <strong>Correo electrónico:</strong>
+          {{ getClientEmail(appointment.clientId) }}
         </div>
         <div>
-          <strong>Phone:</strong> {{ getClientPhone(appointment.clientId) }}
+          <strong>Teléfono:</strong> {{ getClientPhone(appointment.clientId) }}
         </div>
         <div>
-          <strong>Address:</strong> {{ getClientAddress(appointment.clientId) }}
+          <strong>Dirección:</strong>
+          {{ getClientAddress(appointment.clientId) }}
         </div>
         <div *ngIf="getServiceInfo(appointment).location">
-          <strong>Location:</strong> {{ getServiceInfo(appointment).location }}
+          <strong>Ubicación:</strong> {{ getServiceInfo(appointment).location }}
         </div>
       </section>
 
       <section class="detail-section">
-        <h4>Technician Information</h4>
+        <h4>Información del Técnico</h4>
         <div>
-          <strong>Technician:</strong>
+          <strong>Técnico:</strong>
           {{ getTechnicianName(appointment.technicianId) }}
         </div>
         <div>
-          <strong>Specialty:</strong>
+          <strong>Especialidad:</strong>
           {{ getTechnicianSpecialty(appointment.technicianId) }}
         </div>
       </section>
 
       <section class="detail-section">
-        <h4>Service Information</h4>
+        <h4>Información del Servicio</h4>
         <div *ngIf="getServiceInfo(appointment).brand">
-          <strong>Brand:</strong> {{ getServiceInfo(appointment).brand }}
+          <strong>Marca:</strong> {{ getServiceInfo(appointment).brand }}
         </div>
         <div *ngIf="getServiceInfo(appointment).product">
-          <strong>Product:</strong> {{ getServiceInfo(appointment).product }}
+          <strong>Producto:</strong> {{ getServiceInfo(appointment).product }}
         </div>
         <div>
-          <strong>Reference:</strong>
+          <strong>Referencia:</strong>
           {{ getServiceInfo(appointment).reference || "N/A" }}
         </div>
         <div *ngIf="getServiceInfo(appointment).model">
-          <strong>Model:</strong> {{ getServiceInfo(appointment).model }}
+          <strong>Modelo:</strong> {{ getServiceInfo(appointment).model }}
         </div>
         <div *ngIf="getServiceInfo(appointment).symptoms">
-          <strong>Symptoms:</strong> {{ getServiceInfo(appointment).symptoms }}
+          <strong>Síntomas:</strong> {{ getServiceInfo(appointment).symptoms }}
         </div>
         <div *ngIf="getServiceInfo(appointment).modelInfo">
-          <strong>Model Info:</strong>
+          <strong>Información Modelo:</strong>
           {{ getServiceInfo(appointment).modelInfo }}
         </div>
       </section>
 
       <section class="detail-section">
-        <h4>Service Cost</h4>
+        <h4>Costo del Servicio</h4>
         <div><strong>Cost:</strong> TBD</div>
       </section>
     </div>
   </div>
 
   <div *ngIf="filteredAppointments.length === 0" class="no-appointments">
-    <h3>No Appointments</h3>
-    <p>You have no scheduled appointments.</p>
+    <h3>Sin Citas</h3>
+    <p>No tienes citas programadas.</p>
   </div>
 
   <app-reviews

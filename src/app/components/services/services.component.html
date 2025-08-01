@@ -1,6 +1,6 @@
 <div class="container">
   <div class="servicios-header">
-    <h1>Selected Service</h1>
+    <h1>Servicio Seleccionado</h1>
   </div>
 
   <div class="servicio-seleccionado" *ngIf="selectedService">
@@ -15,7 +15,7 @@
           [(ngModel)]="brand"
           (change)="onBrandChange()"
         >
-          <option value="" disabled selected>Select a brand</option>
+          <option value="" disabled selected>Seleccione una marca</option>
           <option *ngFor="let b of brands" [value]="b">{{ b }}</option>
         </select>
       </div>
@@ -26,35 +26,38 @@
           [(ngModel)]="product"
           (change)="onProductChange()"
         >
-          <option value="" disabled selected>Select product type</option>
+          <option value="" disabled selected>
+            Seleccione tipo de producto
+          </option>
           <option *ngFor="let p of products" [value]="p">{{ p }}</option>
         </select>
       </div>
 
       <div class="modelo-selector" *ngIf="product">
-        <select class="model-select" [(ngModel)]="model">
-          <option value="" disabled selected>Model (optional)</option>
+        <select class="modelo-select" [(ngModel)]="model">
+          <option value="" disabled selected>Modelo (opcional)</option>
           <option *ngFor="let m of models" [value]="m">{{ m }}</option>
         </select>
         <div class="modelo-ayuda">
           <span class="ayuda-link" (click)="abrirModalModelo()">
-            How to find your model number?
+            ¿Cómo encontrar tu número de modelo?
           </span>
         </div>
         <div class="modelo-info">
-          Providing your model and symptoms helps us resolve your issue faster.
+          Proporcionar tu modelo y síntomas nos ayuda a resolver tu problema más
+          rápido.
         </div>
         <div class="sintomas-box" *ngIf="product">
           <textarea
             class="sintomas-textarea"
             [(ngModel)]="symptoms"
             rows="3"
-            placeholder="Describe the symptoms of your device..."
+            placeholder="Describe los síntomas de tu dispositivo..."
           ></textarea>
         </div>
         <div class="ubicacion-selector">
           <select class="ubicacion-select" [(ngModel)]="location">
-            <option value="" disabled selected>Select your location</option>
+            <option value="" disabled selected>Selecciona tu ubicación</option>
             <option *ngFor="let loc of locations" [value]="loc">
               {{ loc }}
             </option>
@@ -65,7 +68,7 @@
         <div class="fecha-hora-selector" *ngIf="location">
           <div class="fecha-hora-inputs">
             <div class="fecha-selector">
-              <label for="fecha">Service Date (optional)</label>
+              <label for="fecha">Fecha de servicio (opcional)</label>
               <input
                 type="date"
                 id="fecha"
@@ -79,7 +82,7 @@
                 >Service Time (optional)</label
               >
               <select id="hora" [(ngModel)]="time" class="hora-select">
-                <option value="">Select a time</option>
+                <option value="">Selecciona una hora</option>
                 <option *ngFor="let t of availableTimes" [value]="t">
                   {{ t }}
                 </option>
@@ -91,33 +94,40 @@
     </div>
 
     <div class="servicio-actions">
-      <button class="btn btn-secondary" (click)="goHome()">Home</button>
+      <button class="btn btn-secondary" (click)="goHome()">Inicio</button>
       <button class="btn btn-primary" (click)="scheduleService()">
-        Select Technician
+        Seleccionar Técnico
       </button>
     </div>
   </div>
 
   <div class="no-servicio" *ngIf="!selectedService">
-    <p>No service selected.</p>
-    <button class="btn btn-primary" (click)="goHome()">Home</button>
+    <p>No se seleccionó ningún servicio.</p>
+    <button class="btn btn-primary" (click)="goHome()">Inicio</button>
   </div>
 
   <!-- Modal de ayuda para modelo -->
-  <div class="modal-modelo" *ngIf="showModelModal">
-    <div class="modal-content">
+  <div
+    class="modal-modelo"
+    *ngIf="showModelModal"
+    (click)="cerrarModalModelo()"
+  >
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <button class="cerrar-modal" (click)="cerrarModalModelo()">
         &times;
       </button>
-      <h2 class="modal-titulo">Find Your Model Number</h2>
+      <h2 class="modal-titulo">Encuentra tu número de modelo</h2>
       <p class="modal-descripcion">
-        You can usually find this number on a label or plate on your device.
+        Normalmente puedes encontrar este número en una etiqueta o placa de tu
+        dispositivo.
       </p>
-      <div class="modal-subtitulo">Where to Look</div>
+      <div class="modal-subtitulo">Dónde buscar</div>
       <ul class="modal-lista">
-        <li>On the back or side of the device.</li>
-        <li>Inside near compartments or controls.</li>
-        <li>On the bottom or on a sticker visible when moving the unit.</li>
+        <li>En la parte trasera o lateral del dispositivo.</li>
+        <li>En el interior, cerca de los compartimentos o controles.</li>
+        <li>
+          En la parte inferior o en una etiqueta visible al mover la unidad.
+        </li>
       </ul>
     </div>
   </div>

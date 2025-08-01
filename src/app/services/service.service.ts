@@ -12,24 +12,24 @@ export class ServiceService {
     return of<Service[]>([
       {
         id: '1',
-        name: 'Preventive Maintenance',
-        description: 'Service to ensure optimal performance of your appliances, extend lifespan, and prevent future breakdowns. Includes cleaning, technical inspection, and operational testing.',
+        name: 'Mantenimiento Preventivo',
+        description: 'Servicio para asegurar el rendimiento óptimo de tus electrodomésticos, extender su vida útil y prevenir futuras averías. Incluye limpieza, inspección técnica y prueba de funcionamiento.',
         price: 50,
         estimatedDuration: 60,
         category: ServiceCategory.MAINTENANCE
       },
       {
         id: '2',
-        name: 'Appliance Repair',
-        description: 'Diagnostic visit to identify malfunctions and, if necessary, provide a quote for part replacements.',
+        name: 'Reparación de Electrodomésticos',
+        description: 'Visita de diagnóstico para identificar fallos y, si es necesario, proporcionar un presupuesto para el reemplazo de piezas.',
         price: 80,
         estimatedDuration: 120,
         category: ServiceCategory.REPAIR
       },
       {
         id: '3',
-        name: 'Installation and Configuration',
-        description: 'Professional appliance installation, ensuring safe and functional connections. Includes proper mounting, leveling, and system startup verification.',
+        name: 'Instalación y Configuración',
+        description: 'Instalación profesional de electrodomésticos, garantizando conexiones seguras y funcionales. Incluye montaje, nivelación adecuada y verificación de arranque del sistema.',
         price: 40,
         estimatedDuration: 90,
         category: ServiceCategory.INSTALLATION

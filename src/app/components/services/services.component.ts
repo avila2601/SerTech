@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
@@ -116,8 +116,8 @@ export class ServicesComponent implements OnInit {
         }
       }
 
-      // Manejar selección desde home
-      const serviceType = params['type'];
+      // Manejar clave 'type' o 'tipo'
+      const serviceType = params['type'] || params['tipo'];
       if (serviceType) {
         // Map service type to corresponding category
         const category = this.mapTypeToCategory(serviceType);
@@ -129,20 +129,25 @@ export class ServicesComponent implements OnInit {
           });
         }
       }
-      // Guardar el icono recibido
-      if (params['icono']) {
-        this.iconoServicio = params['icono'];
+      // Guardar el icono recibido (puede venir como 'icon' o 'icono')
+      if (params['icon'] || params['icono']) {
+        this.iconoServicio = params['icon'] || params['icono'];
       }
     });
   }
 
   private mapTypeToCategory(type: string): ServiceCategory | null {
     const mapping: Record<string, ServiceCategory> = {
+      // English keys
       'maintenance': ServiceCategory.MAINTENANCE,
       'repair': ServiceCategory.REPAIR,
-      'installation': ServiceCategory.INSTALLATION
+      'installation': ServiceCategory.INSTALLATION,
+      // Spanish keys
+      'mantenimiento': ServiceCategory.MAINTENANCE,
+      'reparacion': ServiceCategory.REPAIR,
+      'instalacion': ServiceCategory.INSTALLATION
     };
-    return mapping[type] || null;
+    return mapping[type.toLowerCase()] || null;
   }
 
   onBrandChange(): void {
@@ -194,6 +199,13 @@ export class ServicesComponent implements OnInit {
         time: this.time
       }
     });
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscape(event: KeyboardEvent) {
+    if (this.showModelModal) {
+      this.cerrarModalModelo();
+    }
   }
 
   abrirModalModelo() {

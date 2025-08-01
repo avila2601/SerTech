@@ -14,7 +14,12 @@ export class HomeComponent {
 
   navigateToService(serviceType: string, icon: string): void {
     this.router.navigate(['/services'], {
-      queryParams: { type: serviceType, icon: icon }
+      queryParams: {
+        type: serviceType,
+        tipo: serviceType,
+        icon: icon,
+        icono: icon
+      }
     });
   }
 }
