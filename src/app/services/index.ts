@@ -4,6 +4,7 @@ export { TechnicianService } from './technician.service';
 export { AppointmentService } from './appointment.service';
 export { ServiceService } from './service.service';
 export { ReviewService } from './review.service';
+export { UserStateService } from './user-state.service';
 
 // Original Spanish services (for backward compatibility) - now redirected to English services
 export { ClientService as ClienteService } from './client.service';

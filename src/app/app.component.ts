@@ -26,9 +26,9 @@ import { TecnicosResenasModalComponent } from './components/tecnicos/tecnicos-re
 
         <ul class="nav-menu" [class.active]="isMenuOpen">
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
-          <li><a routerLink="/quienes-somos" routerLinkActive="active" (click)="closeMenu()">¿Quienes Somos?</a></li>
+          <li><a routerLink="/about-us" routerLinkActive="active" (click)="closeMenu()">¿Quienes Somos?</a></li>
           <li *ngIf="loggedTechnician || isLoggedAsClient">
-            <a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a>
+            <a routerLink="/my-appointments" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a>
           </li>
           <li *ngIf="!loggedTechnician && !isLoggedAsClient">
             <a href="#" routerLinkActive="active" class="" (click)="openTechniciansModal(); closeMenu(); $event.preventDefault()">Técnicos</a>
@@ -264,12 +264,14 @@ export class AppComponent implements OnInit {
 
   loginTechnician(technicianId: string) {
     this.loggedTechnician = technicianId;
-    localStorage.setItem('tecnicoLogueado', technicianId);
+    localStorage.setItem('loggedTechnician', technicianId);
+    localStorage.setItem('tecnicoLogueado', technicianId); // Backward compatibility
   }
 
   logoutTechnician() {
     this.loggedTechnician = null;
-    localStorage.removeItem('tecnicoLogueado');
+    localStorage.removeItem('loggedTechnician');
+    localStorage.removeItem('tecnicoLogueado'); // Backward compatibility
     this.router.navigate(['/']);
   }
 
@@ -284,7 +286,8 @@ export class AppComponent implements OnInit {
 
   logoutClient() {
     this.loggedClient = null;
-    localStorage.removeItem('clienteLogueado');
+    localStorage.removeItem('loggedClient');
+    localStorage.removeItem('clienteLogueado'); // Backward compatibility
     localStorage.removeItem('emailLogin');
     this.router.navigate(['/']);
   }
@@ -302,22 +305,22 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.reloadUserState();
 
-    // Si no hay cliente logueado, limpiar emailLogin
-    if (!localStorage.getItem('clienteLogueado')) {
+    // Clean up emailLogin if no client is logged in
+    if (!localStorage.getItem('loggedClient') && !localStorage.getItem('clienteLogueado')) {
       localStorage.removeItem('emailLogin');
     }
 
-    // Escuchar cambios en localStorage para actualizar el navbar
+    // Listen to localStorage changes to update navbar
     window.addEventListener('storage', (event) => {
-      if (event.key === 'clienteLogueado' || event.key === 'tecnicoLogueado') {
+      if (event.key?.includes('logged') || event.key?.includes('Logueado') || event.key === 'emailLogin') {
         this.reloadUserState();
       }
     });
   }
 
   reloadUserState() {
-    this.loggedTechnician = localStorage.getItem('tecnicoLogueado');
-    this.loggedClient = localStorage.getItem('clienteLogueado');
+    this.loggedTechnician = localStorage.getItem('loggedTechnician') || localStorage.getItem('tecnicoLogueado');
+    this.loggedClient = localStorage.getItem('loggedClient') || localStorage.getItem('clienteLogueado');
   }
 
   // Método público para que otros componentes puedan actualizar el navbar
@@ -326,6 +329,6 @@ export class AppComponent implements OnInit {
   }
 
   get isLoggedAsClient(): boolean {
-    return !!localStorage.getItem('clienteLogueado') || !!localStorage.getItem('emailLogin');
+    return !!(localStorage.getItem('loggedClient') || localStorage.getItem('clienteLogueado') || localStorage.getItem('emailLogin'));
   }
 }

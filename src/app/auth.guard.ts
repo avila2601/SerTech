@@ -4,14 +4,14 @@ import { inject } from '@angular/core';
 
 export const AuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const loggedTechnician = localStorage.getItem('tecnicoLogueado');
-  const loggedClient = localStorage.getItem('clienteLogueado');
+  const loggedTechnician = localStorage.getItem('loggedTechnician') || localStorage.getItem('tecnicoLogueado');
+  const loggedClient = localStorage.getItem('loggedClient') || localStorage.getItem('clienteLogueado');
   const emailLogin = localStorage.getItem('emailLogin');
 
   if (loggedTechnician || loggedClient || emailLogin) {
     return true;
   } else {
-    // Redirigir al login en lugar de la página principal
+    // Redirect to login instead of homepage
     return router.createUrlTree(['/login']);
   }
 };
