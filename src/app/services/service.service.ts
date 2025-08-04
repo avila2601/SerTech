@@ -20,34 +20,14 @@ export class ServiceService {
     };
   }
 
-  private mapCategoryToEnglish(categoria: CategoriaServicio): ServiceCategory {
-    switch (categoria) {
-      case CategoriaServicio.MANTENIMIENTO:
-        return ServiceCategory.MAINTENANCE;
-      case CategoriaServicio.REPARACION:
-        return ServiceCategory.REPAIR;
-      case CategoriaServicio.INSTALACION:
-        return ServiceCategory.INSTALLATION;
-      case CategoriaServicio.LIMPIEZA:
-        return ServiceCategory.CLEANING;
-      default:
-        return ServiceCategory.MAINTENANCE;
-    }
+  private mapCategoryToEnglish(categoria: ServiceCategory): ServiceCategory {
+    // Since CategoriaServicio is now an alias for ServiceCategory, direct return
+    return categoria;
   }
 
-  private mapCategoryToSpanish(category: ServiceCategory): CategoriaServicio {
-    switch (category) {
-      case ServiceCategory.MAINTENANCE:
-        return CategoriaServicio.MANTENIMIENTO;
-      case ServiceCategory.REPAIR:
-        return CategoriaServicio.REPARACION;
-      case ServiceCategory.INSTALLATION:
-        return CategoriaServicio.INSTALACION;
-      case ServiceCategory.CLEANING:
-        return CategoriaServicio.LIMPIEZA;
-      default:
-        return CategoriaServicio.MANTENIMIENTO;
-    }
+  private mapCategoryToSpanish(category: ServiceCategory): ServiceCategory {
+    // Since CategoriaServicio is now an alias for ServiceCategory, direct return
+    return category;
   }
 
   getServices(): Observable<Service[]> {
@@ -59,7 +39,7 @@ export class ServiceService {
         descripcion: 'Mantenimiento para asegurar el óptimo funcionamiento de tus electrodomésticos, prolongar su vida útil y prevenir futuras fallas. Incluye limpieza, revisión técnica y pruebas de operación.',
         precio: 50,
         duracionEstimada: 60,
-        categoria: CategoriaServicio.MANTENIMIENTO
+        categoria: ServiceCategory.MAINTENANCE
       },
       {
         id: '2',
@@ -67,7 +47,7 @@ export class ServiceService {
         descripcion: 'Visita de diagnóstico para detectar fallas y si es necesario, cotizar el cambio de piezas.',
         precio: 80,
         duracionEstimada: 120,
-        categoria: CategoriaServicio.REPARACION
+        categoria: ServiceCategory.REPAIR
       },
       {
         id: '3',
@@ -75,7 +55,7 @@ export class ServiceService {
         descripcion: 'Instalación profesional de electrodomésticos, asegurando una conexión segura y funcional. Verificación del correcto montaje, nivelación y puesta en marcha del equipo.',
         precio: 40,
         duracionEstimada: 90,
-        categoria: CategoriaServicio.INSTALACION
+        categoria: ServiceCategory.INSTALLATION
       }
     ] as Servicio[]).pipe(
       map(servicios => servicios.map(servicio => this.mapServicioToService(servicio)))
@@ -95,6 +75,54 @@ export class ServiceService {
     return new Observable(observer => {
       this.getServices().subscribe(services => {
         observer.next(services.filter(s => s.category === category));
+        observer.complete();
+      });
+    });
+  }
+
+  // Backward compatibility Spanish interface methods (deprecated)
+  getServicios(): Observable<Servicio[]> {
+    return of([
+      {
+        id: '1',
+        nombre: 'Mantenimiento Preventivo',
+        descripcion: 'Mantenimiento para asegurar el óptimo funcionamiento de tus electrodomésticos, prolongar su vida útil y prevenir futuras fallas. Incluye limpieza, revisión técnica y pruebas de operación.',
+        precio: 50,
+        duracionEstimada: 60,
+        categoria: ServiceCategory.MAINTENANCE
+      },
+      {
+        id: '2',
+        nombre: 'Reparación de Electrodomésticos',
+        descripcion: 'Visita de diagnóstico para detectar fallas y si es necesario, cotizar el cambio de piezas.',
+        precio: 80,
+        duracionEstimada: 120,
+        categoria: ServiceCategory.REPAIR
+      },
+      {
+        id: '3',
+        nombre: 'Instalación y Configuración',
+        descripcion: 'Instalación profesional de electrodomésticos, asegurando una conexión segura y funcional. Verificación del correcto montaje, nivelación y puesta en marcha del equipo.',
+        precio: 40,
+        duracionEstimada: 90,
+        categoria: ServiceCategory.INSTALLATION
+      }
+    ]);
+  }
+
+  getServicioById(id: string): Observable<Servicio | undefined> {
+    return new Observable(observer => {
+      this.getServicios().subscribe(servicios => {
+        observer.next(servicios.find(servicio => servicio.id === id));
+        observer.complete();
+      });
+    });
+  }
+
+  getServiciosPorCategoria(categoria: ServiceCategory): Observable<Servicio[]> {
+    return new Observable(observer => {
+      this.getServicios().subscribe(servicios => {
+        observer.next(servicios.filter(s => s.categoria === categoria));
         observer.complete();
       });
     });

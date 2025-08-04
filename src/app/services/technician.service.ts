@@ -12,6 +12,7 @@ export class TechnicianService {
 
   constructor(private http: HttpClient) {}
 
+  // Primary English interface methods
   getTechnicians(): Observable<Technician[]> {
     return this.http.get<Tecnico[]>(this.url).pipe(
       map((tecnicos: Tecnico[]) =>
@@ -41,6 +42,29 @@ export class TechnicianService {
     return new Observable(observer => {
       this.getTechnicians().subscribe(technicians => {
         observer.next(technicians.filter((tech: Technician) => tech.available));
+        observer.complete();
+      });
+    });
+  }
+
+  // Backward compatibility Spanish interface methods (deprecated)
+  getTecnicos(): Observable<Tecnico[]> {
+    return this.http.get<Tecnico[]>(this.url);
+  }
+
+  getTecnicoById(id: string): Observable<Tecnico | undefined> {
+    return new Observable(observer => {
+      this.getTecnicos().subscribe(tecnicos => {
+        observer.next(tecnicos.find(tecnico => tecnico.id === id));
+        observer.complete();
+      });
+    });
+  }
+
+  getTecnicosDisponibles(): Observable<Tecnico[]> {
+    return new Observable(observer => {
+      this.getTecnicos().subscribe(tecnicos => {
+        observer.next(tecnicos.filter((t: Tecnico) => t.disponible));
         observer.complete();
       });
     });

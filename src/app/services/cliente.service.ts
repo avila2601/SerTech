@@ -1,27 +1,14 @@
+// DEPRECATED: This service has been consolidated into ClientService
+// Please use ClientService instead
+// All methods are available with both English and Spanish interfaces
+
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Cliente } from '../models';
-import { StorageService } from './storage.service';
+import { ClientService } from './client.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClienteService {
-  constructor(private storageService: StorageService) {}
-
-  getClientes(): Observable<Cliente[]> {
-    return this.storageService.getClientes();
-  }
-
-  getClienteById(id: string): Cliente | undefined {
-    return this.storageService.getClienteById(id);
-  }
-
-  agregarCliente(cliente: Omit<Cliente, 'id'>): Observable<Cliente> {
-    return this.storageService.agregarCliente(cliente);
-  }
-
-  actualizarCliente(id: string, datos: Partial<Cliente>) {
-    return this.storageService.actualizarCliente(id, datos);
-  }
+export class ClienteService extends ClientService {
+  // This service now extends ClientService to maintain backward compatibility
+  // All Spanish methods are available through the parent class
 }

@@ -10,9 +10,10 @@ import { map } from 'rxjs/operators';
 export class ClientService {
   constructor(private storageService: StorageService) {}
 
+  // Primary English interface methods
   getClients(): Observable<Client[]> {
-    // Temporary: Use Spanish method and map data to English interface
-    return this.storageService.getClientes().pipe(
+    // Use migrated English method from StorageService
+    return this.storageService.getClients().pipe(
       map((clientes: Cliente[]) =>
         clientes.map(cliente => ({
           id: cliente.id,
@@ -26,7 +27,7 @@ export class ClientService {
   }
 
   getClientById(id: string): Observable<Client | undefined> {
-    const cliente = this.storageService.getClienteById(id);
+    const cliente = this.storageService.getClientById(id);
     if (!cliente) {
       return new Observable(observer => {
         observer.next(undefined);
@@ -57,7 +58,7 @@ export class ClientService {
       direccion: client.address
     };
 
-    return this.storageService.agregarCliente(clienteData).pipe(
+    return this.storageService.addClient(clienteData).pipe(
       map((cliente: Cliente) => ({
         id: cliente.id,
         name: cliente.nombre,
@@ -76,7 +77,7 @@ export class ClientService {
     if (data.phone) datosCliente.telefono = data.phone;
     if (data.address) datosCliente.direccion = data.address;
 
-    return this.storageService.actualizarCliente(id, datosCliente).pipe(
+    return this.storageService.updateClient(id, datosCliente).pipe(
       map((cliente: Cliente | null) => {
         if (!cliente) return null;
         return {
@@ -88,5 +89,22 @@ export class ClientService {
         } as Client;
       })
     );
+  }
+
+  // Backward compatibility Spanish interface methods (deprecated)
+  getClientes(): Observable<Cliente[]> {
+    return this.storageService.getClients();
+  }
+
+  getClienteById(id: string): Cliente | undefined {
+    return this.storageService.getClientById(id);
+  }
+
+  agregarCliente(cliente: Omit<Cliente, 'id'>): Observable<Cliente> {
+    return this.storageService.addClient(cliente);
+  }
+
+  actualizarCliente(id: string, datos: Partial<Cliente>) {
+    return this.storageService.updateClient(id, datos);
   }
 }

@@ -1,35 +1,14 @@
+// DEPRECATED: This service has been consolidated into TechnicianService
+// Please use TechnicianService instead
+// All methods are available with both English and Spanish interfaces
+
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Tecnico } from '../models';
+import { TechnicianService } from './technician.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TecnicoService {
-  private url = 'assets/data/tecnicos.json';
-
-  constructor(private http: HttpClient) {}
-
-  getTecnicos(): Observable<Tecnico[]> {
-    return this.http.get<Tecnico[]>(this.url);
-  }
-
-  getTecnicoById(id: string): Observable<Tecnico | undefined> {
-    return new Observable(observer => {
-      this.getTecnicos().subscribe(tecnicos => {
-        observer.next(tecnicos.find(tecnico => tecnico.id === id));
-        observer.complete();
-      });
-    });
-  }
-
-  getTecnicosDisponibles(): Observable<Tecnico[]> {
-    return new Observable(observer => {
-      this.getTecnicos().subscribe(tecnicos => {
-        observer.next(tecnicos.filter((t: Tecnico) => t.disponible));
-        observer.complete();
-      });
-    });
-  }
+export class TecnicoService extends TechnicianService {
+  // This service now extends TechnicianService to maintain backward compatibility
+  // All Spanish methods are available through the parent class
 }

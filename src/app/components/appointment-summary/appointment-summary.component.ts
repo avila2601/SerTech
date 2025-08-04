@@ -68,7 +68,7 @@ export class AppointmentSummaryComponent implements OnInit {
 
   loadTechnicianData(): void {
     this.technicianService.getTechnicians().subscribe(technicians => {
-      this.technician = technicians.find(t => t.id === this.technicianId) || null;
+      this.technician = technicians.find(tech => tech.id === this.technicianId) || null;
     });
   }
 
@@ -87,10 +87,10 @@ export class AppointmentSummaryComponent implements OnInit {
     };
 
     this.clientService.addClient(clientData).pipe(
-      switchMap(client => {
+      switchMap(createdClient => {
         // Create appointment
         const appointmentData: Omit<Appointment, 'id' | 'status'> = {
-          clientId: client.id,
+          clientId: createdClient.id,
           technicianId: this.technicianId,
           serviceId: this.serviceId,
           equipmentId: undefined,
@@ -103,7 +103,7 @@ export class AppointmentSummaryComponent implements OnInit {
         return this.appointmentService.createAppointment(appointmentData);
       })
     ).subscribe({
-      next: (appointment) => {
+      next: (createdAppointment) => {
         alert('¡Cita agendada exitosamente!');
         this.router.navigate(['/my-appointments']);
       },
@@ -131,7 +131,7 @@ export class AppointmentSummaryComponent implements OnInit {
     });
   }
 
-  goToHome(): void {
+  goHome(): void {
     this.router.navigate(['/']);
   }
 }

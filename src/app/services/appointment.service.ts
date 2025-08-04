@@ -15,7 +15,7 @@ export class AppointmentService {
   }
 
   private refreshAppointments(): void {
-    this.storageService.getCitas().subscribe(citas => {
+    this.storageService.getAppointments().subscribe(citas => {
       const appointments = citas.map(this.mapCitaToAppointment);
       this.appointmentsSubject.next(appointments);
     });
@@ -36,21 +36,9 @@ export class AppointmentService {
     };
   }
 
-  private mapStatusToEnglish(estado: EstadoCita): AppointmentStatus {
-    switch (estado) {
-      case EstadoCita.PENDIENTE:
-        return AppointmentStatus.PENDING;
-      case EstadoCita.CONFIRMADA:
-        return AppointmentStatus.CONFIRMED;
-      case EstadoCita.EN_PROCESO:
-        return AppointmentStatus.IN_PROGRESS;
-      case EstadoCita.COMPLETADA:
-        return AppointmentStatus.COMPLETED;
-      case EstadoCita.CANCELADA:
-        return AppointmentStatus.CANCELLED;
-      default:
-        return AppointmentStatus.PENDING;
-    }
+  private mapStatusToEnglish(estado: AppointmentStatus): AppointmentStatus {
+    // Since EstadoCita is now an alias for AppointmentStatus, we can directly return
+    return estado;
   }
 
   private mapAppointmentToCita(appointment: Partial<Appointment>): Partial<Cita> {
@@ -64,23 +52,8 @@ export class AppointmentService {
     if (appointment.notes) cita.notas = appointment.notes;
     if (appointment.address) cita.direccion = appointment.address;
     if (appointment.status) {
-      switch (appointment.status) {
-        case AppointmentStatus.PENDING:
-          cita.estado = EstadoCita.PENDIENTE;
-          break;
-        case AppointmentStatus.CONFIRMED:
-          cita.estado = EstadoCita.CONFIRMADA;
-          break;
-        case AppointmentStatus.IN_PROGRESS:
-          cita.estado = EstadoCita.EN_PROCESO;
-          break;
-        case AppointmentStatus.COMPLETED:
-          cita.estado = EstadoCita.COMPLETADA;
-          break;
-        case AppointmentStatus.CANCELLED:
-          cita.estado = EstadoCita.CANCELADA;
-          break;
-      }
+      // Since EstadoCita is now an alias for AppointmentStatus, direct assignment works
+      cita.estado = appointment.status;
     }
     return cita;
   }
@@ -90,7 +63,7 @@ export class AppointmentService {
   }
 
   getAppointmentsByClient(clientId: string): Observable<Appointment[]> {
-    return this.storageService.getCitasPorCliente(clientId).pipe(
+    return this.storageService.getAppointmentsByClient(clientId).pipe(
       map(citas => citas.map(this.mapCitaToAppointment))
     );
   }
@@ -98,7 +71,7 @@ export class AppointmentService {
   createAppointment(appointment: Omit<Appointment, 'id' | 'status'>): Observable<Appointment> {
     return new Observable(observer => {
       const citaData = this.mapAppointmentToCita(appointment);
-      this.storageService.crearCita(citaData as Omit<Cita, 'id' | 'estado'>).subscribe({
+      this.storageService.createAppointment(citaData as Omit<Cita, 'id' | 'estado'>).subscribe({
         next: (nuevaCita) => {
           const newAppointment = this.mapCitaToAppointment(nuevaCita);
           observer.next(newAppointment);
@@ -111,12 +84,36 @@ export class AppointmentService {
   }
 
   cancelAppointment(appointmentId: string): void {
-    this.storageService.cancelarCita(appointmentId);
+    this.storageService.cancelAppointment(appointmentId);
     this.refreshAppointments();
   }
 
   updateClientInAppointment(appointmentId: string, clientId: string): void {
-    this.storageService.actualizarCita(appointmentId, { clienteId: clientId }).subscribe(() => {
+    this.storageService.updateAppointment(appointmentId, { clienteId: clientId }).subscribe(() => {
+      this.refreshAppointments();
+    });
+  }
+
+  // Backward compatibility Spanish interface methods (deprecated)
+  getCitas(): Observable<Cita[]> {
+    return this.storageService.getAppointments();
+  }
+
+  getCitasPorCliente(clienteId: string): Observable<Cita[]> {
+    return this.storageService.getAppointmentsByClient(clienteId);
+  }
+
+  crearCita(cita: Omit<Cita, 'id' | 'estado'>): Observable<Cita> {
+    return this.storageService.createAppointment(cita);
+  }
+
+  cancelarCita(citaId: string): void {
+    this.storageService.cancelAppointment(citaId);
+    this.refreshAppointments();
+  }
+
+  actualizarClienteEnCita(citaId: string, clienteId: string): void {
+    this.storageService.updateAppointment(citaId, { clienteId }).subscribe(() => {
       this.refreshAppointments();
     });
   }

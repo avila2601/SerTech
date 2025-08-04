@@ -10,7 +10,10 @@
         <div class="cita-info">
           <div class="servicio-estado-row">
             <h3>{{ getServiceName(appointment.serviceId) }}</h3>
-            <span class="estado-badge" [ngClass]="getAppointmentStatusClass(appointment)">
+            <span
+              class="estado-badge"
+              [ngClass]="getAppointmentStatusClass(appointment)"
+            >
               {{ getAppointmentStatus(appointment) }}
             </span>
           </div>
@@ -92,7 +95,9 @@
           <h4>Información del Servicio</h4>
           <div class="detail-row" *ngIf="getServiceInfo(appointment).marca">
             <span class="detail-label">Marca:</span>
-            <span class="detail-value">{{ getServiceInfo(appointment).marca }}</span>
+            <span class="detail-value">{{
+              getServiceInfo(appointment).marca
+            }}</span>
           </div>
           <div class="detail-row" *ngIf="getServiceInfo(appointment).producto">
             <span class="detail-label">Producto:</span>
@@ -108,7 +113,9 @@
           </div>
           <div class="detail-row" *ngIf="getServiceInfo(appointment).modelo">
             <span class="detail-label">Modelo:</span>
-            <span class="detail-value">{{ getServiceInfo(appointment).modelo }}</span>
+            <span class="detail-value">{{
+              getServiceInfo(appointment).modelo
+            }}</span>
           </div>
           <div class="detail-row" *ngIf="getServiceInfo(appointment).sintomas">
             <span class="detail-label">Síntomas:</span>
@@ -116,7 +123,10 @@
               getServiceInfo(appointment).sintomas
             }}</span>
           </div>
-          <div class="detail-row" *ngIf="getServiceInfo(appointment).modeloInfo">
+          <div
+            class="detail-row"
+            *ngIf="getServiceInfo(appointment).modeloInfo"
+          >
             <span class="detail-label">Info del Modelo:</span>
             <span class="detail-value">{{
               getServiceInfo(appointment).modeloInfo

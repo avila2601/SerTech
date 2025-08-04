@@ -156,7 +156,7 @@ export class ResumenCitaComponent implements OnInit {
       localStorage.setItem('citaEnProceso', newAppointment.id);
 
       // Actualizar el navbar inmediatamente
-      this.appComponent.actualizarEstadoUsuario();
+      this.appComponent.updateUserState();
 
       alert('¡Cita agendada exitosamente!');
 

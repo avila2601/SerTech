@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
-import { Cita, Cliente, EstadoCita } from '../models';
+import { Cita, Cliente, AppointmentStatus } from '../models';
 
 interface DataStorage {
   citas: Cita[];
@@ -126,7 +126,7 @@ export class StorageService {
         const newAppointment: Cita = {
           ...appointment,
           id: newId,
-          estado: EstadoCita.PENDIENTE
+          estado: AppointmentStatus.PENDING
         };
         const updatedAppointments = [...appointments, newAppointment];
         // Hacer PUT al backend con el array actualizado
@@ -153,7 +153,7 @@ export class StorageService {
   cancelAppointment(appointmentId: string): void {
     const appointmentIndex = this.data.citas.findIndex(appointment => appointment.id === appointmentId);
     if (appointmentIndex !== -1) {
-      this.data.citas[appointmentIndex].estado = EstadoCita.CANCELADA;
+      this.data.citas[appointmentIndex].estado = AppointmentStatus.CANCELLED;
       this.saveData();
     }
   }

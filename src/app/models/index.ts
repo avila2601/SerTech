@@ -1,6 +1,6 @@
 // Models for technical services application
 
-// New English interfaces
+// English interfaces (primary)
 export interface Client {
   id: string;
   name: string;
@@ -50,7 +50,17 @@ export interface Appointment {
   address?: string;
 }
 
-// Original Spanish interfaces (still active)
+export interface Review {
+  id: string;
+  technicianId: string;
+  clientId: string;
+  clientName: string;
+  comment: string;
+  rating: number;
+  date: string;
+}
+
+// Spanish interfaces (backward compatibility)
 export interface Cliente {
   id: string;
   nombre: string;
@@ -75,7 +85,7 @@ export interface Servicio {
   descripcion: string;
   precio: number;
   duracionEstimada: number; // en minutos
-  categoria: CategoriaServicio;
+  categoria: ServiceCategory;
 }
 
 export interface Equipo {
@@ -83,7 +93,7 @@ export interface Equipo {
   nombre: string;
   marca: string;
   modelo: string;
-  tipo: TipoEquipo;
+  tipo: EquipmentType;
   descripcion?: string;
 }
 
@@ -95,11 +105,22 @@ export interface Cita {
   equipoId?: string;
   fecha: Date;
   hora: string;
-  estado: EstadoCita;
+  estado: AppointmentStatus;
   notas?: string;
   direccion?: string;
 }
 
+export interface Resena {
+  id: string;
+  tecnicoId: string;
+  clienteId: string;
+  cliente: string;
+  comentario: string;
+  calificacion: number;
+  fecha: string;
+}
+
+// Consolidated Enums (English keys with Spanish values for UI)
 export enum ServiceCategory {
   MAINTENANCE = 'Mantenimiento',
   REPAIR = 'Reparación',
@@ -128,31 +149,14 @@ export enum AppointmentStatus {
   CANCELLED = 'Cancelada'
 }
 
-// Original Spanish enums for backward compatibility
-export enum CategoriaServicio {
-  MANTENIMIENTO = 'Mantenimiento',
-  REPARACION = 'Reparación',
-  INSTALACION = 'Instalación',
-  LIMPIEZA = 'Limpieza'
+export enum UserType {
+  CLIENT = 'Cliente',
+  TECHNICIAN = 'Técnico',
+  ADMIN = 'Administrador'
 }
 
-export enum TipoEquipo {
-  COMPUTADORA = 'Computadora',
-  LAPTOP = 'Laptop',
-  IMPRESORA = 'Impresora',
-  TELEFONO = 'Teléfono',
-  TABLET = 'Tablet',
-  TELEVISOR = 'Televisor',
-  AIRE_ACONDICIONADO = 'Aire Acondicionado',
-  REFRIGERADOR = 'Refrigerador',
-  LAVADORA = 'Lavadora',
-  OTRO = 'Otro'
-}
-
-export enum EstadoCita {
-  PENDIENTE = 'Pendiente',
-  CONFIRMADA = 'Confirmada',
-  EN_PROCESO = 'En Proceso',
-  COMPLETADA = 'Completada',
-  CANCELADA = 'Cancelada'
-}
+// Spanish aliases for backward compatibility
+export const CategoriaServicio = ServiceCategory;
+export const TipoEquipo = EquipmentType;
+export const EstadoCita = AppointmentStatus;
+export const TipoUsuario = UserType;
