@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-// TODO: Implement TechnicianLoginComponent and TechnicianReviewsModalComponent
-// import { TechnicianLoginComponent } from './components/technicians/technician-login.component';
-// import { TechnicianReviewsModalComponent } from './components/technicians/technician-reviews-modal.component';
+import { TechnicianLoginComponent } from './components/technicians/technician-login.component';
+import { TechnicianReviewsModalComponent } from './components/technicians/technician-reviews-modal.component';
 import { Router } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, LoginComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, LoginComponent, TechnicianLoginComponent, TechnicianReviewsModalComponent],
   template: `
     <nav class="navbar">
       <div class="container">
@@ -54,16 +53,14 @@ import { LoginComponent } from './components/login/login.component';
       <router-outlet></router-outlet>
     </main>
 
-    <!-- TODO: Implement technician login modal in English -->
-    <!-- <app-technician-login *ngIf="showTechniciansModal" (close)="closeTechniciansModal()" (loginSuccess)="loginTechnician($event)"></app-technician-login> -->
+    <app-technician-login *ngIf="showTechniciansModal" (close)="closeTechniciansModal()" (loginSuccess)="loginTechnician($event)"></app-technician-login>
     <app-login *ngIf="showLoginModal" (close)="closeLoginModal()" (loginSuccess)="updateUserState()"></app-login>
 
-    <!-- TODO: Implement technician reviews modal in English -->
-    <!-- <app-technician-reviews-modal
+    <app-technician-reviews-modal
       *ngIf="showTechnicianReviewsModal"
       [technicianId]="technicianIdForReviews"
       (close)="closeTechnicianReviewsModal()"
-    ></app-technician-reviews-modal> -->
+    ></app-technician-reviews-modal>
 
     <footer class="footer">
       <div class="container">
