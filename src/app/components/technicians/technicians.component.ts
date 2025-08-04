@@ -1,0 +1,104 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
+import { TechnicianService } from '../../services/technician.service';
+import { Technician } from '../../models';
+import { TecnicosResenasModalComponent } from '../tecnicos/tecnicos-resenas-modal.component';
+
+@Component({
+  selector: 'app-technicians',
+  standalone: true,
+  imports: [CommonModule, TecnicosResenasModalComponent],
+  templateUrl: './technicians.component.html',
+  styleUrls: ['./technicians.component.scss']
+})
+export class TechniciansComponent implements OnInit {
+  technicians: Technician[] = [];
+  showReviewsModal: boolean = false;
+  modalTechnicianId: string = '';
+
+  constructor(
+    private technicianService: TechnicianService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.loadTechnicians();
+  }
+
+  loadTechnicians(): void {
+    this.technicianService.getTechnicians().subscribe(technicians => {
+      this.technicians = technicians;
+    });
+  }
+
+  getStars(rating: number): number[] {
+    return Array(Math.floor(rating)).fill(0);
+  }
+
+  getEmptyStars(rating: number): number[] {
+    return Array(5 - Math.floor(rating)).fill(0);
+  }
+
+  selectTechnician(technician: Technician): void {
+    this.route.queryParams.subscribe(params => {
+      const preservedParams: any = {
+        technicianId: technician.id
+      };
+
+      // Preserve all form parameters
+      if (params['service']) {
+        preservedParams.service = params['service'];
+        preservedParams.serviceId = params['service'];
+      }
+      if (params['brand']) preservedParams.brand = params['brand'];
+      if (params['product']) preservedParams.product = params['product'];
+      if (params['model']) preservedParams.model = params['model'];
+      if (params['location']) preservedParams.location = params['location'];
+      if (params['symptoms']) preservedParams.symptoms = params['symptoms'];
+      if (params['date']) preservedParams.date = params['date'];
+      if (params['time']) preservedParams.time = params['time'];
+
+      // Navigate to clients component (keeping Spanish route for now)
+      this.router.navigate(['/clientes'], {
+        queryParams: preservedParams
+      });
+    });
+  }
+
+  goBackToServices(): void {
+    this.route.queryParams.subscribe(params => {
+      const preservedParams: any = {};
+      if (params['service']) preservedParams.service = params['service'];
+      if (params['brand']) preservedParams.brand = params['brand'];
+      if (params['product']) preservedParams.product = params['product'];
+      if (params['model']) preservedParams.model = params['model'];
+      if (params['location']) preservedParams.location = params['location'];
+      if (params['symptoms']) preservedParams.symptoms = params['symptoms'];
+      if (params['date']) preservedParams.date = params['date'];
+      if (params['time']) preservedParams.time = params['time'];
+
+      // Navigate to services component (using English route)
+      this.router.navigate(['/services'], {
+        queryParams: preservedParams
+      });
+    });
+  }
+
+  openReviewsModal(technicianId: string): void {
+    this.modalTechnicianId = technicianId;
+    this.showReviewsModal = true;
+  }
+
+  closeReviewsModal(): void {
+    this.showReviewsModal = false;
+    this.modalTechnicianId = '';
+  }
+
+  getRandomAvatar(id: string): string {
+    // Use pravatar.cc to get a random but consistent image per technician
+    const num = (parseInt(id, 10) % 70) + 1;
+    return `https://i.pravatar.cc/150?img=${num}`;
+  }
+}

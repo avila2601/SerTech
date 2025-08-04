@@ -1,0 +1,145 @@
+<div class="container">
+  <div class="servicios-header">
+    <h1>Servicio Seleccionado</h1>
+  </div>
+
+  <div class="servicio-seleccionado" *ngIf="selectedService">
+    <div class="service-card">
+      <div class="service-icon">{{ serviceIcon }}</div>
+      <h3>{{ selectedService.name }}</h3>
+      <p>{{ selectedService.description }}</p>
+
+      <div class="marca-selector">
+        <select
+          class="marca-select"
+          [(ngModel)]="selectedBrand"
+          (change)="onBrandChange()"
+        >
+          <option value="" disabled selected>
+            Selecciona la marca del producto
+          </option>
+          <option *ngFor="let brand of brands" [value]="brand">
+            {{ brand }}
+          </option>
+        </select>
+      </div>
+
+      <div class="producto-selector" *ngIf="selectedBrand">
+        <select
+          class="producto-select"
+          [(ngModel)]="selectedProduct"
+          (change)="onProductChange()"
+        >
+          <option value="" disabled selected>Tipo de producto</option>
+          <option *ngFor="let product of products" [value]="product">
+            {{ product }}
+          </option>
+        </select>
+      </div>
+
+      <div class="modelo-selector" *ngIf="selectedProduct">
+        <select class="modelo-select" [(ngModel)]="selectedModel">
+          <option value="" disabled selected>Modelo (opcional)</option>
+          <option *ngFor="let model of models" [value]="model">
+            {{ model }}
+          </option>
+        </select>
+        <div class="modelo-ayuda">
+          <span class="ayuda-link" (click)="openModelModal()"
+            >¿Cómo se encuentra el número de modelo?</span
+          >
+        </div>
+        <div class="modelo-info">
+          * Ingresar el modelo del producto y los síntomas presentados nos
+          permitirá solucionar tu requerimiento de forma más rápida y eficiente
+        </div>
+        <div class="sintomas-box" *ngIf="selectedProduct">
+          <textarea
+            class="sintomas-textarea"
+            [(ngModel)]="symptoms"
+            rows="3"
+            placeholder="Describe los síntomas que presenta tu equipo..."
+          ></textarea>
+        </div>
+        <div class="ubicacion-selector">
+          <select class="ubicacion-select" [(ngModel)]="selectedLocation">
+            <option value="" disabled selected>Donde te encuentras?</option>
+            <option *ngFor="let location of locations" [value]="location">
+              {{ location }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Fecha y Hora -->
+        <div class="fecha-hora-selector" *ngIf="selectedLocation">
+          <div class="fecha-hora-inputs">
+            <div class="fecha-selector">
+              <label for="fecha">Fecha del servicio (opcional)</label>
+              <input
+                type="date"
+                id="fecha"
+                [(ngModel)]="selectedDate"
+                [min]="minDate"
+                class="fecha-input"
+              />
+            </div>
+            <div class="hora-selector">
+              <label for="hora" class="hora-label"
+                >Hora del servicio (opcional)</label
+              >
+              <select
+                id="hora"
+                [(ngModel)]="selectedTime"
+                class="hora-select"
+              >
+                <option value="">Selecciona una hora</option>
+                <option *ngFor="let hour of availableHours" [value]="hour">
+                  {{ hour }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="servicio-actions">
+      <button class="btn btn-secondary" (click)="goBackToHome()">
+        Volver al Inicio
+      </button>
+      <button class="btn btn-primary" (click)="scheduleService()">
+        Seleccionar Técnico
+      </button>
+    </div>
+  </div>
+
+  <div class="no-servicio" *ngIf="!selectedService">
+    <p>No se ha seleccionado ningún servicio.</p>
+    <button class="btn btn-primary" (click)="goBackToHome()">
+      Volver al Inicio
+    </button>
+  </div>
+
+  <!-- Modal de ayuda para modelo -->
+  <div class="modal-modelo" *ngIf="showModelModal">
+    <div class="modal-content">
+      <button class="cerrar-modal" (click)="closeModelModal()">
+        &times;
+      </button>
+      <h2 class="modal-titulo">Encuentra el modelo</h2>
+      <p class="modal-descripcion">
+        Este número normalmente se encuentra en una etiqueta o placa ubicada en
+        alguna parte del electrodoméstico.
+      </p>
+      <div class="modal-subtitulo">¿Dónde buscar?</div>
+      <ul class="modal-lista">
+        <li>En la parte trasera o lateral del electrodoméstico.</li>
+        <li>En el interior, cerca de los compartimientos o controles.</li>
+        <li>
+          En la parte inferior o en una etiqueta adhesiva visible al mover el
+          equipo.
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

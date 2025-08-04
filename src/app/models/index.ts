@@ -1,5 +1,56 @@
-// Modelos para la aplicación de servicios técnicos
+// Models for technical services application
 
+// New English interfaces
+export interface Client {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+}
+
+export interface Technician {
+  id: string;
+  name: string;
+  specialty: string;
+  rating: number;
+  available: boolean;
+  photo?: string;
+  password: string;
+}
+
+export interface Service {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  estimatedDuration: number; // in minutes
+  category: ServiceCategory;
+}
+
+export interface Equipment {
+  id: string;
+  name: string;
+  brand: string;
+  model: string;
+  type: EquipmentType;
+  description?: string;
+}
+
+export interface Appointment {
+  id: string;
+  clientId: string;
+  technicianId: string;
+  serviceId: string;
+  equipmentId?: string;
+  date: Date;
+  time: string;
+  status: AppointmentStatus;
+  notes?: string;
+  address?: string;
+}
+
+// Original Spanish interfaces (still active)
 export interface Cliente {
   id: string;
   nombre: string;
@@ -49,6 +100,35 @@ export interface Cita {
   direccion?: string;
 }
 
+export enum ServiceCategory {
+  MAINTENANCE = 'Mantenimiento',
+  REPAIR = 'Reparación',
+  INSTALLATION = 'Instalación',
+  CLEANING = 'Limpieza'
+}
+
+export enum EquipmentType {
+  COMPUTER = 'Computadora',
+  LAPTOP = 'Laptop',
+  PRINTER = 'Impresora',
+  PHONE = 'Teléfono',
+  TABLET = 'Tablet',
+  TV = 'Televisor',
+  AIR_CONDITIONING = 'Aire Acondicionado',
+  REFRIGERATOR = 'Refrigerador',
+  WASHING_MACHINE = 'Lavadora',
+  OTHER = 'Otro'
+}
+
+export enum AppointmentStatus {
+  PENDING = 'Pendiente',
+  CONFIRMED = 'Confirmada',
+  IN_PROGRESS = 'En Proceso',
+  COMPLETED = 'Completada',
+  CANCELLED = 'Cancelada'
+}
+
+// Original Spanish enums for backward compatibility
 export enum CategoriaServicio {
   MANTENIMIENTO = 'Mantenimiento',
   REPARACION = 'Reparación',
