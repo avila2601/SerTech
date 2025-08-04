@@ -1,0 +1,30 @@
+<div class="modal-backdrop" (click)="closeModal()"></div>
+<div class="modal-reviews" (click)="$event.stopPropagation()">
+  <h2>Evaluar servicio</h2>
+  <form (ngSubmit)="submitReview()">
+    <div class="stars">
+      <span
+        *ngFor="let star of [1, 2, 3, 4, 5]"
+        (click)="rating = star"
+        [class.selected]="star <= rating"
+        >★</span
+      >
+    </div>
+    <div class="form-group">
+      <label for="comment">Comentario</label>
+      <textarea
+        id="comment"
+        [(ngModel)]="comment"
+        name="comment"
+        rows="3"
+        required
+      ></textarea>
+    </div>
+    <button class="btn btn-primary" type="submit" [disabled]="submitting">
+      {{ submitting ? "Enviando..." : "Enviar" }}
+    </button>
+  </form>
+  <button class="btn btn-secondary close-btn" (click)="closeModal()">
+    Cerrar
+  </button>
+</div>

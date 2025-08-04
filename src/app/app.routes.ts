@@ -5,6 +5,7 @@ import { AuthGuard } from './auth.guard';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'quienes-somos', loadComponent: () => import('./components/quienes-somos/quienes-somos.component').then(m => m.QuienesSomosComponent) },
+  { path: 'about-us', loadComponent: () => import('./components/about-us/about-us.component').then(m => m.AboutUsComponent) },
   { path: 'clientes', loadComponent: () => import('./components/clientes/clientes.component').then(m => m.ClientesComponent) },
   { path: 'clients', loadComponent: () => import('./components/clients/clients.component').then(m => m.ClientsComponent) },
   { path: 'servicios', loadComponent: () => import('./components/servicios/servicios.component').then(m => m.ServiciosComponent) },
@@ -13,8 +14,11 @@ export const routes: Routes = [
   { path: 'technicians', loadComponent: () => import('./components/technicians/technicians.component').then(m => m.TechniciansComponent) },
   { path: 'mis-citas', loadComponent: () => import('./components/mis-citas/mis-citas.component').then(m => m.MisCitasComponent), canActivate: [AuthGuard] },
   { path: 'my-appointments', loadComponent: () => import('./components/my-appointments/my-appointments.component').then(m => m.MyAppointmentsComponent), canActivate: [AuthGuard] },
+  { path: 'resenas', loadComponent: () => import('./components/resenas/resenas.component').then(m => m.ResenasComponent) },
+  { path: 'reviews', loadComponent: () => import('./components/reviews/reviews.component').then(m => m.ReviewsComponent) },
   { path: 'debug', loadComponent: () => import('./components/debug/debug.component').then(m => m.DebugComponent) },
   { path: 'resumen-cita', loadComponent: () => import('./components/resumen-cita/resumen-cita.component').then(m => m.ResumenCitaComponent) },
+  { path: 'appointment-summary', loadComponent: () => import('./components/appointment-summary/appointment-summary.component').then(m => m.AppointmentSummaryComponent) },
   { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
   { path: '**', redirectTo: '' }
 ];

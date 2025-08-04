@@ -1,0 +1,81 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+.modal-reviews {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #232946;
+  color: #fff;
+  border-radius: 16px;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  min-width: 340px;
+  max-width: 95vw;
+  z-index: 1001;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+h2 {
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.stars span {
+  margin: 0 0.2rem;
+  transition: color 0.2s;
+}
+
+.stars span.selected {
+  color: #ffd700;
+  text-shadow: 0 2px 8px #ffd70099;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: rgba(17, 24, 39, 0.8);
+  color: #e0e0e0;
+  font-size: 1rem;
+  padding: 0.7rem 1rem;
+  resize: vertical;
+}
+
+.btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.7rem 0;
+  font-size: 1.08rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.close-btn {
+  background: #6c757d;
+  color: #fff;
+  margin-top: 1rem;
+}
