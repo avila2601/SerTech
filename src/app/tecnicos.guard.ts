@@ -4,8 +4,8 @@ import { inject } from '@angular/core';
 
 export const TecnicosGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const tecnicoLogueado = localStorage.getItem('tecnicoLogueado');
-  if (tecnicoLogueado) {
+  const loggedTechnician = localStorage.getItem('tecnicoLogueado');
+  if (loggedTechnician) {
     return true;
   } else {
     return router.createUrlTree(['/']);

@@ -8,22 +8,22 @@ import { ResenaService } from '../../services/resena.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="modal-backdrop" (click)="cerrar()"></div>
+    <div class="modal-backdrop" (click)="closeModal()"></div>
     <div class="modal-resenas" (click)="$event.stopPropagation()">
       <h2>Evaluar servicio</h2>
-      <form (ngSubmit)="enviarResena()">
+      <form (ngSubmit)="submitReview()">
         <div class="estrellas">
-          <span *ngFor="let star of [1,2,3,4,5]" (click)="calificacion = star" [class.selected]="star <= calificacion">★</span>
+          <span *ngFor="let star of [1,2,3,4,5]" (click)="rating = star" [class.selected]="star <= rating">★</span>
         </div>
         <div class="form-group">
           <label for="comentario">Comentario</label>
-          <textarea id="comentario" [(ngModel)]="comentario" name="comentario" rows="3" required></textarea>
+          <textarea id="comentario" [(ngModel)]="comment" name="comentario" rows="3" required></textarea>
         </div>
-        <button class="btn btn-primary" type="submit" [disabled]="enviando">
-          {{ enviando ? 'Enviando...' : 'Enviar' }}
+        <button class="btn btn-primary" type="submit" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Enviando...' : 'Enviar' }}
         </button>
       </form>
-      <button class="btn btn-secondary cerrar-btn" (click)="cerrar()">Cerrar</button>
+      <button class="btn btn-secondary cerrar-btn" (click)="closeModal()">Cerrar</button>
     </div>
   `,
   styles: [`
@@ -101,49 +101,49 @@ import { ResenaService } from '../../services/resena.service';
   `]
 })
 export class ResenasComponent {
-  @Input() tecnicoId: string = '';
-  @Input() clienteId: string = '';
-  @Input() cliente: string = '';
+  @Input() technicianId: string = '';
+  @Input() clientId: string = '';
+  @Input() client: string = '';
   @Output() close = new EventEmitter<void>();
-  @Output() resenaEnviada = new EventEmitter<void>();
-  calificacion: number = 0;
-  comentario: string = '';
-  enviando: boolean = false;
+  @Output() reviewSent = new EventEmitter<void>();
+  rating: number = 0;
+  comment: string = '';
+  isSubmitting: boolean = false;
 
   constructor(private resenaService: ResenaService) {}
 
-  enviarResena() {
-    if (!this.calificacion || !this.comentario.trim()) {
+  submitReview() {
+    if (!this.rating || !this.comment.trim()) {
       alert('Por favor, califica y escribe un comentario.');
       return;
     }
 
-    this.enviando = true;
+    this.isSubmitting = true;
 
-    const nuevaResena = {
-      tecnicoId: this.tecnicoId,
-      clienteId: this.clienteId,
-      cliente: this.cliente,
-      comentario: this.comentario,
-      calificacion: this.calificacion,
+    const newReview = {
+      tecnicoId: this.technicianId,
+      clienteId: this.clientId,
+      cliente: this.client,
+      comentario: this.comment,
+      calificacion: this.rating,
       fecha: new Date().toISOString().split('T')[0]
     };
 
-    this.resenaService.agregarResena(nuevaResena).subscribe({
+    this.resenaService.agregarResena(newReview).subscribe({
       next: () => {
         alert('¡Reseña enviada exitosamente!');
-        this.resenaEnviada.emit();
-        this.cerrar();
+        this.reviewSent.emit();
+        this.closeModal();
       },
       error: (error) => {
         console.error('Error al enviar reseña:', error);
         alert('No se pudo enviar la reseña. Por favor, intenta de nuevo.');
-        this.enviando = false;
+        this.isSubmitting = false;
       }
     });
   }
 
-  cerrar() {
+  closeModal() {
     this.close.emit();
   }
 }

@@ -2,24 +2,24 @@ import { Component, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ClienteService } from '../../services/cliente.service';
+import { ClientService } from '../../services/client.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="modal-backdrop" (click)="cerrar()"></div>
+    <div class="modal-backdrop" (click)="closeModal()"></div>
     <div class="modal-ingreso" (click)="$event.stopPropagation()">
       <h2>Iniciar Sesión</h2>
-      <form (ngSubmit)="ingresar()" autocomplete="off">
+      <form (ngSubmit)="login()" autocomplete="off">
         <div class="form-group">
           <label for="email">Ingresa tu e-mail</label>
           <input id="email" name="email" type="email" [(ngModel)]="email" required autocomplete="off" />
         </div>
         <button class="btn btn-primary btn-ingresar" type="submit">Ingresar</button>
       </form>
-      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+      <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
     </div>
   `,
   styles: [`
@@ -104,33 +104,33 @@ export class LoginComponent {
   email: string = '';
   @Output() close = new EventEmitter<void>();
   @Output() loginSuccess = new EventEmitter<void>();
-  errorMsg: string = '';
+  errorMessage: string = '';
 
-  constructor(private router: Router, private clienteService: ClienteService) {}
+  constructor(private router: Router, private clientService: ClientService) {}
 
   @HostListener('document:keydown.escape')
   onEscapePress() {
-    this.cerrar();
+    this.closeModal();
   }
 
-  ingresar() {
+  login() {
     if (!this.email) {
-      this.errorMsg = 'Por favor, ingresa tu e-mail.';
+      this.errorMessage = 'Por favor, ingresa tu e-mail.';
       return;
     }
 
     // Validar formato de e-mail
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(this.email)) {
-      this.errorMsg = 'Por favor, ingresa un e-mail válido.';
+      this.errorMessage = 'Por favor, ingresa un e-mail válido.';
       return;
     }
 
-    this.clienteService.getClientes().subscribe(clientes => {
-      const cliente = clientes.find(c => c.email === this.email);
-      if (cliente) {
+    this.clientService.getClients().subscribe((clients: any[]) => {
+      const client = clients.find(c => c.email === this.email);
+      if (client) {
         // Guardar el clienteId como cliente logueado y limpiar emailLogin
-        localStorage.setItem('clienteLogueado', cliente.id);
+        localStorage.setItem('clienteLogueado', client.id);
         localStorage.removeItem('emailLogin');
       } else {
         // Si el email no existe, guardar el email en emailLogin y limpiar clienteLogueado
@@ -138,15 +138,15 @@ export class LoginComponent {
         localStorage.removeItem('clienteLogueado');
       }
 
-      this.errorMsg = '';
+      this.errorMessage = '';
       this.loginSuccess.emit();
-      this.cerrar();
+      this.closeModal();
       // Siempre redirigir a inicio
       this.router.navigate(['/']);
     });
   }
 
-  cerrar() {
+  closeModal() {
     this.close.emit();
   }
 }

@@ -83,8 +83,8 @@ export class DebugComponent {
     Promise.all([
       this.http.get<any>('https://sertech-backend.onrender.com/clientes').toPromise(),
       this.http.get<any>('https://sertech-backend.onrender.com/citas').toPromise()
-    ]).then(([clientes, citas]) => {
-      this.jsonData = JSON.stringify({ clientes, citas }, null, 2);
+    ]).then(([clients, appointments]) => {
+      this.jsonData = JSON.stringify({ clientes: clients, citas: appointments }, null, 2);
     }).catch(() => {
       this.jsonData = 'Error al obtener datos de Render';
     });
@@ -95,8 +95,8 @@ export class DebugComponent {
     Promise.all([
       this.http.get<any>('https://sertech-backend.onrender.com/clientes').toPromise(),
       this.http.get<any>('https://sertech-backend.onrender.com/citas').toPromise()
-    ]).then(([clientes, citas]) => {
-      const data = JSON.stringify({ clientes, citas }, null, 2);
+    ]).then(([clients, appointments]) => {
+      const data = JSON.stringify({ clientes: clients, citas: appointments }, null, 2);
       const blob = new Blob([data], { type: 'application/json' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');

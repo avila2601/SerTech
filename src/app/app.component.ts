@@ -27,23 +27,23 @@ import { TecnicosResenasModalComponent } from './components/tecnicos/tecnicos-re
         <ul class="nav-menu" [class.active]="isMenuOpen">
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
           <li><a routerLink="/quienes-somos" routerLinkActive="active" (click)="closeMenu()">¿Quienes Somos?</a></li>
-          <li *ngIf="tecnicoLogueado || estaLogueadoComoCliente">
+          <li *ngIf="loggedTechnician || isLoggedAsClient">
             <a routerLink="/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis Citas</a>
           </li>
-          <li *ngIf="!tecnicoLogueado && !estaLogueadoComoCliente">
-            <a href="#" routerLinkActive="active" class="" (click)="abrirModalTecnicos(); closeMenu(); $event.preventDefault()">Técnicos</a>
+          <li *ngIf="!loggedTechnician && !isLoggedAsClient">
+            <a href="#" routerLinkActive="active" class="" (click)="openTechniciansModal(); closeMenu(); $event.preventDefault()">Técnicos</a>
           </li>
-          <li *ngIf="!estaLogueadoComoCliente && !tecnicoLogueado">
-            <a href="#" (click)="abrirModalLogin(); closeMenu(); $event.preventDefault()">Ingreso clientes</a>
+          <li *ngIf="!isLoggedAsClient && !loggedTechnician">
+            <a href="#" (click)="openLoginModal(); closeMenu(); $event.preventDefault()">Ingreso clientes</a>
           </li>
-          <li *ngIf="tecnicoLogueado">
-            <a href="#" (click)="abrirModalResenasTecnico(); closeMenu(); $event.preventDefault()">Mis reseñas</a>
+          <li *ngIf="loggedTechnician">
+            <a href="#" (click)="openTechnicianReviewsModal(); closeMenu(); $event.preventDefault()">Mis reseñas</a>
           </li>
-          <li *ngIf="tecnicoLogueado">
-            <a href="#" (click)="logoutTecnico(); $event.preventDefault()">Cerrar sesión</a>
+          <li *ngIf="loggedTechnician">
+            <a href="#" (click)="logoutTechnician(); $event.preventDefault()">Cerrar sesión</a>
           </li>
-          <li *ngIf="estaLogueadoComoCliente">
-            <a href="#" (click)="logoutCliente(); $event.preventDefault()">Cerrar sesión</a>
+          <li *ngIf="isLoggedAsClient">
+            <a href="#" (click)="logoutClient(); $event.preventDefault()">Cerrar sesión</a>
           </li>
         </ul>
       </div>
@@ -53,13 +53,13 @@ import { TecnicosResenasModalComponent } from './components/tecnicos/tecnicos-re
       <router-outlet></router-outlet>
     </main>
 
-    <app-ingreso-tecnicos *ngIf="mostrarModalTecnicos" (close)="cerrarModalTecnicos()" (loginSuccess)="loginTecnico($event)"></app-ingreso-tecnicos>
-    <app-login *ngIf="mostrarModalLogin" (close)="cerrarModalLogin()" (loginSuccess)="actualizarEstadoUsuario()"></app-login>
+    <app-ingreso-tecnicos *ngIf="showTechniciansModal" (close)="closeTechniciansModal()" (loginSuccess)="loginTechnician($event)"></app-ingreso-tecnicos>
+    <app-login *ngIf="showLoginModal" (close)="closeLoginModal()" (loginSuccess)="updateUserState()"></app-login>
 
     <app-tecnicos-resenas-modal
-      *ngIf="mostrarModalResenasTecnico"
-      [tecnicoId]="tecnicoIdResenas"
-      (close)="cerrarModalResenasTecnico()"
+      *ngIf="showTechnicianReviewsModal"
+      [tecnicoId]="technicianIdForReviews"
+      (close)="closeTechnicianReviewsModal()"
     ></app-tecnicos-resenas-modal>
 
     <footer class="footer">
@@ -237,12 +237,12 @@ import { TecnicosResenasModalComponent } from './components/tecnicos/tecnicos-re
 export class AppComponent implements OnInit {
   title = 'sertech';
   isMenuOpen = false;
-  mostrarModalTecnicos = false;
-  tecnicoLogueado: string | null = null;
-  mostrarModalLogin = false;
-  clienteLogueado: string | null = null;
-  mostrarModalResenasTecnico = false;
-  tecnicoIdResenas: string = '';
+  showTechniciansModal = false;
+  loggedTechnician: string | null = null;
+  showLoginModal = false;
+  loggedClient: string | null = null;
+  showTechnicianReviewsModal = false;
+  technicianIdForReviews: string = '';
 
   constructor(private router: Router) {}
 
@@ -254,53 +254,53 @@ export class AppComponent implements OnInit {
     this.isMenuOpen = false;
   }
 
-  abrirModalTecnicos() {
-    this.mostrarModalTecnicos = true;
+  openTechniciansModal() {
+    this.showTechniciansModal = true;
   }
 
-  cerrarModalTecnicos() {
-    this.mostrarModalTecnicos = false;
+  closeTechniciansModal() {
+    this.showTechniciansModal = false;
   }
 
-  loginTecnico(tecnicoId: string) {
-    this.tecnicoLogueado = tecnicoId;
-    localStorage.setItem('tecnicoLogueado', tecnicoId);
+  loginTechnician(technicianId: string) {
+    this.loggedTechnician = technicianId;
+    localStorage.setItem('tecnicoLogueado', technicianId);
   }
 
-  logoutTecnico() {
-    this.tecnicoLogueado = null;
+  logoutTechnician() {
+    this.loggedTechnician = null;
     localStorage.removeItem('tecnicoLogueado');
     this.router.navigate(['/']);
   }
 
-  abrirModalLogin() {
-    this.mostrarModalLogin = true;
+  openLoginModal() {
+    this.showLoginModal = true;
   }
 
-  cerrarModalLogin() {
-    this.mostrarModalLogin = false;
-    this.recargarEstadoUsuario();
+  closeLoginModal() {
+    this.showLoginModal = false;
+    this.reloadUserState();
   }
 
-  logoutCliente() {
-    this.clienteLogueado = null;
+  logoutClient() {
+    this.loggedClient = null;
     localStorage.removeItem('clienteLogueado');
     localStorage.removeItem('emailLogin');
     this.router.navigate(['/']);
   }
 
-  abrirModalResenasTecnico() {
-    this.tecnicoIdResenas = this.tecnicoLogueado || '';
-    this.mostrarModalResenasTecnico = true;
+  openTechnicianReviewsModal() {
+    this.technicianIdForReviews = this.loggedTechnician || '';
+    this.showTechnicianReviewsModal = true;
   }
 
-  cerrarModalResenasTecnico() {
-    this.mostrarModalResenasTecnico = false;
-    this.tecnicoIdResenas = '';
+  closeTechnicianReviewsModal() {
+    this.showTechnicianReviewsModal = false;
+    this.technicianIdForReviews = '';
   }
 
   ngOnInit() {
-    this.recargarEstadoUsuario();
+    this.reloadUserState();
 
     // Si no hay cliente logueado, limpiar emailLogin
     if (!localStorage.getItem('clienteLogueado')) {
@@ -310,22 +310,22 @@ export class AppComponent implements OnInit {
     // Escuchar cambios en localStorage para actualizar el navbar
     window.addEventListener('storage', (event) => {
       if (event.key === 'clienteLogueado' || event.key === 'tecnicoLogueado') {
-        this.recargarEstadoUsuario();
+        this.reloadUserState();
       }
     });
   }
 
-  recargarEstadoUsuario() {
-    this.tecnicoLogueado = localStorage.getItem('tecnicoLogueado');
-    this.clienteLogueado = localStorage.getItem('clienteLogueado');
+  reloadUserState() {
+    this.loggedTechnician = localStorage.getItem('tecnicoLogueado');
+    this.loggedClient = localStorage.getItem('clienteLogueado');
   }
 
   // Método público para que otros componentes puedan actualizar el navbar
-  public actualizarEstadoUsuario() {
-    this.recargarEstadoUsuario();
+  public updateUserState() {
+    this.reloadUserState();
   }
 
-  get estaLogueadoComoCliente(): boolean {
+  get isLoggedAsClient(): boolean {
     return !!localStorage.getItem('clienteLogueado') || !!localStorage.getItem('emailLogin');
   }
 }

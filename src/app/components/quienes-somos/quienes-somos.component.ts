@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class QuienesSomosComponent {
   constructor(private router: Router) {}
 
-  volverAHome(): void {
+  goHome(): void {
     this.router.navigate(['/']);
   }
 }
