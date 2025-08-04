@@ -5,32 +5,32 @@
   </div>
 
   <div class="citas-grid">
-    <div *ngFor="let cita of citasFiltradas" class="cita-card">
+    <div *ngFor="let appointment of filteredAppointments" class="cita-card">
       <div class="cita-header">
         <div class="cita-info">
           <div class="servicio-estado-row">
-            <h3>{{ getServicioNombre(cita.servicioId) }}</h3>
-            <span class="estado-badge" [ngClass]="getEstadoCitaClass(cita)">
-              {{ getEstadoCita(cita) }}
+            <h3>{{ getServiceName(appointment.serviceId) }}</h3>
+            <span class="estado-badge" [ngClass]="getAppointmentStatusClass(appointment)">
+              {{ getAppointmentStatus(appointment) }}
             </span>
           </div>
-          <div *ngIf="getEstadoCita(cita) === 'Terminada'">
+          <div *ngIf="getAppointmentStatus(appointment) === 'Terminada'">
             <button
-              *ngIf="!yaFueEvaluada(cita)"
+              *ngIf="!wasAlreadyEvaluated(appointment)"
               class="btn btn-primary btn-evaluar"
-              (click)="abrirModalResena(cita)"
+              (click)="openReviewModal(appointment)"
             >
               Evaluar servicio
             </button>
             <button
-              *ngIf="yaFueEvaluada(cita)"
+              *ngIf="wasAlreadyEvaluated(appointment)"
               class="btn btn-secondary btn-evaluado"
               disabled
             >
               Evaluado
             </button>
           </div>
-          <p>{{ formatDate(cita.fecha) }} - {{ cita.hora }}</p>
+          <p>{{ formatDate(appointment.date) }} - {{ appointment.time }}</p>
         </div>
       </div>
 
@@ -41,31 +41,31 @@
           <div class="detail-row">
             <span class="detail-label">Nombre:</span>
             <span class="detail-value">{{
-              getClienteNombre(cita.clienteId)
+              getClientName(appointment.clientId)
             }}</span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Email:</span>
             <span class="detail-value">{{
-              getClienteEmail(cita.clienteId)
+              getClientEmail(appointment.clientId)
             }}</span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Teléfono:</span>
             <span class="detail-value">{{
-              getClienteTelefono(cita.clienteId)
+              getClientPhone(appointment.clientId)
             }}</span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Dirección:</span>
             <span class="detail-value">{{
-              getClienteDireccion(cita.clienteId)
+              getClientAddress(appointment.clientId)
             }}</span>
           </div>
-          <div class="detail-row" *ngIf="getServicioInfo(cita).ubicacion">
+          <div class="detail-row" *ngIf="getServiceInfo(appointment).ubicacion">
             <span class="detail-label">Ubicación:</span>
             <span class="detail-value">{{
-              getServicioInfo(cita).ubicacion
+              getServiceInfo(appointment).ubicacion
             }}</span>
           </div>
         </div>
@@ -76,13 +76,13 @@
           <div class="detail-row">
             <span class="detail-label">Técnico:</span>
             <span class="detail-value">{{
-              getTecnicoNombre(cita.tecnicoId)
+              getTechnicianName(appointment.technicianId)
             }}</span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Especialidad:</span>
             <span class="detail-value">{{
-              getTecnicoEspecialidad(cita.tecnicoId)
+              getTechnicianSpecialty(appointment.technicianId)
             }}</span>
           </div>
         </div>
@@ -90,36 +90,36 @@
         <!-- Información del Servicio -->
         <div class="detail-section">
           <h4>Información del Servicio</h4>
-          <div class="detail-row" *ngIf="getServicioInfo(cita).marca">
+          <div class="detail-row" *ngIf="getServiceInfo(appointment).marca">
             <span class="detail-label">Marca:</span>
-            <span class="detail-value">{{ getServicioInfo(cita).marca }}</span>
+            <span class="detail-value">{{ getServiceInfo(appointment).marca }}</span>
           </div>
-          <div class="detail-row" *ngIf="getServicioInfo(cita).producto">
+          <div class="detail-row" *ngIf="getServiceInfo(appointment).producto">
             <span class="detail-label">Producto:</span>
             <span class="detail-value">{{
-              getServicioInfo(cita).producto
+              getServiceInfo(appointment).producto
             }}</span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Referencia:</span>
             <span class="detail-value">{{
-              getServicioInfo(cita).referencia || "No aplica"
+              getServiceInfo(appointment).referencia || "No aplica"
             }}</span>
           </div>
-          <div class="detail-row" *ngIf="getServicioInfo(cita).modelo">
+          <div class="detail-row" *ngIf="getServiceInfo(appointment).modelo">
             <span class="detail-label">Modelo:</span>
-            <span class="detail-value">{{ getServicioInfo(cita).modelo }}</span>
+            <span class="detail-value">{{ getServiceInfo(appointment).modelo }}</span>
           </div>
-          <div class="detail-row" *ngIf="getServicioInfo(cita).sintomas">
+          <div class="detail-row" *ngIf="getServiceInfo(appointment).sintomas">
             <span class="detail-label">Síntomas:</span>
             <span class="detail-value">{{
-              getServicioInfo(cita).sintomas
+              getServiceInfo(appointment).sintomas
             }}</span>
           </div>
-          <div class="detail-row" *ngIf="getServicioInfo(cita).modeloInfo">
+          <div class="detail-row" *ngIf="getServiceInfo(appointment).modeloInfo">
             <span class="detail-label">Info del Modelo:</span>
             <span class="detail-value">{{
-              getServicioInfo(cita).modeloInfo
+              getServiceInfo(appointment).modeloInfo
             }}</span>
           </div>
         </div>
@@ -135,17 +135,17 @@
     </div>
   </div>
 
-  <div *ngIf="citasFiltradas.length === 0" class="no-citas">
+  <div *ngIf="filteredAppointments.length === 0" class="no-citas">
     <h3>No tienes citas programadas</h3>
     <p>Aún no has agendado ningún servicio técnico.</p>
   </div>
 </div>
 
 <app-resenas
-  *ngIf="mostrarModalResena"
-  [tecnicoId]="tecnicoIdResena"
-  [clienteId]="clienteIdResena"
-  [cliente]="clienteNombreResena"
-  (close)="cerrarModalResena()"
-  (resenaEnviada)="onResenaEnviada()"
+  *ngIf="showReviewModal"
+  [tecnicoId]="reviewTechnicianId"
+  [clienteId]="reviewClientId"
+  [cliente]="reviewClientName"
+  (close)="closeReviewModal()"
+  (resenaEnviada)="onReviewSent()"
 ></app-resenas>

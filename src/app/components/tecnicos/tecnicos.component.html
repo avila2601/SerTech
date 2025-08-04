@@ -5,57 +5,57 @@
   </div>
 
   <div class="tecnicos-grid">
-    <div *ngFor="let tecnico of tecnicos" class="tecnico-card">
+    <div *ngFor="let technician of technicians" class="tecnico-card">
       <div class="tecnico-avatar">
         <img
-          [src]="tecnico.foto || getRandomAvatar(tecnico.id)"
+          [src]="technician.photo || getRandomAvatar(technician.id)"
           alt="Avatar técnico"
         />
       </div>
       <div class="tecnico-info">
-        <h3>{{ tecnico.nombre }}</h3>
-        <p class="especialidad">{{ tecnico.especialidad }}</p>
+        <h3>{{ technician.name }}</h3>
+        <p class="especialidad">{{ technician.specialty }}</p>
         <div class="rating-section">
           <div class="rating-info">
             <div class="stars">
               <span class="star">★</span>
             </div>
-            <span class="rating-value">{{ tecnico.calificacion }}</span>
+            <span class="rating-value">{{ technician.rating }}</span>
           </div>
           <button
             class="btn btn-primary btn-comentarios"
-            (click)="abrirModalResenas(tecnico.id)"
+            (click)="openReviewsModal(technician.id)"
           >
             Ver comentarios
           </button>
         </div>
-        <!-- <p class="experiencia">{{ tecnico.experiencia }} años de experiencia</p> -->
+        <!-- <p class="experiencia">{{ technician.experience }} años de experiencia</p> -->
       </div>
       <div class="tecnico-actions">
         <button
           class="btn btn-primary"
-          [disabled]="!tecnico.disponible"
-          (click)="seleccionarTecnico(tecnico)"
+          [disabled]="!technician.available"
+          (click)="selectTechnician(technician)"
         >
-          {{ tecnico.disponible ? "Seleccionar" : "No disponible" }}
+          {{ technician.available ? "Seleccionar" : "No disponible" }}
         </button>
       </div>
     </div>
   </div>
 
-  <div *ngIf="tecnicos.length === 0" class="no-tecnicos">
+  <div *ngIf="technicians.length === 0" class="no-tecnicos">
     <p>No hay técnicos disponibles en este momento.</p>
   </div>
 
   <div class="tecnicos-actions">
-    <button class="btn btn-secondary" (click)="volverAServicios()">
+    <button class="btn btn-secondary" (click)="goBackToServices()">
       Volver a Servicios
     </button>
   </div>
 
   <app-tecnicos-resenas-modal
-    *ngIf="mostrarModalResenas"
-    [tecnicoId]="tecnicoIdModal"
-    (close)="cerrarModalResenas()"
+    *ngIf="showReviewsModal"
+    [tecnicoId]="modalTechnicianId"
+    (close)="closeReviewsModal()"
   ></app-tecnicos-resenas-modal>
 </div>

@@ -18,7 +18,7 @@ export class ReviewsComponent {
   @Output() reviewSubmitted = new EventEmitter<void>();
   rating: number = 0;
   comment: string = '';
-  submitting: boolean = false;
+  isSubmitting: boolean = false;
 
   constructor(private resenaService: ResenaService) {}
 
@@ -28,7 +28,7 @@ export class ReviewsComponent {
       return;
     }
 
-    this.submitting = true;
+    this.isSubmitting = true;
 
     const newReview = {
       tecnicoId: this.technicianId,
@@ -48,7 +48,7 @@ export class ReviewsComponent {
       error: (error: any) => {
         console.error('Error al enviar reseña:', error);
         alert('No se pudo enviar la reseña. Por favor, intenta de nuevo.');
-        this.submitting = false;
+        this.isSubmitting = false;
       }
     });
   }

@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CitaService } from '../../services/cita.service';
-import { ServicioService } from '../../services/servicio.service';
-import { TecnicoService } from '../../services/tecnico.service';
-import { ClienteService } from '../../services/cliente.service';
+import { AppointmentService } from '../../services/appointment.service';
+import { ServiceService } from '../../services/service.service';
+import { TechnicianService } from '../../services/technician.service';
+import { ClientService } from '../../services/client.service';
 import { ResenaService } from '../../services/resena.service';
-import { Cita, Servicio, Tecnico, Cliente } from '../../models';
+import { Appointment, Service, Technician, Client } from '../../models';
 import { ResenasComponent } from '../resenas/resenas.component';
 
 @Component({
@@ -17,24 +17,24 @@ import { ResenasComponent } from '../resenas/resenas.component';
   styleUrls: ['./mis-citas.component.scss']
 })
 export class MisCitasComponent implements OnInit {
-  citas: Cita[] = [];
-  citasFiltradas: Cita[] = [];
-  servicios: Servicio[] = [];
-  tecnicos: Tecnico[] = [];
-  clientes: Cliente[] = [];
-  clienteIdActual: string | null = null; // Por defecto, sin filtro
-  tecnicoIdActual: string | null = null;
-  mostrarModalResena = false;
-  tecnicoIdResena = '';
-  clienteIdResena = '';
-  clienteNombreResena = '';
-  citasEvaluadas: Set<string> = new Set(); // Para trackear citas ya evaluadas
+  appointments: Appointment[] = [];
+  filteredAppointments: Appointment[] = [];
+  services: Service[] = [];
+  technicians: Technician[] = [];
+  clients: Client[] = [];
+  currentClientId: string | null = null; // Por defecto, sin filtro
+  currentTechnicianId: string | null = null;
+  showReviewModal = false;
+  reviewTechnicianId = '';
+  reviewClientId = '';
+  reviewClientName = '';
+  evaluatedAppointments: Set<string> = new Set(); // Para trackear citas ya evaluadas
 
   constructor(
-    private citaService: CitaService,
-    private servicioService: ServicioService,
-    private tecnicoService: TecnicoService,
-    private clienteService: ClienteService,
+    private appointmentService: AppointmentService,
+    private serviceService: ServiceService,
+    private technicianService: TechnicianService,
+    private clientService: ClientService,
     private resenaService: ResenaService,
     private router: Router,
     private route: ActivatedRoute
@@ -44,11 +44,11 @@ export class MisCitasComponent implements OnInit {
     // Obtener el ID del cliente o del técnico desde query params o localStorage
     this.route.queryParams.subscribe(params => {
       if (params['clienteId']) {
-        this.clienteIdActual = params['clienteId'];
-        this.tecnicoIdActual = null;
+        this.currentClientId = params['clienteId'];
+        this.currentTechnicianId = null;
       } else if (params['tecnicoId']) {
-        this.tecnicoIdActual = params['tecnicoId'];
-        this.clienteIdActual = null;
+        this.currentTechnicianId = params['tecnicoId'];
+        this.currentClientId = null;
       } else {
         // Si no hay query params, verificar localStorage
         const tecnicoLogueado = localStorage.getItem('tecnicoLogueado');
@@ -56,75 +56,75 @@ export class MisCitasComponent implements OnInit {
         const emailLogin = localStorage.getItem('emailLogin');
 
         if (tecnicoLogueado) {
-          this.tecnicoIdActual = tecnicoLogueado;
-          this.clienteIdActual = null;
+          this.currentTechnicianId = tecnicoLogueado;
+          this.currentClientId = null;
         } else if (clienteLogueado) {
-          this.clienteIdActual = clienteLogueado;
-          this.tecnicoIdActual = null;
+          this.currentClientId = clienteLogueado;
+          this.currentTechnicianId = null;
         } else if (emailLogin) {
           // Si hay un email guardado, filtrar por ese email
-          this.clienteService.getClientes().subscribe(clientes => {
-            const clienteConEmail = clientes.find(c => c.email === emailLogin);
-            this.clienteIdActual = clienteConEmail ? clienteConEmail.id : emailLogin;
-            this.tecnicoIdActual = null;
-            this.cargarDatos();
+          this.clientService.getClients().subscribe((clients: Client[]) => {
+            const clientWithEmail = clients.find(c => c.email === emailLogin);
+            this.currentClientId = clientWithEmail ? clientWithEmail.id : emailLogin;
+            this.currentTechnicianId = null;
+            this.loadData();
           });
         } else {
-          this.clienteIdActual = null;
-          this.tecnicoIdActual = null;
+          this.currentClientId = null;
+          this.currentTechnicianId = null;
         }
       }
-      this.cargarDatos();
+      this.loadData();
     });
   }
 
-  cargarDatos(): void {
-    this.citaService.getCitas().subscribe(citas => {
-      if (this.tecnicoIdActual) {
-        this.citas = citas.filter(c => String(c.tecnicoId) === String(this.tecnicoIdActual));
-      } else if (this.clienteIdActual) {
+  loadData(): void {
+    this.appointmentService.getAppointments().subscribe((appointments: Appointment[]) => {
+      if (this.currentTechnicianId) {
+        this.appointments = appointments.filter(c => String(c.technicianId) === String(this.currentTechnicianId));
+      } else if (this.currentClientId) {
         const emailLogin = localStorage.getItem('emailLogin');
         if (emailLogin) {
           // Si hay emailLogin, mostrar solo las citas donde el email coincide
-          this.citas = citas.filter(c => {
-            const cliente = this.clientes.find(cl => cl.id === c.clienteId);
-            return cliente?.email === emailLogin;
+          this.appointments = appointments.filter(c => {
+            const client = this.clients.find(cl => cl.id === c.clientId);
+            return client?.email === emailLogin;
           });
         } else {
           // Si hay clienteId, mostrar solo las citas de ese cliente
-          this.citas = citas.filter(c => c.clienteId === this.clienteIdActual);
+          this.appointments = appointments.filter(c => c.clientId === this.currentClientId);
         }
       } else {
-        this.citas = []; // No mostrar citas si no hay filtro válido
+        this.appointments = []; // No mostrar citas si no hay filtro válido
       }
-      this.citasFiltradas = this.citas;
-      this.verificarCitasEvaluadas();
+      this.filteredAppointments = this.appointments;
+      this.checkEvaluatedAppointments();
     });
 
-    this.servicioService.getServicios().subscribe(servicios => {
-      this.servicios = servicios;
+    this.serviceService.getServices().subscribe((services: Service[]) => {
+      this.services = services;
     });
 
-    this.tecnicoService.getTecnicos().subscribe(tecnicos => {
-      this.tecnicos = tecnicos;
+    this.technicianService.getTechnicians().subscribe((technicians: Technician[]) => {
+      this.technicians = technicians;
     });
 
-    this.clienteService.getClientes().subscribe(clientes => {
-      this.clientes = clientes;
+    this.clientService.getClients().subscribe((clients: Client[]) => {
+      this.clients = clients;
     });
   }
 
-  verificarCitasEvaluadas(): void {
+  checkEvaluatedAppointments(): void {
     // Verificar qué citas ya han sido evaluadas
-    this.citasFiltradas.forEach(cita => {
-      if (this.getEstadoCita(cita) === 'Terminada') {
-        const tecnicoId = cita.tecnicoId;
-        const clienteId = cita.clienteId;
-        const clienteNombre = this.getClienteNombre(cita.clienteId);
+    this.filteredAppointments.forEach(appointment => {
+      if (this.getAppointmentStatus(appointment) === 'Terminada') {
+        const technicianId = appointment.technicianId;
+        const clientId = appointment.clientId;
+        const clientName = this.getClientName(appointment.clientId);
 
-        this.resenaService.existeResena(tecnicoId, clienteId, clienteNombre).subscribe(existe => {
-          if (existe) {
-            this.citasEvaluadas.add(cita.id);
+        this.resenaService.existeResena(technicianId, clientId, clientName).subscribe(exists => {
+          if (exists) {
+            this.evaluatedAppointments.add(appointment.id);
           }
         });
       }
@@ -142,50 +142,50 @@ export class MisCitasComponent implements OnInit {
     });
   }
 
-  getServicioNombre(servicioId: string): string {
-    const servicio = this.servicios.find(s => s.id === servicioId);
-    return servicio ? servicio.nombre : 'Servicio no encontrado';
+  getServiceName(serviceId: string): string {
+    const service = this.services.find(s => s.id === serviceId);
+    return service ? service.name : 'Servicio no encontrado';
   }
 
-  getTecnicoNombre(tecnicoId: string): string {
-    const tecnico = this.tecnicos.find(t => t.id === tecnicoId);
-    return tecnico ? tecnico.nombre : 'No asignado';
+  getTechnicianName(technicianId: string): string {
+    const technician = this.technicians.find(t => t.id === technicianId);
+    return technician ? technician.name : 'No asignado';
   }
 
-  getTecnicoEspecialidad(tecnicoId: string): string {
-    const tecnico = this.tecnicos.find(t => t.id === tecnicoId);
-    return tecnico ? tecnico.especialidad : 'No asignado';
+  getTechnicianSpecialty(technicianId: string): string {
+    const technician = this.technicians.find(t => t.id === technicianId);
+    return technician ? technician.specialty : 'No asignado';
   }
 
-  getTecnicoCalificacion(tecnicoId: string): number {
-    const tecnico = this.tecnicos.find(t => t.id === tecnicoId);
-    return tecnico ? tecnico.calificacion : 0;
+  getTechnicianRating(technicianId: string): number {
+    const technician = this.technicians.find(t => t.id === technicianId);
+    return technician ? technician.rating : 0;
   }
 
-  getClienteNombre(clienteId: string): string {
-    const cliente = this.clientes.find(c => c.id === clienteId);
-    return cliente ? cliente.nombre : 'No disponible';
+  getClientName(clientId: string): string {
+    const client = this.clients.find(c => c.id === clientId);
+    return client ? client.name : 'No disponible';
   }
 
-  getClienteEmail(clienteId: string): string {
-    const cliente = this.clientes.find(c => c.id === clienteId);
-    return cliente ? cliente.email : 'No disponible';
+  getClientEmail(clientId: string): string {
+    const client = this.clients.find(c => c.id === clientId);
+    return client ? client.email : 'No disponible';
   }
 
-  getClienteTelefono(clienteId: string): string {
-    const cliente = this.clientes.find(c => c.id === clienteId);
-    return cliente ? cliente.telefono : 'No disponible';
+  getClientPhone(clientId: string): string {
+    const client = this.clients.find(c => c.id === clientId);
+    return client ? client.phone : 'No disponible';
   }
 
-  getClienteDireccion(clienteId: string): string {
-    const cliente = this.clientes.find(c => c.id === clienteId);
-    return cliente ? cliente.direccion : 'No disponible';
+  getClientAddress(clientId: string): string {
+    const client = this.clients.find(c => c.id === clientId);
+    return client ? client.address : 'No disponible';
   }
 
-  getServicioInfo(cita: Cita): any {
+  getServiceInfo(appointment: Appointment): any {
     try {
-      if (cita.notas) {
-        return JSON.parse(cita.notas);
+      if (appointment.notes) {
+        return JSON.parse(appointment.notes);
       }
     } catch (error) {
       console.error('Error parsing service info:', error);
@@ -193,12 +193,12 @@ export class MisCitasComponent implements OnInit {
     return {};
   }
 
-  getEstadoCita(cita: Cita): string {
-    const fechaCita = new Date(cita.fecha);
-    const fechaActual = new Date();
+  getAppointmentStatus(appointment: Appointment): string {
+    const appointmentDate = new Date(appointment.date);
+    const currentDate = new Date();
 
     // Si la fecha de la cita ya pasó, mostrar "Terminada"
-    if (fechaCita < fechaActual) {
+    if (appointmentDate < currentDate) {
       return 'Terminada';
     }
 
@@ -206,37 +206,37 @@ export class MisCitasComponent implements OnInit {
     return 'Pendiente';
   }
 
-  getEstadoCitaClass(cita: Cita): string {
-    const estado = this.getEstadoCita(cita);
-    return estado === 'Pendiente' ? 'estado-pendiente' : 'estado-terminada';
+  getAppointmentStatusClass(appointment: Appointment): string {
+    const status = this.getAppointmentStatus(appointment);
+    return status === 'Pendiente' ? 'estado-pendiente' : 'estado-terminada';
   }
 
-  yaFueEvaluada(cita: Cita): boolean {
-    return this.citasEvaluadas.has(cita.id);
+  wasAlreadyEvaluated(appointment: Appointment): boolean {
+    return this.evaluatedAppointments.has(appointment.id);
   }
 
-  abrirModalResena(cita: Cita) {
-    this.tecnicoIdResena = cita.tecnicoId;
-    this.clienteIdResena = cita.clienteId;
-    this.clienteNombreResena = this.getClienteNombre(cita.clienteId);
-    this.mostrarModalResena = true;
+  openReviewModal(appointment: Appointment) {
+    this.reviewTechnicianId = appointment.technicianId;
+    this.reviewClientId = appointment.clientId;
+    this.reviewClientName = this.getClientName(appointment.clientId);
+    this.showReviewModal = true;
   }
 
-  cerrarModalResena() {
-    this.mostrarModalResena = false;
+  closeReviewModal() {
+    this.showReviewModal = false;
     // Recargar las citas evaluadas después de cerrar el modal
-    this.verificarCitasEvaluadas();
+    this.checkEvaluatedAppointments();
   }
 
-  onResenaEnviada() {
+  onReviewSent() {
     // Marcar la cita actual como evaluada
-    const citaActual = this.citasFiltradas.find(cita =>
-      cita.tecnicoId === this.tecnicoIdResena &&
-      cita.clienteId === this.clienteIdResena
+    const currentAppointment = this.filteredAppointments.find(appointment =>
+      appointment.technicianId === this.reviewTechnicianId &&
+      appointment.clientId === this.reviewClientId
     );
 
-    if (citaActual) {
-      this.citasEvaluadas.add(citaActual.id);
+    if (currentAppointment) {
+      this.evaluatedAppointments.add(currentAppointment.id);
     }
   }
 }

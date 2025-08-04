@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TecnicoService } from '../../services/tecnico.service';
-import { Tecnico } from '../../models';
+import { TechnicianService } from '../../services/technician.service';
+import { Technician } from '../../models';
 import { TecnicosResenasModalComponent } from './tecnicos-resenas-modal.component';
 
 @Component({
@@ -13,41 +13,41 @@ import { TecnicosResenasModalComponent } from './tecnicos-resenas-modal.componen
   styleUrls: ['./tecnicos.component.scss']
 })
 export class TecnicosComponent implements OnInit {
-  tecnicos: Tecnico[] = [];
-  mostrarModalResenas: boolean = false;
-  tecnicoIdModal: string = '';
+  technicians: Technician[] = [];
+  showReviewsModal: boolean = false;
+  modalTechnicianId: string = '';
 
   constructor(
-    private tecnicoService: TecnicoService,
+    private technicianService: TechnicianService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.cargarTecnicos();
+    this.loadTechnicians();
   }
 
-  cargarTecnicos(): void {
-    this.tecnicoService.getTecnicos().subscribe(tecnicos => {
-      this.tecnicos = tecnicos;
+  loadTechnicians(): void {
+    this.technicianService.getTechnicians().subscribe(technicians => {
+      this.technicians = technicians;
     });
   }
 
-  getStars(calificacion: number): number[] {
-    return Array(Math.floor(calificacion)).fill(0);
+  getStars(rating: number): number[] {
+    return Array(Math.floor(rating)).fill(0);
   }
 
-  getEmptyStars(calificacion: number): number[] {
-    return Array(5 - Math.floor(calificacion)).fill(0);
+  getEmptyStars(rating: number): number[] {
+    return Array(5 - Math.floor(rating)).fill(0);
   }
 
-  seleccionarTecnico(tecnico: Tecnico): void {
+  selectTechnician(technician: Technician): void {
     this.route.queryParams.subscribe(params => {
       const preservedParams: any = {
-        tecnicoId: tecnico.id
+        tecnicoId: technician.id
       };
 
-      // Preservar todos los parámetros del formulario
+      // Preserve all form parameters
       if (params['servicio']) {
         preservedParams.servicio = params['servicio'];
         preservedParams.servicioId = params['servicio'];
@@ -66,7 +66,7 @@ export class TecnicosComponent implements OnInit {
     });
   }
 
-  volverAServicios(): void {
+  goBackToServices(): void {
     this.route.queryParams.subscribe(params => {
       const preservedParams: any = {};
       if (params['servicio']) preservedParams.servicio = params['servicio'];
@@ -84,18 +84,18 @@ export class TecnicosComponent implements OnInit {
     });
   }
 
-  abrirModalResenas(tecnicoId: string): void {
-    this.tecnicoIdModal = tecnicoId;
-    this.mostrarModalResenas = true;
+  openReviewsModal(technicianId: string): void {
+    this.modalTechnicianId = technicianId;
+    this.showReviewsModal = true;
   }
 
-  cerrarModalResenas(): void {
-    this.mostrarModalResenas = false;
-    this.tecnicoIdModal = '';
+  closeReviewsModal(): void {
+    this.showReviewsModal = false;
+    this.modalTechnicianId = '';
   }
 
   getRandomAvatar(id: string): string {
-    // Usamos pravatar.cc para obtener una imagen aleatoria pero consistente por técnico
+    // Use pravatar.cc to get a random but consistent image per technician
     const num = (parseInt(id, 10) % 70) + 1;
     return `https://i.pravatar.cc/150?img=${num}`;
   }

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CitaService } from '../../services/cita.service';
-import { ClienteService } from '../../services/cliente.service';
-import { TecnicoService } from '../../services/tecnico.service';
-import { Cliente, Cita, Tecnico } from '../../models';
+import { AppointmentService } from '../../services/appointment.service';
+import { ClientService } from '../../services/client.service';
+import { TechnicianService } from '../../services/technician.service';
+import { Client, Appointment, Technician } from '../../models';
 import { switchMap } from 'rxjs/operators';
 import { AppComponent } from '../../app.component';
 
@@ -17,143 +17,143 @@ import { AppComponent } from '../../app.component';
 })
 export class ResumenCitaComponent implements OnInit {
   // Datos del servicio y personales
-  marca: string = '';
-  producto: string = '';
-  modelo: string = '';
-  sintomas: string = '';
-  ubicacion: string = '';
-  fecha: string = '';
-  hora: string = '';
-  nombre: string = '';
+  brand: string = '';
+  product: string = '';
+  model: string = '';
+  symptoms: string = '';
+  location: string = '';
+  date: string = '';
+  time: string = '';
+  name: string = '';
   email: string = '';
-  telefono: string = '';
-  direccion: string = '';
-  isAgendando: boolean = false;
-  tecnicoId: string = '';
-  servicioId: string = '';
+  phone: string = '';
+  address: string = '';
+  isScheduling: boolean = false;
+  technicianId: string = '';
+  serviceId: string = '';
 
   // Información del técnico
-  tecnico: Tecnico | null = null;
+  technician: Technician | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private citaService: CitaService,
-    private clienteService: ClienteService,
-    private tecnicoService: TecnicoService,
+    private appointmentService: AppointmentService,
+    private clientService: ClientService,
+    private technicianService: TechnicianService,
     private appComponent: AppComponent
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.marca = params['marca'] || '';
-      this.producto = params['producto'] || '';
-      this.modelo = params['modelo'] || '';
-      this.sintomas = params['sintomas'] || '';
-      this.ubicacion = params['ubicacion'] || '';
-      this.fecha = params['fecha'] || '';
-      this.hora = params['hora'] || '';
-      this.nombre = params['nombre'] || '';
+      this.brand = params['marca'] || '';
+      this.product = params['producto'] || '';
+      this.model = params['modelo'] || '';
+      this.symptoms = params['sintomas'] || '';
+      this.location = params['ubicacion'] || '';
+      this.date = params['fecha'] || '';
+      this.time = params['hora'] || '';
+      this.name = params['nombre'] || '';
       this.email = params['email'] || '';
-      this.telefono = params['telefono'] || '';
-      this.direccion = params['direccion'] || '';
-      this.tecnicoId = params['tecnicoId'] || '';
-      this.servicioId = params['servicioId'] || '';
+      this.phone = params['telefono'] || '';
+      this.address = params['direccion'] || '';
+      this.technicianId = params['tecnicoId'] || '';
+      this.serviceId = params['servicioId'] || '';
 
       // Cargar información del técnico si hay tecnicoId
-      if (this.tecnicoId) {
-        this.cargarInformacionTecnico();
+      if (this.technicianId) {
+        this.loadTechnicianInfo();
       }
     });
   }
 
-  cargarInformacionTecnico(): void {
-    this.tecnicoService.getTecnicoById(this.tecnicoId).subscribe(tecnico => {
-      this.tecnico = tecnico || null;
+  loadTechnicianInfo(): void {
+    this.technicianService.getTechnicianById(this.technicianId).subscribe((technician: Technician | undefined) => {
+      this.technician = technician || null;
     });
   }
 
-  regresar(): void {
+  goBack(): void {
     // Navegar de vuelta al componente información personal preservando todos los datos
     this.router.navigate(['/clientes'], {
       queryParams: {
-        marca: this.marca,
-        producto: this.producto,
-        modelo: this.modelo,
-        sintomas: this.sintomas,
-        ubicacion: this.ubicacion,
-        fecha: this.fecha,
-        hora: this.hora,
-        nombre: this.nombre,
+        marca: this.brand,
+        producto: this.product,
+        modelo: this.model,
+        sintomas: this.symptoms,
+        ubicacion: this.location,
+        fecha: this.date,
+        hora: this.time,
+        nombre: this.name,
         email: this.email,
-        telefono: this.telefono,
-        direccion: this.direccion
+        telefono: this.phone,
+        direccion: this.address
       }
     });
   }
 
-  agendarCita(): void {
-    if (!this.nombre || !this.email || !this.telefono || !this.direccion) {
+  scheduleAppointment(): void {
+    if (!this.name || !this.email || !this.phone || !this.address) {
       alert('Por favor completa todos los campos requeridos');
       return;
     }
 
-    this.isAgendando = true;
+    this.isScheduling = true;
 
     // Primero verificar si el cliente ya existe
-    this.clienteService.getClientes().pipe(
-      switchMap(clientes => {
-        const clienteExistente = clientes.find(c => c.email === this.email);
+    this.clientService.getClients().pipe(
+      switchMap((clients: Client[]) => {
+        const existingClient = clients.find(c => c.email === this.email);
 
-        if (clienteExistente) {
+        if (existingClient) {
           // Si el cliente existe, usar el existente
-          return [clienteExistente];
+          return [existingClient];
         } else {
           // Si no existe, crear uno nuevo
-          const cliente: Omit<Cliente, 'id'> = {
-            nombre: this.nombre,
+          const client: Omit<Client, 'id'> = {
+            name: this.name,
             email: this.email,
-            telefono: this.telefono,
-            direccion: this.direccion
+            phone: this.phone,
+            address: this.address
           };
-          return this.clienteService.agregarCliente(cliente);
+          return this.clientService.addClient(client);
         }
       }),
-      switchMap(cliente => {
+      switchMap((client: Client) => {
         // Guardar toda la información del servicio en las notas como JSON
-        const infoServicio = {
-          marca: this.marca,
-          producto: this.producto,
-          modelo: this.modelo,
-          sintomas: this.sintomas,
-          ubicacion: this.ubicacion
+        const serviceInfo = {
+          marca: this.brand,
+          producto: this.product,
+          modelo: this.model,
+          sintomas: this.symptoms,
+          ubicacion: this.location
         };
 
         // Manejar fecha y hora opcionales
-        let fechaSeleccionada: Date;
-        if (this.fecha) {
-          fechaSeleccionada = new Date(this.fecha + 'T00:00:00');
+        let selectedDate: Date;
+        if (this.date) {
+          selectedDate = new Date(this.date + 'T00:00:00');
         } else {
-          fechaSeleccionada = new Date();
+          selectedDate = new Date();
         }
 
-        const cita: Omit<Cita, 'id' | 'estado'> = {
-          clienteId: cliente.id,
-          tecnicoId: this.tecnicoId,
-          servicioId: this.servicioId,
-          fecha: fechaSeleccionada,
-          hora: this.hora || 'Por coordinar',
-          notas: JSON.stringify(infoServicio),
-          direccion: this.direccion
+        const appointment: Omit<Appointment, 'id' | 'status'> = {
+          clientId: client.id,
+          technicianId: this.technicianId,
+          serviceId: this.serviceId,
+          date: selectedDate,
+          time: this.time || 'Por coordinar',
+          notes: JSON.stringify(serviceInfo),
+          address: this.address
         };
-        return this.citaService.crearCita(cita);
+        return this.appointmentService.createAppointment(appointment);
       })
-    ).subscribe(nuevaCita => {
-      this.isAgendando = false;
+    ).subscribe((newAppointment: Appointment) => {
+      this.isScheduling = false;
 
       // Guardar IDs en localStorage
-      localStorage.setItem('clienteLogueado', nuevaCita.clienteId);
-      localStorage.setItem('citaEnProceso', nuevaCita.id);
+      localStorage.setItem('clienteLogueado', newAppointment.clientId);
+      localStorage.setItem('citaEnProceso', newAppointment.id);
 
       // Actualizar el navbar inmediatamente
       this.appComponent.actualizarEstadoUsuario();
@@ -161,7 +161,7 @@ export class ResumenCitaComponent implements OnInit {
       alert('¡Cita agendada exitosamente!');
 
       // Redirigir a mis-citas con el clienteId
-      this.router.navigate(['/mis-citas'], { queryParams: { clienteId: nuevaCita.clienteId } });
+      this.router.navigate(['/mis-citas'], { queryParams: { clienteId: newAppointment.clientId } });
     });
   }
 }

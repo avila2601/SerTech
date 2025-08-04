@@ -3,49 +3,49 @@
     <h1>Servicio Seleccionado</h1>
   </div>
 
-  <div class="servicio-seleccionado" *ngIf="servicioSeleccionado">
+  <div class="servicio-seleccionado" *ngIf="selectedService">
     <div class="service-card">
-      <div class="service-icon">{{ iconoServicio }}</div>
-      <h3>{{ servicioSeleccionado.nombre }}</h3>
-      <p>{{ servicioSeleccionado.descripcion }}</p>
+      <div class="service-icon">{{ serviceIcon }}</div>
+      <h3>{{ selectedService.name }}</h3>
+      <p>{{ selectedService.description }}</p>
 
       <div class="marca-selector">
         <select
           class="marca-select"
-          [(ngModel)]="marcaSeleccionada"
-          (change)="onMarcaChange()"
+          [(ngModel)]="selectedBrand"
+          (change)="onBrandChange()"
         >
           <option value="" disabled selected>
             Selecciona la marca del producto
           </option>
-          <option *ngFor="let marca of marcas" [value]="marca">
+          <option *ngFor="let marca of brands" [value]="marca">
             {{ marca }}
           </option>
         </select>
       </div>
 
-      <div class="producto-selector" *ngIf="marcaSeleccionada">
+      <div class="producto-selector" *ngIf="selectedBrand">
         <select
           class="producto-select"
-          [(ngModel)]="productoSeleccionado"
-          (change)="onProductoChange()"
+          [(ngModel)]="selectedProduct"
+          (change)="onProductChange()"
         >
           <option value="" disabled selected>Tipo de producto</option>
-          <option *ngFor="let producto of productos" [value]="producto">
+          <option *ngFor="let producto of products" [value]="producto">
             {{ producto }}
           </option>
         </select>
       </div>
 
-      <div class="modelo-selector" *ngIf="productoSeleccionado">
-        <select class="modelo-select" [(ngModel)]="modeloSeleccionado">
+      <div class="modelo-selector" *ngIf="selectedProduct">
+        <select class="modelo-select" [(ngModel)]="selectedModel">
           <option value="" disabled selected>Modelo (opcional)</option>
-          <option *ngFor="let modelo of modelos" [value]="modelo">
+          <option *ngFor="let modelo of models" [value]="modelo">
             {{ modelo }}
           </option>
         </select>
         <div class="modelo-ayuda">
-          <span class="ayuda-link" (click)="abrirModalModelo()"
+          <span class="ayuda-link" (click)="openModelModal()"
             >¿Cómo se encuentra el número de modelo?</span
           >
         </div>
@@ -53,32 +53,32 @@
           * Ingresar el modelo del producto y los síntomas presentados nos
           permitirá solucionar tu requerimiento de forma más rápida y eficiente
         </div>
-        <div class="sintomas-box" *ngIf="productoSeleccionado">
+        <div class="sintomas-box" *ngIf="selectedProduct">
           <textarea
             class="sintomas-textarea"
-            [(ngModel)]="sintomas"
+            [(ngModel)]="symptoms"
             rows="3"
             placeholder="Describe los síntomas que presenta tu equipo..."
           ></textarea>
         </div>
         <div class="ubicacion-selector">
-          <select class="ubicacion-select" [(ngModel)]="ubicacionSeleccionada">
+          <select class="ubicacion-select" [(ngModel)]="selectedLocation">
             <option value="" disabled selected>Donde te encuentras?</option>
-            <option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion">
+            <option *ngFor="let ubicacion of locations" [value]="ubicacion">
               {{ ubicacion }}
             </option>
           </select>
         </div>
 
         <!-- Fecha y Hora -->
-        <div class="fecha-hora-selector" *ngIf="ubicacionSeleccionada">
+        <div class="fecha-hora-selector" *ngIf="selectedLocation">
           <div class="fecha-hora-inputs">
             <div class="fecha-selector">
               <label for="fecha">Fecha del servicio (opcional)</label>
               <input
                 type="date"
                 id="fecha"
-                [(ngModel)]="fechaSeleccionada"
+                [(ngModel)]="selectedDate"
                 [min]="minDate"
                 class="fecha-input"
               />
@@ -87,13 +87,9 @@
               <label for="hora" class="hora-label"
                 >Hora del servicio (opcional)</label
               >
-              <select
-                id="hora"
-                [(ngModel)]="horaSeleccionada"
-                class="hora-select"
-              >
+              <select id="hora" [(ngModel)]="selectedTime" class="hora-select">
                 <option value="">Selecciona una hora</option>
-                <option *ngFor="let hora of horasDisponibles" [value]="hora">
+                <option *ngFor="let hora of availableHours" [value]="hora">
                   {{ hora }}
                 </option>
               </select>
@@ -104,28 +100,26 @@
     </div>
 
     <div class="servicio-actions">
-      <button class="btn btn-secondary" (click)="volverAHome()">
+      <button class="btn btn-secondary" (click)="goBackToHome()">
         Volver al Inicio
       </button>
-      <button class="btn btn-primary" (click)="agendarServicio()">
+      <button class="btn btn-primary" (click)="scheduleService()">
         Seleccionar Técnico
       </button>
     </div>
   </div>
 
-  <div class="no-servicio" *ngIf="!servicioSeleccionado">
+  <div class="no-servicio" *ngIf="!selectedService">
     <p>No se ha seleccionado ningún servicio.</p>
-    <button class="btn btn-primary" (click)="volverAHome()">
+    <button class="btn btn-primary" (click)="goBackToHome()">
       Volver al Inicio
     </button>
   </div>
 
   <!-- Modal de ayuda para modelo -->
-  <div class="modal-modelo" *ngIf="mostrarModalModelo">
+  <div class="modal-modelo" *ngIf="showModelModal">
     <div class="modal-content">
-      <button class="cerrar-modal" (click)="cerrarModalModelo()">
-        &times;
-      </button>
+      <button class="cerrar-modal" (click)="closeModelModal()">&times;</button>
       <h2 class="modal-titulo">Encuentra el modelo</h2>
       <p class="modal-descripcion">
         Este número normalmente se encuentra en una etiqueta o placa ubicada en

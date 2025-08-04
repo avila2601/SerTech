@@ -6,7 +6,7 @@
 
   <div class="agendar-content">
     <form
-      [formGroup]="informacionForm"
+      [formGroup]="informationForm"
       (ngSubmit)="onSubmit()"
       class="agendar-form"
     >
@@ -24,8 +24,8 @@
             <div
               class="error"
               *ngIf="
-                informacionForm.get('nombre')?.invalid &&
-                informacionForm.get('nombre')?.touched
+                informationForm.get('nombre')?.invalid &&
+                informationForm.get('nombre')?.touched
               "
             >
               El nombre es requerido
@@ -42,8 +42,8 @@
             <div
               class="error"
               *ngIf="
-                informacionForm.get('email')?.invalid &&
-                informacionForm.get('email')?.touched
+                informationForm.get('email')?.invalid &&
+                informationForm.get('email')?.touched
               "
             >
               Email válido es requerido
@@ -62,8 +62,8 @@
             <div
               class="error"
               *ngIf="
-                informacionForm.get('telefono')?.invalid &&
-                informacionForm.get('telefono')?.touched
+                informationForm.get('telefono')?.invalid &&
+                informationForm.get('telefono')?.touched
               "
             >
               Teléfono es requerido
@@ -80,8 +80,8 @@
             <div
               class="error"
               *ngIf="
-                informacionForm.get('direccion')?.invalid &&
-                informacionForm.get('direccion')?.touched
+                informationForm.get('direccion')?.invalid &&
+                informationForm.get('direccion')?.touched
               "
             >
               Dirección es requerida
@@ -92,13 +92,13 @@
 
       <!-- Botones -->
       <div class="form-actions">
-        <button type="button" class="btn btn-secondary" (click)="regresar()">
+        <button type="button" class="btn btn-secondary" (click)="goBack()">
           Regresar
         </button>
         <button
           type="submit"
           class="btn btn-primary"
-          [disabled]="informacionForm.invalid || isSubmitting"
+          [disabled]="informationForm.invalid || isSubmitting"
         >
           <span *ngIf="!isSubmitting">Continuar</span>
           <span *ngIf="isSubmitting">Procesando...</span>

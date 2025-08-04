@@ -2,41 +2,41 @@
   <h2>Resumen de tu cita</h2>
   <div class="resumen-section">
     <h3>Datos del Servicio</h3>
-    <p><strong>Marca:</strong> {{ marca }}</p>
-    <p><strong>Producto:</strong> {{ producto }}</p>
-    <p><strong>Modelo:</strong> {{ modelo }}</p>
-    <p><strong>Síntomas:</strong> {{ sintomas }}</p>
-    <p><strong>Ubicación:</strong> {{ ubicacion }}</p>
-    <p><strong>Fecha:</strong> {{ fecha || "Por coordinar" }}</p>
-    <p><strong>Hora:</strong> {{ hora || "Por coordinar" }}</p>
+    <p><strong>Marca:</strong> {{ brand }}</p>
+    <p><strong>Producto:</strong> {{ product }}</p>
+    <p><strong>Modelo:</strong> {{ model }}</p>
+    <p><strong>Síntomas:</strong> {{ symptoms }}</p>
+    <p><strong>Ubicación:</strong> {{ location }}</p>
+    <p><strong>Fecha:</strong> {{ date || "Por coordinar" }}</p>
+    <p><strong>Hora:</strong> {{ time || "Por coordinar" }}</p>
   </div>
 
-  <div class="resumen-section" *ngIf="tecnico">
+  <div class="resumen-section" *ngIf="technician">
     <h3>Información del Técnico</h3>
-    <p><strong>Nombre:</strong> {{ tecnico.nombre }}</p>
-    <p><strong>Especialidad:</strong> {{ tecnico.especialidad }}</p>
+    <p><strong>Nombre:</strong> {{ technician.name }}</p>
+    <p><strong>Especialidad:</strong> {{ technician.specialty }}</p>
   </div>
 
   <div class="resumen-section">
     <h3>Datos Personales</h3>
-    <p><strong>Nombre:</strong> {{ nombre }}</p>
+    <p><strong>Nombre:</strong> {{ name }}</p>
     <p><strong>Email:</strong> {{ email }}</p>
-    <p><strong>Teléfono:</strong> {{ telefono }}</p>
-    <p><strong>Dirección:</strong> {{ direccion }}</p>
+    <p><strong>Teléfono:</strong> {{ phone }}</p>
+    <p><strong>Dirección:</strong> {{ address }}</p>
   </div>
   <div class="resumen-section">
     <h3>Costo del servicio</h3>
     <p><strong>Valor:</strong></p>
   </div>
   <div class="resumen-actions">
-    <button class="btn btn-secondary" (click)="regresar()">Regresar</button>
+    <button class="btn btn-secondary" (click)="goBack()">Regresar</button>
     <button
       class="btn btn-primary"
-      (click)="agendarCita()"
-      [disabled]="isAgendando"
+      (click)="scheduleAppointment()"
+      [disabled]="isScheduling"
     >
-      <span *ngIf="!isAgendando">Agendar Cita</span>
-      <span *ngIf="isAgendando">Agendando...</span>
+      <span *ngIf="!isScheduling">Agendar Cita</span>
+      <span *ngIf="isScheduling">Agendando...</span>
     </button>
   </div>
 </div>

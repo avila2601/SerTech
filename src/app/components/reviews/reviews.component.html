@@ -20,8 +20,8 @@
         required
       ></textarea>
     </div>
-    <button class="btn btn-primary" type="submit" [disabled]="submitting">
-      {{ submitting ? "Enviando..." : "Enviar" }}
+    <button class="btn btn-primary" type="submit" [disabled]="isSubmitting">
+      {{ isSubmitting ? "Enviando..." : "Enviar" }}
     </button>
   </form>
   <button class="btn btn-secondary close-btn" (click)="closeModal()">
