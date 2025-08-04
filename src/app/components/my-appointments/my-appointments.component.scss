@@ -5,27 +5,27 @@
   padding: 0;
 }
 
-.mis-citas-header {
+.my-appointments-header {
   text-align: center;
   margin-bottom: 2rem;
   padding: 1.5rem 0;
 }
 
-.mis-citas-header h1 {
+.my-appointments-header h1 {
   font-size: 2.5rem;
   color: #e0e0e0;
   margin-bottom: 0.5rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.mis-citas-header p {
+.my-appointments-header p {
   font-size: 1.1rem;
   color: #b0b0b0;
   max-width: 600px;
   margin: 0 auto;
 }
 
-.citas-filtro {
+.appointments-filtro {
   display: flex;
   justify-content: center;
   gap: 1rem;
@@ -54,14 +54,14 @@
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
-.citas-grid {
+.appointments-grid {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-.cita-card {
+.appointment-card {
   width: 100%;
   /* Puedes ajustar el max-width si quieres un límite en pantallas muy grandes */
   /* max-width: 900px; */
@@ -81,7 +81,7 @@
   overflow: hidden;
 }
 
-.cita-card::before {
+.appointment-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -93,17 +93,17 @@
   transition: transform 0.3s ease;
 }
 
-.cita-card:hover::before {
+.appointment-card:hover::before {
   transform: scaleX(1);
 }
 
-.cita-card:hover {
+.appointment-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
   border-color: rgba(102, 126, 234, 0.3);
 }
 
-.cita-header {
+.appointment-header {
   flex: none;
   min-width: 220px;
   display: flex;
@@ -112,20 +112,20 @@
   margin-bottom: 0;
 }
 
-.cita-info h3 {
+.appointment-info h3 {
   font-size: 1.3rem;
   color: #e0e0e0;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
-.cita-info p {
+.appointment-info p {
   color: #9ca3af;
   font-size: 0.95rem;
   margin-bottom: 0.25rem;
 }
 
-.cita-details {
+.appointment-details {
   flex: none;
   display: flex;
   flex-direction: row;
@@ -227,7 +227,7 @@
   color: white;
 }
 
-.cita-actions {
+.appointment-actions {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -332,20 +332,20 @@
   box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
 }
 
-.no-citas {
+.no-appointments {
   text-align: center;
   padding: 3rem;
   color: #9ca3af;
   font-size: 1.1rem;
 }
 
-.no-citas h3 {
+.no-appointments h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: #e0e0e0;
 }
 
-.no-citas p {
+.no-appointments p {
   margin-bottom: 1.5rem;
 }
 
@@ -355,20 +355,20 @@
     padding: 0 15px;
   }
 
-  .mis-citas-header {
+  .my-appointments-header {
     margin-bottom: 2rem;
     padding: 1.5rem 0;
   }
 
-  .mis-citas-header h1 {
+  .my-appointments-header h1 {
     font-size: 2rem;
   }
 
-  .mis-citas-header p {
+  .my-appointments-header p {
     font-size: 1rem;
   }
 
-  .citas-filtro {
+  .appointments-filtro {
     gap: 0.8rem;
     margin-bottom: 2rem;
   }
@@ -378,23 +378,23 @@
     font-size: 0.9rem;
   }
 
-  .citas-grid {
+  .appointments-grid {
     gap: 1.5rem;
   }
 
-  .cita-card {
+  .appointment-card {
     padding: 1.5rem;
   }
 
-  .cita-header {
+  .appointment-header {
     margin-bottom: 1rem;
   }
 
-  .cita-info h3 {
+  .appointment-info h3 {
     font-size: 1.1rem;
   }
 
-  .cita-info p {
+  .appointment-info p {
     font-size: 0.9rem;
   }
 
@@ -403,7 +403,7 @@
     font-size: 0.75rem;
   }
 
-  .cita-details {
+  .appointment-details {
     padding: 0.8rem;
     margin-bottom: 1rem;
   }
@@ -417,7 +417,7 @@
     font-size: 0.85rem;
   }
 
-  .cita-actions {
+  .appointment-actions {
     flex-direction: column;
     gap: 0.5rem;
   }
@@ -435,20 +435,20 @@
     padding: 0 10px;
   }
 
-  .mis-citas-header {
+  .my-appointments-header {
     margin-bottom: 1.5rem;
     padding: 1rem 0;
   }
 
-  .mis-citas-header h1 {
+  .my-appointments-header h1 {
     font-size: 1.6rem;
   }
 
-  .mis-citas-header p {
+  .my-appointments-header p {
     font-size: 0.9rem;
   }
 
-  .citas-filtro {
+  .appointments-filtro {
     gap: 0.5rem;
     margin-bottom: 1.5rem;
   }
@@ -458,24 +458,24 @@
     font-size: 0.8rem;
   }
 
-  .citas-grid {
+  .appointments-grid {
     gap: 1rem;
   }
 
-  .cita-card {
+  .appointment-card {
     padding: 1rem;
   }
 
-  .cita-header {
+  .appointment-header {
     margin-bottom: 0.8rem;
   }
 
-  .cita-info h3 {
+  .appointment-info h3 {
     font-size: 1rem;
     margin-bottom: 0.3rem;
   }
 
-  .cita-info p {
+  .appointment-info p {
     font-size: 0.85rem;
     margin-bottom: 0.2rem;
   }
@@ -485,7 +485,7 @@
     font-size: 0.7rem;
   }
 
-  .cita-details {
+  .appointment-details {
     padding: 0.6rem;
     margin-bottom: 0.8rem;
   }
@@ -504,21 +504,21 @@
     font-size: 0.8rem;
   }
 
-  .no-citas {
+  .no-appointments {
     padding: 2rem;
   }
 
-  .no-citas h3 {
+  .no-appointments h3 {
     font-size: 1.3rem;
   }
 
-  .no-citas p {
+  .no-appointments p {
     font-size: 1rem;
   }
 }
 
 @media (max-width: 900px) {
-  .cita-details {
+  .appointment-details {
     flex-direction: column;
     gap: 1rem;
   }
@@ -536,14 +536,14 @@
   }
 }
 
-.servicio-estado-row {
+.service-estado-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
 }
 
-.servicio-estado-row h3 {
+.service-estado-row h3 {
   margin: 0;
   flex: 1;
 }

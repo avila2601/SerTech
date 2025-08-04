@@ -60,66 +60,6 @@ export interface Review {
   date: string;
 }
 
-// Spanish interfaces (backward compatibility)
-export interface Cliente {
-  id: string;
-  nombre: string;
-  email: string;
-  telefono: string;
-  direccion: string;
-}
-
-export interface Tecnico {
-  id: string;
-  nombre: string;
-  especialidad: string;
-  calificacion: number;
-  disponible: boolean;
-  foto?: string;
-  contraseña: string;
-}
-
-export interface Servicio {
-  id: string;
-  nombre: string;
-  descripcion: string;
-  precio: number;
-  duracionEstimada: number; // en minutos
-  categoria: ServiceCategory;
-}
-
-export interface Equipo {
-  id: string;
-  nombre: string;
-  marca: string;
-  modelo: string;
-  tipo: EquipmentType;
-  descripcion?: string;
-}
-
-export interface Cita {
-  id: string;
-  clienteId: string;
-  tecnicoId: string;
-  servicioId: string;
-  equipoId?: string;
-  fecha: Date;
-  hora: string;
-  estado: AppointmentStatus;
-  notas?: string;
-  direccion?: string;
-}
-
-export interface Resena {
-  id: string;
-  tecnicoId: string;
-  clienteId: string;
-  cliente: string;
-  comentario: string;
-  calificacion: number;
-  fecha: string;
-}
-
 // Consolidated Enums (English keys with Spanish values for UI)
 export enum ServiceCategory {
   MAINTENANCE = 'Mantenimiento',
@@ -154,9 +94,3 @@ export enum UserType {
   TECHNICIAN = 'Técnico',
   ADMIN = 'Administrador'
 }
-
-// Spanish aliases for backward compatibility
-export const CategoriaServicio = ServiceCategory;
-export const TipoEquipo = EquipmentType;
-export const EstadoCita = AppointmentStatus;
-export const TipoUsuario = UserType;

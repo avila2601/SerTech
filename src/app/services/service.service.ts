@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { Service, ServiceCategory, Servicio, CategoriaServicio } from '../models';
+import { Service, ServiceCategory } from '../models';
+import { ServicioData } from '../models/data-types';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -9,24 +10,35 @@ import { map } from 'rxjs/operators';
 export class ServiceService {
   constructor() {}
 
-  private mapServicioToService(servicio: Servicio): Service {
+  private mapServicioDataToService(ServicioData: ServicioData): Service {
     return {
-      id: servicio.id,
-      name: servicio.nombre,
-      description: servicio.descripcion,
-      price: servicio.precio,
-      estimatedDuration: servicio.duracionEstimada,
-      category: this.mapCategoryToEnglish(servicio.categoria)
+      id: ServicioData.id,
+      name: ServicioData.nombre,
+      description: ServicioData.descripcion,
+      price: ServicioData.precio,
+      estimatedDuration: ServicioData.duracionEstimada,
+      category: this.mapCategoryToEnglish(ServicioData.categoria)
     };
   }
 
-  private mapCategoryToEnglish(categoria: ServiceCategory): ServiceCategory {
-    // Since CategoriaServicio is now an alias for ServiceCategory, direct return
-    return categoria;
+  private mapCategoryToEnglish(categoria: string): ServiceCategory {
+    // Map Spanish category strings to ServiceCategory enum
+    switch (categoria) {
+      case 'Mantenimiento':
+        return ServiceCategory.MAINTENANCE;
+      case 'Reparación':
+        return ServiceCategory.REPAIR;
+      case 'Instalación':
+        return ServiceCategory.INSTALLATION;
+      case 'Limpieza':
+        return ServiceCategory.CLEANING;
+      default:
+        return ServiceCategory.MAINTENANCE;
+    }
   }
 
   private mapCategoryToSpanish(category: ServiceCategory): ServiceCategory {
-    // Since CategoriaServicio is now an alias for ServiceCategory, direct return
+    // Since CategoriaServicioData is now an alias for ServiceCategory, direct return
     return category;
   }
 
@@ -57,8 +69,8 @@ export class ServiceService {
         duracionEstimada: 90,
         categoria: ServiceCategory.INSTALLATION
       }
-    ] as Servicio[]).pipe(
-      map(servicios => servicios.map(servicio => this.mapServicioToService(servicio)))
+    ] as ServicioData[]).pipe(
+      map(ServicioData => ServicioData.map(ServicioData => this.mapServicioDataToService(ServicioData)))
     );
   }
 
@@ -81,7 +93,7 @@ export class ServiceService {
   }
 
   // Backward compatibility Spanish interface methods (deprecated)
-  getServicios(): Observable<Servicio[]> {
+  getServicioData(): Observable<ServicioData[]> {
     return of([
       {
         id: '1',
@@ -110,19 +122,19 @@ export class ServiceService {
     ]);
   }
 
-  getServicioById(id: string): Observable<Servicio | undefined> {
+  getServicioDataById(id: string): Observable<ServicioData | undefined> {
     return new Observable(observer => {
-      this.getServicios().subscribe(servicios => {
-        observer.next(servicios.find(servicio => servicio.id === id));
+      this.getServicioData().subscribe(ServicioData => {
+        observer.next(ServicioData.find(ServicioData => ServicioData.id === id));
         observer.complete();
       });
     });
   }
 
-  getServiciosPorCategoria(categoria: ServiceCategory): Observable<Servicio[]> {
+  getServicioDataPorCategoria(categoria: ServiceCategory): Observable<ServicioData[]> {
     return new Observable(observer => {
-      this.getServicios().subscribe(servicios => {
-        observer.next(servicios.filter(s => s.categoria === categoria));
+      this.getServicioData().subscribe(ServicioData => {
+        observer.next(ServicioData.filter(s => s.categoria === categoria));
         observer.complete();
       });
     });

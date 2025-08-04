@@ -6,8 +6,8 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const DATA_PATH = path.join(__dirname, 'citas.json');
-const RESENAS_PATH = path.join(__dirname, 'resenas.json');
+const DATA_PATH = path.join(__dirname, 'appointments.json');
+const REVIEWS_PATH = path.join(__dirname, 'reviews.json');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -77,7 +77,7 @@ app.put('/clientes', (req, res) => {
 
 // Endpoint para obtener todas las reseñas
 app.get('/resenas', (req, res) => {
-  fs.readFile(RESENAS_PATH, 'utf8', (err, data) => {
+  fs.readFile(REVIEWS_PATH, 'utf8', (err, data) => {
     if (err) {
       return res.status(500).json({ error: 'No se pudo leer el archivo de reseñas.' });
     }
@@ -89,7 +89,7 @@ app.get('/resenas', (req, res) => {
 // Endpoint para actualizar todas las reseñas (PUT)
 app.put('/resenas', (req, res) => {
   const nuevasResenas = req.body;
-  fs.writeFile(RESENAS_PATH, JSON.stringify(nuevasResenas, null, 2), 'utf8', err => {
+  fs.writeFile(REVIEWS_PATH, JSON.stringify(nuevasResenas, null, 2), 'utf8', err => {
     if (err) {
       return res.status(500).json({ error: 'No se pudo guardar el archivo de reseñas.' });
     }
@@ -115,7 +115,7 @@ app.delete('/debug/clear-all', (req, res) => {
       return res.status(500).json({ error: 'No se pudo limpiar citas y clientes.' });
     }
     // Limpiar reseñas
-    fs.writeFile(RESENAS_PATH, JSON.stringify([], null, 2), 'utf8', err2 => {
+    fs.writeFile(REVIEWS_PATH, JSON.stringify([], null, 2), 'utf8', err2 => {
       if (err2) {
         return res.status(500).json({ error: 'No se pudo limpiar reseñas.' });
       }

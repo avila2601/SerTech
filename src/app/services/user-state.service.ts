@@ -27,8 +27,8 @@ export class UserStateService {
   }
 
   private initializeUserState(): void {
-    const loggedTechnician = localStorage.getItem('loggedTechnician') || localStorage.getItem('tecnicoLogueado');
-    const loggedClient = localStorage.getItem('loggedClient') || localStorage.getItem('clienteLogueado');
+    const loggedTechnician = localStorage.getItem('loggedTechnician');
+    const loggedClient = localStorage.getItem('loggedClient');
     const emailLogin = localStorage.getItem('emailLogin');
 
     if (loggedTechnician) {
@@ -61,7 +61,6 @@ export class UserStateService {
 
   loginTechnician(technicianId: string): void {
     localStorage.setItem('loggedTechnician', technicianId);
-    localStorage.setItem('tecnicoLogueado', technicianId); // Backward compatibility
     this.userStateSubject.next({
       isLoggedIn: true,
       userType: UserType.TECHNICIAN,
@@ -71,7 +70,6 @@ export class UserStateService {
 
   loginClient(clientId: string, email?: string): void {
     localStorage.setItem('loggedClient', clientId);
-    localStorage.setItem('clienteLogueado', clientId); // Backward compatibility
     if (email) {
       localStorage.setItem('emailLogin', email);
     }
@@ -86,9 +84,7 @@ export class UserStateService {
   logout(): void {
     // Clear all auth-related localStorage items
     localStorage.removeItem('loggedTechnician');
-    localStorage.removeItem('tecnicoLogueado');
     localStorage.removeItem('loggedClient');
-    localStorage.removeItem('clienteLogueado');
     localStorage.removeItem('emailLogin');
 
     this.userStateSubject.next({

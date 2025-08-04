@@ -62,7 +62,7 @@ export class ClientsComponent implements OnInit {
     });
 
     // --- NEW: Load logged client data if exists ---
-    const clientId = localStorage.getItem('clienteLogueado'); // Keep Spanish key for compatibility
+    const clientId = localStorage.getItem('loggedClient');
     if (clientId) {
       this.clientService.getClients().subscribe(clients => {
         const client = clients.find(c => c.id === clientId);
@@ -92,15 +92,15 @@ export class ClientsComponent implements OnInit {
 
       const formValue = this.informationForm.value;
       const params = this.route.snapshot.queryParams;
-      const clientId = localStorage.getItem('clienteLogueado'); // Keep Spanish key for compatibility
-      const appointmentId = localStorage.getItem('citaEnProceso'); // Keep Spanish key for compatibility
+      const clientId = localStorage.getItem('loggedClient');
+      const appointmentId = localStorage.getItem('appointmentInProcess');
       const emailLogin = localStorage.getItem('emailLogin');
 
       const navigateToSummary = (newClientId?: string) => {
         // If there's an appointment in process, update its clientId
         if (appointmentId && newClientId) {
           this.appointmentService.updateClientInAppointment(appointmentId, newClientId);
-          localStorage.removeItem('citaEnProceso');
+          localStorage.removeItem('appointmentInProcess');
         }
 
         this.router.navigate(['/resumen-cita'], { // Keep Spanish route for compatibility

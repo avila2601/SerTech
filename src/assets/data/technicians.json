@@ -1,0 +1,65 @@
+[
+  {
+    "id": "1",
+    "nombre": "Juan Pérez",
+    "especialidad": "Electrodomésticos",
+    "calificacion": 4.7,
+    "disponible": true,
+    "foto": "https://i.pravatar.cc/150?img=2",
+    "contraseña": "clave1"
+  },
+  {
+    "id": "2",
+    "nombre": "María López",
+    "especialidad": "Refrigeradores y Aires Acondicionados",
+    "calificacion": 4.9,
+    "disponible": true,
+    "foto": "https://i.pravatar.cc/150?img=3",
+    "contraseña": "clave2"
+  },
+  {
+    "id": "3",
+    "nombre": "Carlos Ramírez",
+    "especialidad": "Lavadoras y Secadoras",
+    "calificacion": 4.5,
+    "disponible": false,
+    "foto": "https://i.pravatar.cc/150?img=4",
+    "contraseña": "clave3"
+  },
+  {
+    "id": "4",
+    "nombre": "Ana Torres",
+    "especialidad": "Microondas y Hornos",
+    "calificacion": 4.8,
+    "disponible": true,
+    "foto": "https://i.pravatar.cc/150?img=5",
+    "contraseña": "clave4"
+  },
+  {
+    "id": "5",
+    "nombre": "Luis Fernández",
+    "especialidad": "Televisores y Audio",
+    "calificacion": 4.6,
+    "disponible": true,
+    "foto": "https://i.pravatar.cc/150?img=6",
+    "contraseña": "clave5"
+  },
+  {
+    "id": "6",
+    "nombre": "Patricia Soto",
+    "especialidad": "Pequeños electrodomésticos",
+    "calificacion": 4.4,
+    "disponible": false,
+    "foto": "https://i.pravatar.cc/150?img=7",
+    "contraseña": "clave6"
+  },
+  {
+    "id": "7",
+    "nombre": "Esteban Amador",
+    "especialidad": "Todos los electros",
+    "calificacion": 4.9,
+    "disponible": true,
+    "foto": "https://i.pravatar.cc/150?img=7",
+    "contraseña": "clave7"
+  }
+]

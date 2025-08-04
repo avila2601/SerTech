@@ -1,18 +1,18 @@
 <div class="container">
-  <div class="tecnicos-header">
+  <div class="technicians-header">
     <h1>Profesionales expertos en equipos</h1>
     <p>Selecciona el técnico de tu preferencia</p>
   </div>
 
-  <div class="tecnicos-grid">
-    <div *ngFor="let technician of technicians" class="tecnico-card">
-      <div class="tecnico-avatar">
+  <div class="technicians-grid">
+    <div *ngFor="let technician of technicians" class="technician-card">
+      <div class="technician-avatar">
         <img
           [src]="technician.photo || getRandomAvatar(technician.id)"
           alt="Avatar técnico"
         />
       </div>
-      <div class="tecnico-info">
+      <div class="technician-info">
         <h3>{{ technician.name }}</h3>
         <p class="especialidad">{{ technician.specialty }}</p>
         <div class="rating-section">
@@ -30,7 +30,7 @@
           </button>
         </div>
       </div>
-      <div class="tecnico-actions">
+      <div class="technician-actions">
         <button
           class="btn btn-primary"
           [disabled]="!technician.available"
@@ -42,19 +42,20 @@
     </div>
   </div>
 
-  <div *ngIf="technicians.length === 0" class="no-tecnicos">
+  <div *ngIf="technicians.length === 0" class="no-technicians">
     <p>No hay técnicos disponibles en este momento.</p>
   </div>
 
-  <div class="tecnicos-actions">
+  <div class="technicians-actions">
     <button class="btn btn-secondary" (click)="goBackToServices()">
       Volver a Servicios
     </button>
   </div>
 
-  <app-tecnicos-resenas-modal
+  <!-- TODO: Implement technician reviews modal in English -->
+  <!-- <app-technician-reviews-modal
     *ngIf="showReviewsModal"
-    [tecnicoId]="modalTechnicianId"
+    [technicianId]="modalTechnicianId"
     (close)="closeReviewsModal()"
-  ></app-tecnicos-resenas-modal>
+  ></app-technician-reviews-modal> -->
 </div>

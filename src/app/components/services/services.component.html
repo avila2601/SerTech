@@ -1,9 +1,9 @@
 <div class="container">
-  <div class="servicios-header">
+  <div class="services-header">
     <h1>Servicio Seleccionado</h1>
   </div>
 
-  <div class="servicio-seleccionado" *ngIf="selectedService">
+  <div class="service-seleccionado" *ngIf="selectedService">
     <div class="service-card">
       <div class="service-icon">{{ serviceIcon }}</div>
       <h3>{{ selectedService.name }}</h3>
@@ -99,7 +99,7 @@
       </div>
     </div>
 
-    <div class="servicio-actions">
+    <div class="service-actions">
       <button class="btn btn-secondary" (click)="goBackToHome()">
         Volver al Inicio
       </button>

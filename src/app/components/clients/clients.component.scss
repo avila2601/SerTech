@@ -102,14 +102,14 @@
   margin-top: 0.25rem;
 }
 
-.tecnicos-grid {
+.technicians-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.tecnico-card {
+.technician-card {
   background: rgba(0, 0, 0, 0.2);
   border: 2px solid transparent;
   border-radius: 12px;
@@ -121,19 +121,19 @@
   gap: 1rem;
 }
 
-.tecnico-card:hover {
+.technician-card:hover {
   border-color: rgba(102, 126, 234, 0.3);
   background: rgba(102, 126, 234, 0.1);
   transform: translateY(-2px);
 }
 
-.tecnico-card.selected {
+.technician-card.selected {
   border-color: #667eea;
   background: rgba(102, 126, 234, 0.2);
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
-.tecnico-avatar {
+.technician-avatar {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -147,20 +147,20 @@
   flex-shrink: 0;
 }
 
-.tecnico-info h4 {
+.technician-info h4 {
   font-size: 1rem;
   color: #e0e0e0;
   margin-bottom: 0.25rem;
   font-weight: 600;
 }
 
-.tecnico-info p {
+.technician-info p {
   color: #9ca3af;
   font-size: 0.85rem;
   margin-bottom: 0.25rem;
 }
 
-.tecnico-rating {
+.technician-rating {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -311,26 +311,26 @@
     font-size: 0.95rem;
   }
 
-  .tecnicos-grid {
+  .technicians-grid {
     grid-template-columns: 1fr;
     gap: 0.8rem;
   }
 
-  .tecnico-card {
+  .technician-card {
     padding: 0.8rem;
   }
 
-  .tecnico-avatar {
+  .technician-avatar {
     width: 40px;
     height: 40px;
     font-size: 1rem;
   }
 
-  .tecnico-info h4 {
+  .technician-info h4 {
     font-size: 0.9rem;
   }
 
-  .tecnico-info p {
+  .technician-info p {
     font-size: 0.8rem;
   }
 
@@ -393,25 +393,25 @@
     font-size: 0.9rem;
   }
 
-  .tecnicos-grid {
+  .technicians-grid {
     gap: 0.6rem;
   }
 
-  .tecnico-card {
+  .technician-card {
     padding: 0.6rem;
   }
 
-  .tecnico-avatar {
+  .technician-avatar {
     width: 35px;
     height: 35px;
     font-size: 0.9rem;
   }
 
-  .tecnico-info h4 {
+  .technician-info h4 {
     font-size: 0.85rem;
   }
 
-  .tecnico-info p {
+  .technician-info p {
     font-size: 0.75rem;
   }
 

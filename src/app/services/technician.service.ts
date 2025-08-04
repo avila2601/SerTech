@@ -1,21 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Technician, Tecnico } from '../models';
-import { map } from 'rxjs/operators';
+import { Observable, map } from 'rxjs';
+import { Technician } from '../models';
+
+// Temporary interface for reading Spanish data files
+interface TecnicoData {
+  id: string;
+  nombre: string;
+  especialidad: string;
+  calificacion: number;
+  disponible: boolean;
+  foto?: string;
+  contraseña: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class TechnicianService {
-  private url = 'assets/data/tecnicos.json';
+  private url = 'assets/data/technicians.json';
 
   constructor(private http: HttpClient) {}
 
   // Primary English interface methods
   getTechnicians(): Observable<Technician[]> {
-    return this.http.get<Tecnico[]>(this.url).pipe(
-      map((tecnicos: Tecnico[]) =>
+    return this.http.get<TecnicoData[]>(this.url).pipe(
+      map((tecnicos: TecnicoData[]) =>
         tecnicos.map(tecnico => ({
           id: tecnico.id,
           name: tecnico.nombre,
@@ -48,11 +58,11 @@ export class TechnicianService {
   }
 
   // Backward compatibility Spanish interface methods (deprecated)
-  getTecnicos(): Observable<Tecnico[]> {
-    return this.http.get<Tecnico[]>(this.url);
+  getTecnicos(): Observable<TecnicoData[]> {
+    return this.http.get<TecnicoData[]>(this.url);
   }
 
-  getTecnicoById(id: string): Observable<Tecnico | undefined> {
+  getTecnicoById(id: string): Observable<TecnicoData | undefined> {
     return new Observable(observer => {
       this.getTecnicos().subscribe(tecnicos => {
         observer.next(tecnicos.find(tecnico => tecnico.id === id));
@@ -61,10 +71,10 @@ export class TechnicianService {
     });
   }
 
-  getTecnicosDisponibles(): Observable<Tecnico[]> {
+  getTecnicosDisponibles(): Observable<TecnicoData[]> {
     return new Observable(observer => {
       this.getTecnicos().subscribe(tecnicos => {
-        observer.next(tecnicos.filter((t: Tecnico) => t.disponible));
+        observer.next(tecnicos.filter((t: TecnicoData) => t.disponible));
         observer.complete();
       });
     });

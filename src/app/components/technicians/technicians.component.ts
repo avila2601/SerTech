@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TechnicianService } from '../../services/technician.service';
 import { Technician } from '../../models';
-import { TecnicosResenasModalComponent } from '../tecnicos/tecnicos-resenas-modal.component';
+// TODO: Implement TechnicianReviewsModalComponent in English
+// import { TechnicianReviewsModalComponent } from './technician-reviews-modal.component';
 
 @Component({
   selector: 'app-technicians',
   standalone: true,
-  imports: [CommonModule, TecnicosResenasModalComponent],
+  imports: [CommonModule],
   templateUrl: './technicians.component.html',
   styleUrls: ['./technicians.component.scss']
 })

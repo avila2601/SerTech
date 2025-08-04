@@ -1,20 +1,20 @@
 <div class="container">
-  <div class="mis-citas-header">
+  <div class="mis-appointments-header">
     <h1>Mis Citas</h1>
     <p>Gestiona tus citas programadas</p>
   </div>
 
-  <div class="citas-content" *ngIf="filteredAppointments.length > 0">
-    <div class="citas-grid">
-      <div *ngFor="let appointment of filteredAppointments" class="cita-card">
-        <div class="cita-header">
+  <div class="appointments-content" *ngIf="filteredAppointments.length > 0">
+    <div class="appointments-grid">
+      <div *ngFor="let appointment of filteredAppointments" class="appointment-card">
+        <div class="appointment-header">
           <h3>{{ getServiceName(appointment.serviceId) }}</h3>
           <span class="estado" [ngClass]="getStatusClass(appointment.status)">
             {{ getStatusText(appointment.status) }}
           </span>
         </div>
 
-        <div class="cita-details">
+        <div class="appointment-details">
           <div class="detail-item">
             <span class="label">Técnico:</span>
             <span class="value">{{
@@ -41,7 +41,7 @@
           </div>
         </div>
 
-        <div class="cita-actions">
+        <div class="appointment-actions">
           <button
             *ngIf="canEvaluate(appointment)"
             class="btn btn-primary btn-small"
@@ -55,7 +55,7 @@
   </div>
 
   <div class="no-citas" *ngIf="filteredAppointments.length === 0">
-    <div class="no-citas-content">
+    <div class="no-appointments-content">
       <h3>No tienes citas programadas</h3>
       <p>Cuando tengas citas programadas, aparecerán aquí.</p>
       <button class="btn btn-primary" (click)="goBack()">

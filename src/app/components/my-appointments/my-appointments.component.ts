@@ -5,7 +5,7 @@ import { AppointmentService } from '../../services/appointment.service';
 import { ServiceService } from '../../services/service.service';
 import { TechnicianService } from '../../services/technician.service';
 import { ClientService } from '../../services/client.service';
-import { ResenaService } from '../../services/resena.service';
+import { ReviewService } from '../../services/review.service';
 import { Appointment, Service, Technician, Client, AppointmentStatus } from '../../models';
 
 @Component({
@@ -34,7 +34,7 @@ export class MyAppointmentsComponent implements OnInit {
     private serviceService: ServiceService,
     private technicianService: TechnicianService,
     private clientService: ClientService,
-    private resenaService: ResenaService,
+    private reviewService: ReviewService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -50,8 +50,8 @@ export class MyAppointmentsComponent implements OnInit {
         this.currentClientId = null;
       } else {
         // Check localStorage for logged client or technician
-        const loggedClientId = localStorage.getItem('clienteLogueado'); // Keep Spanish key for compatibility
-        const loggedTechnicianId = localStorage.getItem('tecnicoLogueado'); // Keep Spanish key for compatibility
+        const loggedClientId = localStorage.getItem('loggedClient');
+        const loggedTechnicianId = localStorage.getItem('loggedTechnician');
 
         if (loggedClientId) {
           this.currentClientId = loggedClientId;

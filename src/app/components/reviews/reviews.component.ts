@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ResenaService } from '../../services/resena.service';
+import { ReviewService } from '../../services/review.service';
 
 @Component({
   selector: 'app-reviews',
@@ -20,7 +20,7 @@ export class ReviewsComponent {
   comment: string = '';
   isSubmitting: boolean = false;
 
-  constructor(private resenaService: ResenaService) {}
+  constructor(private reviewService: ReviewService) {}
 
   submitReview() {
     if (!this.rating || !this.comment.trim()) {
@@ -31,15 +31,15 @@ export class ReviewsComponent {
     this.isSubmitting = true;
 
     const newReview = {
-      tecnicoId: this.technicianId,
-      clienteId: this.clientId,
-      cliente: this.clientName,
-      comentario: this.comment,
-      calificacion: this.rating,
-      fecha: new Date().toISOString().split('T')[0]
+      technicianId: this.technicianId,
+      clientId: this.clientId,
+      clientName: this.clientName,
+      comment: this.comment,
+      rating: this.rating,
+      date: new Date().toISOString().split('T')[0]
     };
 
-    this.resenaService.agregarResena(newReview).subscribe({
+    this.reviewService.addReview(newReview).subscribe({
       next: () => {
         alert('¡Reseña enviada exitosamente!');
         this.reviewSubmitted.emit();

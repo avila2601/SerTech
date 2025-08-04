@@ -130,12 +130,12 @@ export class LoginComponent {
       const client = clients.find(c => c.email === this.email);
       if (client) {
         // Guardar el clienteId como cliente logueado y limpiar emailLogin
-        localStorage.setItem('clienteLogueado', client.id);
+        localStorage.setItem('loggedClient', client.id);
         localStorage.removeItem('emailLogin');
       } else {
-        // Si el email no existe, guardar el email en emailLogin y limpiar clienteLogueado
+        // Si el email no existe, guardar el email en emailLogin y limpiar loggedClient
         localStorage.setItem('emailLogin', this.email);
-        localStorage.removeItem('clienteLogueado');
+        localStorage.removeItem('loggedClient');
       }
 
       this.errorMessage = '';

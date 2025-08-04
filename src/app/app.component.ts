@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { IngresoTecnicosComponent } from './components/tecnicos/ingreso-tecnicos.component';
+// TODO: Implement TechnicianLoginComponent and TechnicianReviewsModalComponent
+// import { TechnicianLoginComponent } from './components/technicians/technician-login.component';
+// import { TechnicianReviewsModalComponent } from './components/technicians/technician-reviews-modal.component';
 import { Router } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { TecnicosResenasModalComponent } from './components/tecnicos/tecnicos-resenas-modal.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, IngresoTecnicosComponent, LoginComponent, TecnicosResenasModalComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, LoginComponent],
   template: `
     <nav class="navbar">
       <div class="container">
@@ -53,14 +54,16 @@ import { TecnicosResenasModalComponent } from './components/tecnicos/tecnicos-re
       <router-outlet></router-outlet>
     </main>
 
-    <app-ingreso-tecnicos *ngIf="showTechniciansModal" (close)="closeTechniciansModal()" (loginSuccess)="loginTechnician($event)"></app-ingreso-tecnicos>
+    <!-- TODO: Implement technician login modal in English -->
+    <!-- <app-technician-login *ngIf="showTechniciansModal" (close)="closeTechniciansModal()" (loginSuccess)="loginTechnician($event)"></app-technician-login> -->
     <app-login *ngIf="showLoginModal" (close)="closeLoginModal()" (loginSuccess)="updateUserState()"></app-login>
 
-    <app-tecnicos-resenas-modal
+    <!-- TODO: Implement technician reviews modal in English -->
+    <!-- <app-technician-reviews-modal
       *ngIf="showTechnicianReviewsModal"
-      [tecnicoId]="technicianIdForReviews"
+      [technicianId]="technicianIdForReviews"
       (close)="closeTechnicianReviewsModal()"
-    ></app-tecnicos-resenas-modal>
+    ></app-technician-reviews-modal> -->
 
     <footer class="footer">
       <div class="container">
@@ -265,13 +268,11 @@ export class AppComponent implements OnInit {
   loginTechnician(technicianId: string) {
     this.loggedTechnician = technicianId;
     localStorage.setItem('loggedTechnician', technicianId);
-    localStorage.setItem('tecnicoLogueado', technicianId); // Backward compatibility
   }
 
   logoutTechnician() {
     this.loggedTechnician = null;
     localStorage.removeItem('loggedTechnician');
-    localStorage.removeItem('tecnicoLogueado'); // Backward compatibility
     this.router.navigate(['/']);
   }
 
@@ -287,7 +288,6 @@ export class AppComponent implements OnInit {
   logoutClient() {
     this.loggedClient = null;
     localStorage.removeItem('loggedClient');
-    localStorage.removeItem('clienteLogueado'); // Backward compatibility
     localStorage.removeItem('emailLogin');
     this.router.navigate(['/']);
   }
@@ -306,21 +306,21 @@ export class AppComponent implements OnInit {
     this.reloadUserState();
 
     // Clean up emailLogin if no client is logged in
-    if (!localStorage.getItem('loggedClient') && !localStorage.getItem('clienteLogueado')) {
+    if (!localStorage.getItem('loggedClient')) {
       localStorage.removeItem('emailLogin');
     }
 
     // Listen to localStorage changes to update navbar
     window.addEventListener('storage', (event) => {
-      if (event.key?.includes('logged') || event.key?.includes('Logueado') || event.key === 'emailLogin') {
+      if (event.key?.includes('logged') || event.key === 'emailLogin') {
         this.reloadUserState();
       }
     });
   }
 
   reloadUserState() {
-    this.loggedTechnician = localStorage.getItem('loggedTechnician') || localStorage.getItem('tecnicoLogueado');
-    this.loggedClient = localStorage.getItem('loggedClient') || localStorage.getItem('clienteLogueado');
+    this.loggedTechnician = localStorage.getItem('loggedTechnician');
+    this.loggedClient = localStorage.getItem('loggedClient');
   }
 
   // Método público para que otros componentes puedan actualizar el navbar
@@ -329,6 +329,6 @@ export class AppComponent implements OnInit {
   }
 
   get isLoggedAsClient(): boolean {
-    return !!(localStorage.getItem('loggedClient') || localStorage.getItem('clienteLogueado') || localStorage.getItem('emailLogin'));
+    return !!(localStorage.getItem('loggedClient') || localStorage.getItem('emailLogin'));
   }
 }

@@ -4,8 +4,8 @@ import { inject } from '@angular/core';
 
 export const AuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const loggedTechnician = localStorage.getItem('loggedTechnician') || localStorage.getItem('tecnicoLogueado');
-  const loggedClient = localStorage.getItem('loggedClient') || localStorage.getItem('clienteLogueado');
+  const loggedTechnician = localStorage.getItem('loggedTechnician');
+  const loggedClient = localStorage.getItem('loggedClient');
   const emailLogin = localStorage.getItem('emailLogin');
 
   if (loggedTechnician || loggedClient || emailLogin) {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Appointment, Cita, AppointmentStatus, EstadoCita } from '../models';
+import { Appointment, AppointmentStatus } from '../models';
+import { CitaData } from '../models/data-types';
 import { StorageService } from './storage.service';
 import { map } from 'rxjs/operators';
 
@@ -21,7 +22,7 @@ export class AppointmentService {
     });
   }
 
-  private mapCitaToAppointment(cita: Cita): Appointment {
+  private mapCitaToAppointment(cita: CitaData): Appointment {
     return {
       id: cita.id,
       clientId: cita.clienteId,
@@ -36,13 +37,26 @@ export class AppointmentService {
     };
   }
 
-  private mapStatusToEnglish(estado: AppointmentStatus): AppointmentStatus {
-    // Since EstadoCita is now an alias for AppointmentStatus, we can directly return
-    return estado;
+  private mapStatusToEnglish(estado: string): AppointmentStatus {
+    // Map Spanish status strings to AppointmentStatus enum
+    switch (estado) {
+      case 'Pendiente':
+        return AppointmentStatus.PENDING;
+      case 'Confirmada':
+        return AppointmentStatus.CONFIRMED;
+      case 'En Proceso':
+        return AppointmentStatus.IN_PROGRESS;
+      case 'Completada':
+        return AppointmentStatus.COMPLETED;
+      case 'Cancelada':
+        return AppointmentStatus.CANCELLED;
+      default:
+        return AppointmentStatus.PENDING;
+    }
   }
 
-  private mapAppointmentToCita(appointment: Partial<Appointment>): Partial<Cita> {
-    const cita: Partial<Cita> = {};
+  private mapAppointmentToCita(appointment: Partial<Appointment>): Partial<CitaData> {
+    const cita: Partial<CitaData> = {};
     if (appointment.clientId) cita.clienteId = appointment.clientId;
     if (appointment.technicianId) cita.tecnicoId = appointment.technicianId;
     if (appointment.serviceId) cita.servicioId = appointment.serviceId;
@@ -71,7 +85,7 @@ export class AppointmentService {
   createAppointment(appointment: Omit<Appointment, 'id' | 'status'>): Observable<Appointment> {
     return new Observable(observer => {
       const citaData = this.mapAppointmentToCita(appointment);
-      this.storageService.createAppointment(citaData as Omit<Cita, 'id' | 'estado'>).subscribe({
+      this.storageService.createAppointment(citaData as Omit<CitaData, 'id' | 'estado'>).subscribe({
         next: (nuevaCita) => {
           const newAppointment = this.mapCitaToAppointment(nuevaCita);
           observer.next(newAppointment);
@@ -95,15 +109,15 @@ export class AppointmentService {
   }
 
   // Backward compatibility Spanish interface methods (deprecated)
-  getCitas(): Observable<Cita[]> {
+  getCitas(): Observable<CitaData[]> {
     return this.storageService.getAppointments();
   }
 
-  getCitasPorCliente(clienteId: string): Observable<Cita[]> {
+  getCitasPorCliente(clienteId: string): Observable<CitaData[]> {
     return this.storageService.getAppointmentsByClient(clienteId);
   }
 
-  crearCita(cita: Omit<Cita, 'id' | 'estado'>): Observable<Cita> {
+  crearCita(cita: Omit<CitaData, 'id' | 'estado'>): Observable<CitaData> {
     return this.storageService.createAppointment(cita);
   }
 
