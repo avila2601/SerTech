@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="mis-citas-header">
+    <h1>Mis Citas</h1>
+    <p>Gestiona tus citas programadas</p>
+  </div>
+
+  <div class="citas-content" *ngIf="filteredAppointments.length > 0">
+    <div class="citas-grid">
+      <div *ngFor="let appointment of filteredAppointments" class="cita-card">
+        <div class="cita-header">
+          <h3>{{ getServiceName(appointment.serviceId) }}</h3>
+          <span class="estado" [ngClass]="getStatusClass(appointment.status)">
+            {{ getStatusText(appointment.status) }}
+          </span>
+        </div>
+
+        <div class="cita-details">
+          <div class="detail-item">
+            <span class="label">Técnico:</span>
+            <span class="value">{{
+              getTechnicianName(appointment.technicianId)
+            }}</span>
+          </div>
+          <div class="detail-item" *ngIf="currentTechnicianId">
+            <span class="label">Cliente:</span>
+            <span class="value">{{ getClientName(appointment.clientId) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Fecha:</span>
+            <span class="value">{{
+              appointment.date | date : "dd/MM/yyyy"
+            }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Hora:</span>
+            <span class="value">{{ appointment.time }}</span>
+          </div>
+          <div class="detail-item" *ngIf="appointment.notes">
+            <span class="label">Notas:</span>
+            <span class="value">{{ appointment.notes }}</span>
+          </div>
+        </div>
+
+        <div class="cita-actions">
+          <button
+            *ngIf="canEvaluate(appointment)"
+            class="btn btn-primary btn-small"
+            (click)="evaluateTechnician(appointment)"
+          >
+            Evaluar Técnico
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-citas" *ngIf="filteredAppointments.length === 0">
+    <div class="no-citas-content">
+      <h3>No tienes citas programadas</h3>
+      <p>Cuando tengas citas programadas, aparecerán aquí.</p>
+      <button class="btn btn-primary" (click)="goBack()">
+        Volver al Inicio
+      </button>
+    </div>
+  </div>
+
+  <div class="actions-footer">
+    <button class="btn btn-secondary" (click)="goBack()">
+      Volver al Inicio
+    </button>
+  </div>
+</div>

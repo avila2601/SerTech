@@ -60,8 +60,8 @@ export class TechniciansComponent implements OnInit {
       if (params['date']) preservedParams.date = params['date'];
       if (params['time']) preservedParams.time = params['time'];
 
-      // Navigate to clients component (keeping Spanish route for now)
-      this.router.navigate(['/clientes'], {
+      // Navigate to clients component (using English route)
+      this.router.navigate(['/clients'], {
         queryParams: preservedParams
       });
     });

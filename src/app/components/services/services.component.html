@@ -87,11 +87,7 @@
               <label for="hora" class="hora-label"
                 >Hora del servicio (opcional)</label
               >
-              <select
-                id="hora"
-                [(ngModel)]="selectedTime"
-                class="hora-select"
-              >
+              <select id="hora" [(ngModel)]="selectedTime" class="hora-select">
                 <option value="">Selecciona una hora</option>
                 <option *ngFor="let hour of availableHours" [value]="hour">
                   {{ hour }}
@@ -123,9 +119,7 @@
   <!-- Modal de ayuda para modelo -->
   <div class="modal-modelo" *ngIf="showModelModal">
     <div class="modal-content">
-      <button class="cerrar-modal" (click)="closeModelModal()">
-        &times;
-      </button>
+      <button class="cerrar-modal" (click)="closeModelModal()">&times;</button>
       <h2 class="modal-titulo">Encuentra el modelo</h2>
       <p class="modal-descripcion">
         Este número normalmente se encuentra en una etiqueta o placa ubicada en
