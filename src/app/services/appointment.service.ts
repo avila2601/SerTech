@@ -17,7 +17,7 @@ export class AppointmentService {
 
   private refreshAppointments(): void {
     this.storageService.getAppointments().subscribe(citas => {
-      const appointments = citas.map(this.mapCitaToAppointment);
+      const appointments = citas.map(cita => this.mapCitaToAppointment(cita));
       this.appointmentsSubject.next(appointments);
     });
   }

@@ -6,7 +6,6 @@ import { ClientService } from '../../services/client.service';
 import { TechnicianService } from '../../services/technician.service';
 import { Client, Appointment, Technician } from '../../models';
 import { switchMap } from 'rxjs/operators';
-import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'app-appointment-summary',
@@ -40,25 +39,24 @@ export class AppointmentSummaryComponent implements OnInit {
     private router: Router,
     private appointmentService: AppointmentService,
     private clientService: ClientService,
-    private technicianService: TechnicianService,
-    private appComponent: AppComponent
+    private technicianService: TechnicianService
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.brand = params['marca'] || '';
-      this.product = params['producto'] || '';
-      this.model = params['modelo'] || '';
-      this.symptoms = params['sintomas'] || '';
-      this.location = params['ubicacion'] || '';
-      this.date = params['fecha'] || '';
-      this.time = params['hora'] || '';
-      this.name = params['nombre'] || '';
+      this.brand = params['brand'] || '';
+      this.product = params['product'] || '';
+      this.model = params['model'] || '';
+      this.symptoms = params['symptoms'] || '';
+      this.location = params['location'] || '';
+      this.date = params['date'] || '';
+      this.time = params['time'] || '';
+      this.name = params['name'] || '';
       this.email = params['email'] || '';
-      this.phone = params['telefono'] || '';
-      this.address = params['direccion'] || '';
-      this.technicianId = params['tecnicoId'] || '';
-      this.serviceId = params['servicioId'] || '';
+      this.phone = params['phone'] || '';
+      this.address = params['address'] || '';
+      this.technicianId = params['technicianId'] || '';
+      this.serviceId = params['serviceId'] || '';
 
       if (this.technicianId) {
         this.loadTechnicianData();
@@ -88,6 +86,9 @@ export class AppointmentSummaryComponent implements OnInit {
 
     this.clientService.addClient(clientData).pipe(
       switchMap(createdClient => {
+        // Store client as logged in
+        localStorage.setItem('loggedClient', createdClient.id);
+
         // Create appointment
         const appointmentData: Omit<Appointment, 'id' | 'status'> = {
           clientId: createdClient.id,
@@ -105,6 +106,11 @@ export class AppointmentSummaryComponent implements OnInit {
     ).subscribe({
       next: (createdAppointment) => {
         alert('¡Cita agendada exitosamente!');
+        // Trigger storage event to update navbar
+        window.dispatchEvent(new StorageEvent('storage', {
+          key: 'loggedClient',
+          newValue: localStorage.getItem('loggedClient')
+        }));
         this.router.navigate(['/my-appointments']);
       },
       error: (error: any) => {
@@ -118,15 +124,15 @@ export class AppointmentSummaryComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/clients'], {
       queryParams: {
-        marca: this.brand,
-        producto: this.product,
-        modelo: this.model,
-        sintomas: this.symptoms,
-        ubicacion: this.location,
-        fecha: this.date,
-        hora: this.time,
-        tecnicoId: this.technicianId,
-        servicioId: this.serviceId
+        brand: this.brand,
+        product: this.product,
+        model: this.model,
+        symptoms: this.symptoms,
+        location: this.location,
+        date: this.date,
+        time: this.time,
+        technicianId: this.technicianId,
+        serviceId: this.serviceId
       }
     });
   }

@@ -103,7 +103,7 @@ export class ClientsComponent implements OnInit {
           localStorage.removeItem('appointmentInProcess');
         }
 
-        this.router.navigate(['/resumen-cita'], { // Keep Spanish route for compatibility
+        this.router.navigate(['/appointment-summary'], {
           queryParams: {
             brand: this.selectedBrand,
             product: this.selectedProduct,

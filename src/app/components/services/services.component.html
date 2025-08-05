@@ -37,7 +37,7 @@
         </select>
       </div>
 
-      <div class="modelo-selector" *ngIf="selectedProduct">
+      <div class="modelo-selector" *ngIf="selectedBrand">
         <select class="modelo-select" [(ngModel)]="selectedModel">
           <option value="" disabled selected>Modelo (opcional)</option>
           <option *ngFor="let model of models" [value]="model">
@@ -53,7 +53,7 @@
           * Ingresar el modelo del producto y los síntomas presentados nos
           permitirá solucionar tu requerimiento de forma más rápida y eficiente
         </div>
-        <div class="sintomas-box" *ngIf="selectedProduct">
+        <div class="sintomas-box" *ngIf="selectedBrand">
           <textarea
             class="sintomas-textarea"
             [(ngModel)]="symptoms"
@@ -71,7 +71,7 @@
         </div>
 
         <!-- Fecha y Hora -->
-        <div class="fecha-hora-selector" *ngIf="selectedLocation">
+        <div class="fecha-hora-selector" *ngIf="selectedBrand">
           <div class="fecha-hora-inputs">
             <div class="fecha-selector">
               <label for="fecha">Fecha del servicio (opcional)</label>

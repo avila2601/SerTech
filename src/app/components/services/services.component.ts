@@ -32,7 +32,8 @@ export class ServicesComponent implements OnInit {
   minDate: string;
   availableHours = [
     '08:00', '09:00', '10:00', '11:00', '12:00', '13:00',
-    '14:00', '15:00', '16:00', '17:00', '18:00'
+    '14:00', '15:00', '16:00', '17:00', '18:00', '19:00',
+    '20:00', '21:00', '22:00', '23:00'
   ];
   locations: string[] = [
     'Cerrillos', 'Cerro Navia', 'Conchalí', 'El Bosque', 'Estación Central',
@@ -132,8 +133,19 @@ export class ServicesComponent implements OnInit {
         }
       }
       // Save received icon
-      if (params['icon']) {
-        this.serviceIcon = params['icon'];
+      const icon = params['icon'];
+      if (icon) {
+        this.serviceIcon = icon;
+      }
+
+      // If no service selected by this point, select a default one
+      if (!this.selectedService && !serviceType && !params['brand']) {
+        this.serviceService.getServicesByCategory(ServiceCategory.REPAIR).subscribe(services => {
+          if (services && services.length > 0) {
+            this.selectedService = services[0];
+            this.serviceIcon = '🔧';
+          }
+        });
       }
     });
   }
@@ -161,16 +173,15 @@ export class ServicesComponent implements OnInit {
       alert('Por favor selecciona una marca');
       return;
     }
-    if (!this.selectedProduct) {
-      alert('Por favor selecciona un tipo de producto');
-      return;
-    }
-    if (!this.selectedLocation) {
-      alert('Por favor selecciona tu ubicación');
-      return;
-    }
-    // selectedDate and selectedTime are optional
-    // selectedModel is optional
+    // if (!this.selectedProduct) {
+    //   alert('Por favor selecciona un tipo de producto');
+    //   return;
+    // }
+    // if (!this.selectedLocation) {
+    //   alert('Por favor selecciona tu ubicación');
+    //   return;
+    // }
+    
     // Here you can add the logic to schedule the service
     console.log('Scheduling service:', {
       service: this.selectedService,

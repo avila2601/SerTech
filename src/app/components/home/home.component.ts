@@ -13,8 +13,8 @@ export class HomeComponent {
   constructor(private router: Router) {}
 
   navigateToService(serviceType: string, icon: string): void {
-    this.router.navigate(['/servicios'], {
-      queryParams: { tipo: serviceType, icono: icon }
+    this.router.navigate(['/services'], {
+      queryParams: { type: serviceType, icon: icon }
     });
   }
 }
