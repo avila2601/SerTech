@@ -1,10 +1,9 @@
-<div class="container"></div>
+<div class="container">
   <div class="my-appointments-header">
     <h1>Mis Citas</h1>
     <p>Gestiona tus servicios técnicos programados</p>
   </div>
 
-<<<<<<< HEAD
   <div class="appointments-content" *ngIf="filteredAppointments.length > 0">
     <div class="appointments-grid">
       <div
@@ -158,140 +157,11 @@
               }}</span>
             </div>
           </div>
-=======
-  <div class="appointments-grid">
-    <div *ngFor="let appointment of filteredAppointments" class="appointment-card">
-      <div class="appointment-header">
-        <div class="appointment-info">
-          <div class="service-status-row">
-            <h3>{{ getServiceName(appointment.serviceId) }}</h3>
-            <span class="status-badge" [ngClass]="getAppointmentStatusClass(appointment)">
-              {{ getAppointmentStatus(appointment) }}
-            </span>
-          </div>
-          <div *ngIf="getAppointmentStatus(appointment) === 'Terminada'">
-            <button
-              *ngIf="!isAlreadyEvaluated(appointment)"
-              class="btn btn-primary btn-evaluate"
-              (click)="openReviewModal(appointment)"
-            >
-              Evaluar servicio
-            </button>
-            <button
-              *ngIf="isAlreadyEvaluated(appointment)"
-              class="btn btn-secondary btn-evaluated"
-              disabled
-            >
-              Evaluado
-            </button>
-          </div>
-          <p>{{ formatDate(appointment.date) }} - {{ appointment.time }}</p>
-        </div>
-      </div>
-
-      <div class="appointment-details">
-        <!-- Datos Personales -->
-        <div class="detail-section">
-          <h4>Datos Personales</h4>
-          <div class="detail-row">
-            <span class="detail-label">Nombre:</span>
-            <span class="detail-value">{{
-              getClientName(appointment.clientId)
-            }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Email:</span>
-            <span class="detail-value">{{
-              getClientEmail(appointment.clientId)
-            }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Teléfono:</span>
-            <span class="detail-value">{{
-              getClientPhone(appointment.clientId)
-            }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Dirección:</span>
-            <span class="detail-value">{{
-              getClientAddress(appointment.clientId)
-            }}</span>
-          </div>
-          <div class="detail-row" *ngIf="getServiceInfo(appointment).ubicacion">
-            <span class="detail-label">Ubicación:</span>
-            <span class="detail-value">{{
-              getServiceInfo(appointment).ubicacion
-            }}</span>
-          </div>
-        </div>
-
-        <!-- Información del Técnico -->
-        <div class="detail-section">
-          <h4>Información del Técnico</h4>
-          <div class="detail-row">
-            <span class="detail-label">Técnico:</span>
-            <span class="detail-value">{{
-              getTechnicianName(appointment.technicianId)
-            }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Especialidad:</span>
-            <span class="detail-value">{{
-              getTechnicianSpecialty(appointment.technicianId)
-            }}</span>
-          </div>
->>>>>>> 9c96325ffa0600b4d82747c8d2cb2bc933498b08
-        </div>
-
-        <!-- Información del Servicio -->
-        <div class="detail-section">
-          <h4>Información del Servicio</h4>
-          <div class="detail-row" *ngIf="getServiceInfo(appointment).marca">
-            <span class="detail-label">Marca:</span>
-            <span class="detail-value">{{ getServiceInfo(appointment).marca }}</span>
-          </div>
-          <div class="detail-row" *ngIf="getServiceInfo(appointment).producto">
-            <span class="detail-label">Producto:</span>
-            <span class="detail-value">{{
-              getServiceInfo(appointment).producto
-            }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Referencia:</span>
-            <span class="detail-value">{{
-              getServiceInfo(appointment).referencia || "No aplica"
-            }}</span>
-          </div>
-          <div class="detail-row" *ngIf="getServiceInfo(appointment).modelo">
-            <span class="detail-label">Modelo:</span>
-            <span class="detail-value">{{ getServiceInfo(appointment).modelo }}</span>
-          </div>
-          <div class="detail-row" *ngIf="getServiceInfo(appointment).sintomas">
-            <span class="detail-label">Síntomas:</span>
-            <span class="detail-value">{{
-              getServiceInfo(appointment).sintomas
-            }}</span>
-          </div>
-          <div class="detail-row" *ngIf="getServiceInfo(appointment).modeloInfo">
-            <span class="detail-label">Info del Modelo:</span>
-            <span class="detail-value">{{
-              getServiceInfo(appointment).modeloInfo
-            }}</span>
-          </div>
-        </div>
-
-        <div class="detail-section cost">
-          <h4>Costo del Servicio</h4>
-          <div class="detail-row">
-            <span class="detail-label">Valor:</span>
-            <span></span>
-          </div>
         </div>
       </div>
     </div>
   </div>
 
-<<<<<<< HEAD
   <div class="no-citas" *ngIf="filteredAppointments.length === 0">
     <div class="no-appointments-content">
       <h3>No tienes citas programadas</h3>
@@ -304,24 +174,11 @@
 </div>
 
 <!-- Modal de Reseñas -->
-=======
-  <div *ngIf="filteredAppointments.length === 0" class="no-appointments">
-    <h3>No tienes citas programadas</h3>
-    <p>Aún no has agendado ningún servicio técnico.</p>
-  </div>
-</div>
-
->>>>>>> 9c96325ffa0600b4d82747c8d2cb2bc933498b08
 <app-reviews
   *ngIf="showReviewModal"
   [technicianId]="reviewTechnicianId"
   [clientId]="reviewClientId"
   [clientName]="reviewClientName"
-<<<<<<< HEAD
   (reviewSubmitted)="onReviewSubmitted()"
   (closeModal)="closeReviewModal()"
-=======
-  (modalClosed)="closeReviewModal()"
-  (reviewSubmitted)="onReviewSubmitted()"
->>>>>>> 9c96325ffa0600b4d82747c8d2cb2bc933498b08
 ></app-reviews>
