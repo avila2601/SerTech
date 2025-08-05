@@ -99,20 +99,26 @@ export class AppointmentSummaryComponent implements OnInit {
         address: this.address
       };
 
+      console.log('=== INICIANDO CREACIÓN DE CLIENTE ===');
+      console.log('Datos del cliente a crear:', clientData);
+
       this.clientService.addClient(clientData).pipe(
         switchMap(createdClient => {
-          console.log('Cliente creado:', createdClient);
+          console.log('Cliente creado exitosamente:', createdClient);
           // Store client as logged in and save email for filtering
           localStorage.setItem('loggedClient', createdClient.id);
           localStorage.setItem('emailLogin', createdClient.email);
           console.log('Cliente guardado en localStorage:', createdClient.id, createdClient.email);
+          console.log('=== INICIANDO CREACIÓN DE CITA ===');
           return this.createAppointmentWithClient(createdClient.id);
         })
       ).subscribe({
         next: (createdAppointment) => {
+          console.log('Cita creada exitosamente:', createdAppointment);
           this.handleAppointmentSuccess();
         },
         error: (error: any) => {
+          console.error('Error en el proceso completo:', error);
           this.handleAppointmentError(error);
         }
       });

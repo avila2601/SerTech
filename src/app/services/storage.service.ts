@@ -63,23 +63,39 @@ export class StorageService {
   }
 
   addClient(client: Omit<ClienteData, 'id'>): Observable<ClienteData> {
+    console.log('=== STORAGE SERVICE: Iniciando addClient ===');
+    console.log('Cliente a agregar:', client);
+
     return this.http.get<ClienteData[]>('https://sertech-backend.onrender.com/clientes').pipe(
       switchMap((clients: ClienteData[]) => {
+        console.log('Clientes existentes obtenidos:', clients);
         // Asegurar que clientes sea un array
         if (!Array.isArray(clients)) {
+          console.log('Clientes no es array, inicializando como array vacío');
           clients = [];
         }
         // Calcular el nuevo ID
         const newId = clients.length > 0 ? (Math.max(...clients.map(c => +c.id)) + 1).toString() : '1';
+        console.log('Nuevo ID calculado:', newId);
+
         const newClient: ClienteData = {
           ...client,
           id: newId
         };
+        console.log('Cliente completo a crear:', newClient);
+
         const updatedClients = [...clients, newClient];
+        console.log('Lista actualizada de clientes:', updatedClients);
+
         return this.http.put<ClienteData[]>(
           'https://sertech-backend.onrender.com/clientes',
           updatedClients
-        ).pipe(map(() => newClient));
+        ).pipe(
+          map(() => {
+            console.log('Cliente guardado exitosamente en Render');
+            return newClient;
+          })
+        );
       })
     );
   }

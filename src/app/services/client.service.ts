@@ -51,6 +51,9 @@ export class ClientService {
   }
 
   addClient(client: Omit<Client, 'id'>): Observable<Client> {
+    console.log('=== CLIENT SERVICE: Iniciando addClient ===');
+    console.log('Cliente recibido (English):', client);
+
     // Convert English client to Spanish format for storage
     const ClienteData: Omit<ClienteData, 'id'> = {
       nombre: client.name,
@@ -59,14 +62,20 @@ export class ClientService {
       direccion: client.address
     };
 
+    console.log('Cliente convertido (Spanish):', ClienteData);
+
     return this.storageService.addClient(ClienteData).pipe(
-      map((ClienteData: ClienteData) => ({
-        id: ClienteData.id,
-        name: ClienteData.nombre,
-        email: ClienteData.email,
-        phone: ClienteData.telefono,
-        address: ClienteData.direccion
-      }) as Client)
+      map((ClienteData: ClienteData) => {
+        const convertedClient = {
+          id: ClienteData.id,
+          name: ClienteData.nombre,
+          email: ClienteData.email,
+          phone: ClienteData.telefono,
+          address: ClienteData.direccion
+        } as Client;
+        console.log('Cliente retornado (English):', convertedClient);
+        return convertedClient;
+      })
     );
   }
 
