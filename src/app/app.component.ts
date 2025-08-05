@@ -272,6 +272,10 @@ export class AppComponent implements OnInit {
   logoutTechnician() {
     this.loggedTechnician = null;
     localStorage.removeItem('loggedTechnician');
+    localStorage.removeItem('loggedClient');
+    localStorage.removeItem('emailLogin');
+    localStorage.removeItem('appointmentInProcess');
+    this.reloadUserState(); // Actualizar el estado del navbar
     this.router.navigate(['/']);
   }
 
@@ -288,7 +292,21 @@ export class AppComponent implements OnInit {
     this.loggedClient = null;
     localStorage.removeItem('loggedClient');
     localStorage.removeItem('emailLogin');
+    localStorage.removeItem('loggedTechnician');
+    localStorage.removeItem('appointmentInProcess');
+    this.reloadUserState(); // Actualizar el estado del navbar
     this.router.navigate(['/']);
+  }
+
+  // Función para limpiar completamente localStorage (si se necesita)
+  clearAllUserData() {
+    this.loggedClient = null;
+    this.loggedTechnician = null;
+    localStorage.removeItem('loggedClient');
+    localStorage.removeItem('loggedTechnician');
+    localStorage.removeItem('emailLogin');
+    localStorage.removeItem('appointmentInProcess');
+    // Note: No limpiamos 'sertech-data' porque contiene datos de la aplicación
   }
 
   openTechnicianReviewsModal() {

@@ -75,53 +75,77 @@ export class AppointmentSummaryComponent implements OnInit {
 
     this.isScheduling = true;
 
-    // Create or get client
-    const clientData: Client = {
-      id: '',
-      name: this.name,
-      email: this.email,
-      phone: this.phone,
-      address: this.address
-    };
+    // Check if client is already logged in
+    const loggedClientId = localStorage.getItem('loggedClient');
 
-    this.clientService.addClient(clientData).pipe(
-      switchMap(createdClient => {
-        // Store client as logged in
-        localStorage.setItem('loggedClient', createdClient.id);
+    if (loggedClientId) {
+      // Use existing logged client
+      this.createAppointmentWithClient(loggedClientId).subscribe({
+        next: (createdAppointment) => {
+          this.handleAppointmentSuccess();
+        },
+        error: (error: any) => {
+          this.handleAppointmentError(error);
+        }
+      });
+    } else {
+      // Create new client
+      const clientData: Client = {
+        id: '',
+        name: this.name,
+        email: this.email,
+        phone: this.phone,
+        address: this.address
+      };
 
-        // Create appointment
-        const appointmentData: Omit<Appointment, 'id' | 'status'> = {
-          clientId: createdClient.id,
-          technicianId: this.technicianId,
-          serviceId: this.serviceId,
-          equipmentId: undefined,
-          date: new Date(this.date),
-          time: this.time,
-          notes: this.symptoms,
-          address: this.location
-        };
-
-        return this.appointmentService.createAppointment(appointmentData);
-      })
-    ).subscribe({
-      next: (createdAppointment) => {
-        alert('¡Cita agendada exitosamente!');
-        // Trigger storage event to update navbar
-        window.dispatchEvent(new StorageEvent('storage', {
-          key: 'loggedClient',
-          newValue: localStorage.getItem('loggedClient')
-        }));
-        this.router.navigate(['/my-appointments']);
-      },
-      error: (error: any) => {
-        console.error('Error scheduling appointment:', error);
-        alert('Error al agendar la cita. Por favor, intenta de nuevo.');
-        this.isScheduling = false;
-      }
-    });
+      this.clientService.addClient(clientData).pipe(
+        switchMap(createdClient => {
+          // Store client as logged in
+          localStorage.setItem('loggedClient', createdClient.id);
+          return this.createAppointmentWithClient(createdClient.id);
+        })
+      ).subscribe({
+        next: (createdAppointment) => {
+          this.handleAppointmentSuccess();
+        },
+        error: (error: any) => {
+          this.handleAppointmentError(error);
+        }
+      });
+    }
   }
 
-  goBack(): void {
+  private createAppointmentWithClient(clientId: string) {
+    // Create appointment
+    const appointmentData: Omit<Appointment, 'id' | 'status'> = {
+      clientId: clientId,
+      technicianId: this.technicianId,
+      serviceId: this.serviceId,
+      equipmentId: undefined,
+      date: new Date(this.date),
+      time: this.time,
+      notes: this.symptoms,
+      address: this.location
+    };
+
+    return this.appointmentService.createAppointment(appointmentData);
+  }
+
+  private handleAppointmentSuccess() {
+    alert('¡Cita agendada exitosamente!');
+    // Trigger storage event to update navbar
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: 'loggedClient',
+      newValue: localStorage.getItem('loggedClient')
+    }));
+    this.router.navigate(['/my-appointments']);
+  }
+
+  private handleAppointmentError(error: any) {
+    console.error('Error scheduling appointment:', error);
+    alert('Error al agendar la cita. Por favor, intenta de nuevo.');
+    this.isScheduling = false;
+  }  goBack(): void {
     this.router.navigate(['/clients'], {
       queryParams: {
         brand: this.brand,
