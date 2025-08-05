@@ -6,12 +6,13 @@ import { ServiceService } from '../../services/service.service';
 import { TechnicianService } from '../../services/technician.service';
 import { ClientService } from '../../services/client.service';
 import { ReviewService } from '../../services/review.service';
-import { Appointment, Service, Technician, Client, AppointmentStatus } from '../../models';
+import { Appointment, Service, Technician, Client } from '../../models';
+import { ReviewsComponent } from '../reviews/reviews.component';
 
 @Component({
   selector: 'app-my-appointments',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReviewsComponent],
   templateUrl: './my-appointments.component.html',
   styleUrls: ['./my-appointments.component.scss']
 })
@@ -21,13 +22,13 @@ export class MyAppointmentsComponent implements OnInit {
   services: Service[] = [];
   technicians: Technician[] = [];
   clients: Client[] = [];
-  currentClientId: string | null = null; // By default, no filter
+  currentClientId: string | null = null; // Por defecto, sin filtro
   currentTechnicianId: string | null = null;
   showReviewModal = false;
   reviewTechnicianId = '';
   reviewClientId = '';
   reviewClientName = '';
-  evaluatedAppointments: Set<string> = new Set(); // To track already evaluated appointments
+  evaluatedAppointments: Set<string> = new Set(); // Para trackear citas ya evaluadas
 
   constructor(
     private appointmentService: AppointmentService,
@@ -40,7 +41,7 @@ export class MyAppointmentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get client or technician ID from query params or localStorage
+    // Obtener el ID del cliente o del técnico desde query params o localStorage
     this.route.queryParams.subscribe(params => {
       if (params['clientId']) {
         this.currentClientId = params['clientId'];
@@ -49,56 +50,96 @@ export class MyAppointmentsComponent implements OnInit {
         this.currentTechnicianId = params['technicianId'];
         this.currentClientId = null;
       } else {
-        // Check localStorage for logged client or technician
-        const loggedClientId = localStorage.getItem('loggedClient');
-        const loggedTechnicianId = localStorage.getItem('loggedTechnician');
+        // Si no hay query params, verificar localStorage
+        const loggedTechnician = localStorage.getItem('loggedTechnician');
+        const loggedClient = localStorage.getItem('loggedClient');
+        const emailLogin = localStorage.getItem('emailLogin');
 
-        if (loggedClientId) {
-          this.currentClientId = loggedClientId;
-        } else if (loggedTechnicianId) {
-          this.currentTechnicianId = loggedTechnicianId;
+        if (loggedTechnician) {
+          this.currentTechnicianId = loggedTechnician;
+          this.currentClientId = null;
+        } else if (loggedClient) {
+          this.currentClientId = loggedClient;
+          this.currentTechnicianId = null;
+        } else if (emailLogin) {
+          // Si hay un email guardado, filtrar por ese email
+          this.clientService.getClients().subscribe(clients => {
+            const clientWithEmail = clients.find(c => c.email === emailLogin);
+            this.currentClientId = clientWithEmail ? clientWithEmail.id : emailLogin;
+            this.currentTechnicianId = null;
+            this.loadData();
+          });
+        } else {
+          this.currentClientId = null;
+          this.currentTechnicianId = null;
         }
       }
-
       this.loadData();
     });
   }
 
   loadData(): void {
-    // Load appointments
     this.appointmentService.getAppointments().subscribe(appointments => {
-      this.appointments = appointments;
-      this.filterAppointments();
+      if (this.currentTechnicianId) {
+        this.appointments = appointments.filter(a => String(a.technicianId) === String(this.currentTechnicianId));
+      } else if (this.currentClientId) {
+        const emailLogin = localStorage.getItem('emailLogin');
+        if (emailLogin) {
+          // Si hay emailLogin, mostrar solo las citas donde el email coincide
+          this.appointments = appointments.filter(a => {
+            const client = this.clients.find(cl => cl.id === a.clientId);
+            return client?.email === emailLogin;
+          });
+        } else {
+          // Si hay clienteId, mostrar solo las citas de ese cliente
+          this.appointments = appointments.filter(a => a.clientId === this.currentClientId);
+        }
+      } else {
+        this.appointments = []; // No mostrar citas si no hay filtro válido
+      }
+      this.filteredAppointments = this.appointments;
+      this.checkEvaluatedAppointments();
     });
 
-    // Load services
     this.serviceService.getServices().subscribe(services => {
       this.services = services;
     });
 
-    // Load technicians
     this.technicianService.getTechnicians().subscribe(technicians => {
       this.technicians = technicians;
     });
 
-    // Load clients
     this.clientService.getClients().subscribe(clients => {
       this.clients = clients;
     });
   }
 
-  filterAppointments(): void {
-    if (this.currentClientId) {
-      this.filteredAppointments = this.appointments.filter(
-        appointment => appointment.clientId === this.currentClientId
-      );
-    } else if (this.currentTechnicianId) {
-      this.filteredAppointments = this.appointments.filter(
-        appointment => appointment.technicianId === this.currentTechnicianId
-      );
-    } else {
-      this.filteredAppointments = [...this.appointments];
-    }
+  checkEvaluatedAppointments(): void {
+    // Verificar qué citas ya han sido evaluadas
+    this.filteredAppointments.forEach(appointment => {
+      if (this.getAppointmentStatus(appointment) === 'Terminada') {
+        const technicianId = appointment.technicianId;
+        const clientId = appointment.clientId;
+        const clientName = this.getClientName(appointment.clientId);
+
+        this.reviewService.reviewExists(technicianId, clientId, clientName).subscribe(exists => {
+          if (exists) {
+            this.evaluatedAppointments.add(appointment.id);
+          }
+        });
+      }
+    });
+  }
+
+  formatDate(date: Date): string {
+    // Asegurar que la fecha se maneje correctamente
+    const dateObj = new Date(date);
+    return dateObj.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 
   getServiceName(serviceId: string): string {
@@ -108,71 +149,94 @@ export class MyAppointmentsComponent implements OnInit {
 
   getTechnicianName(technicianId: string): string {
     const technician = this.technicians.find(t => t.id === technicianId);
-    return technician ? technician.name : 'Técnico no encontrado';
+    return technician ? technician.name : 'No asignado';
+  }
+
+  getTechnicianSpecialty(technicianId: string): string {
+    const technician = this.technicians.find(t => t.id === technicianId);
+    return technician ? technician.specialty : 'No asignado';
+  }
+
+  getTechnicianRating(technicianId: string): number {
+    const technician = this.technicians.find(t => t.id === technicianId);
+    return technician ? technician.rating : 0;
   }
 
   getClientName(clientId: string): string {
     const client = this.clients.find(c => c.id === clientId);
-    return client ? client.name : 'Cliente no encontrado';
+    return client ? client.name : 'No disponible';
   }
 
-  getStatusText(status: string): string {
-    const statusMap: { [key: string]: string } = {
-      'pending': 'Pendiente',
-      'confirmed': 'Confirmada',
-      'in_progress': 'En Progreso',
-      'completed': 'Completada',
-      'cancelled': 'Cancelada'
-    };
-    return statusMap[status] || status;
+  getClientEmail(clientId: string): string {
+    const client = this.clients.find(c => c.id === clientId);
+    return client ? client.email : 'No disponible';
   }
 
-  getStatusClass(status: string): string {
-    const classMap: { [key: string]: string } = {
-      'pending': 'estado-pendiente',
-      'confirmed': 'estado-confirmada',
-      'in_progress': 'estado-en-progreso',
-      'completed': 'estado-completada',
-      'cancelled': 'estado-cancelada'
-    };
-    return classMap[status] || '';
+  getClientPhone(clientId: string): string {
+    const client = this.clients.find(c => c.id === clientId);
+    return client ? client.phone : 'No disponible';
   }
 
-  canEvaluate(appointment: Appointment): boolean {
-    return appointment.status === AppointmentStatus.COMPLETED &&
-           !this.evaluatedAppointments.has(appointment.id) &&
-           this.currentClientId !== null; // Only clients can evaluate
+  getClientAddress(clientId: string): string {
+    const client = this.clients.find(c => c.id === clientId);
+    return client ? client.address : 'No disponible';
   }
 
-  evaluateTechnician(appointment: Appointment): void {
-    if (this.canEvaluate(appointment)) {
-      this.reviewTechnicianId = appointment.technicianId;
-      this.reviewClientId = appointment.clientId;
-      this.reviewClientName = this.getClientName(appointment.clientId);
-      this.showReviewModal = true;
+  getServiceInfo(appointment: Appointment): any {
+    try {
+      if (appointment.notes) {
+        return JSON.parse(appointment.notes);
+      }
+    } catch (error) {
+      console.error('Error parsing service info:', error);
     }
+    return {};
   }
 
-  closeReviewModal(): void {
+  getAppointmentStatus(appointment: Appointment): string {
+    const appointmentDate = new Date(appointment.date);
+    const currentDate = new Date();
+
+    // Si la fecha de la cita ya pasó, mostrar "Terminada"
+    if (appointmentDate < currentDate) {
+      return 'Terminada';
+    }
+
+    // Si la fecha es futura, mostrar "Pendiente"
+    return 'Pendiente';
+  }
+
+  getAppointmentStatusClass(appointment: Appointment): string {
+    const status = this.getAppointmentStatus(appointment);
+    return status === 'Pendiente' ? 'status-pending' : 'status-completed';
+  }
+
+  isAlreadyEvaluated(appointment: Appointment): boolean {
+    return this.evaluatedAppointments.has(appointment.id);
+  }
+
+  openReviewModal(appointment: Appointment) {
+    this.reviewTechnicianId = appointment.technicianId;
+    this.reviewClientId = appointment.clientId;
+    this.reviewClientName = this.getClientName(appointment.clientId);
+    this.showReviewModal = true;
+  }
+
+  closeReviewModal() {
     this.showReviewModal = false;
-    this.reviewTechnicianId = '';
-    this.reviewClientId = '';
-    this.reviewClientName = '';
+    // Recargar las citas evaluadas después de cerrar el modal
+    this.checkEvaluatedAppointments();
   }
 
-  onReviewSubmitted(appointmentId: string): void {
-    this.evaluatedAppointments.add(appointmentId);
-    this.closeReviewModal();
-  }
+  onReviewSubmitted() {
+    // Marcar la cita actual como evaluada
+    const currentAppointment = this.filteredAppointments.find(appointment =>
+      appointment.technicianId === this.reviewTechnicianId &&
+      appointment.clientId === this.reviewClientId
+    );
 
-  cancelAppointment(appointmentId: string): void {
-    if (confirm('¿Estás seguro de que quieres cancelar esta cita?')) {
-      this.appointmentService.cancelAppointment(appointmentId);
-      this.loadData(); // Reload data
+    if (currentAppointment) {
+      this.evaluatedAppointments.add(currentAppointment.id);
     }
-  }
-
-  goBack(): void {
-    this.router.navigate(['/']);
   }
 }
