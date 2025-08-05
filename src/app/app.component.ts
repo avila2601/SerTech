@@ -265,6 +265,8 @@ export class AppComponent implements OnInit {
   loginTechnician(technicianId: string) {
     this.loggedTechnician = technicianId;
     localStorage.setItem('loggedTechnician', technicianId);
+    this.closeTechniciansModal();
+    this.router.navigate(['/my-appointments']);
   }
 
   logoutTechnician() {

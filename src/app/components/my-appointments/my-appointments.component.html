@@ -1,7 +1,6 @@
 <div class="container">
   <div class="mis-appointments-header">
-    <h1>Mis Citas</h1>
-    <p>Gestiona tus citas programadas</p>
+    <h1>Gestiona tus servicios técnicos programados</h1>
   </div>
 
   <div class="appointments-content" *ngIf="filteredAppointments.length > 0">
@@ -57,15 +56,11 @@
   <div class="no-citas" *ngIf="filteredAppointments.length === 0">
     <div class="no-appointments-content">
       <h3>No tienes citas programadas</h3>
-      <p>Cuando tengas citas programadas, aparecerán aquí.</p>
-      <button class="btn btn-primary" (click)="goBack()">
-        Volver al Inicio
-      </button>
     </div>
   </div>
 
   <div class="actions-footer">
-    <button class="btn btn-secondary" (click)="goBack()">
+    <button class="btn btn-primary" (click)="goBack()">
       Volver al Inicio
     </button>
   </div>

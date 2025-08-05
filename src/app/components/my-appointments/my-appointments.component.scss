@@ -2,16 +2,18 @@
   /* max-width: 700px; */
   width: 100%;
   margin: 0 auto;
-  padding: 0;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.my-appointments-header {
+.mis-appointments-header {
   text-align: center;
   margin-bottom: 2rem;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
 }
 
-.my-appointments-header h1 {
+.mis-appointments-header h1 {
   font-size: 2.5rem;
   color: #e0e0e0;
   margin-bottom: 0.5rem;
@@ -23,6 +25,14 @@
   color: #b0b0b0;
   max-width: 600px;
   margin: 0 auto;
+}
+
+.appointments-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .appointments-filtro {
@@ -59,6 +69,8 @@
   flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .appointment-card {
@@ -347,6 +359,39 @@
 
 .no-appointments p {
   margin-bottom: 1.5rem;
+}
+
+.no-citas {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.no-appointments-content {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.no-appointments-content h3 {
+  font-size: 1.5rem;
+  color: #e0e0e0;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.actions-footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-top: auto;
+}
+
+.actions-footer .btn {
+  min-width: 150px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
 }
 
 /* Responsive para tablets */
