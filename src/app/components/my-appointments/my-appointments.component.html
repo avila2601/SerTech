@@ -5,7 +5,10 @@
 
   <div class="appointments-content" *ngIf="filteredAppointments.length > 0">
     <div class="appointments-grid">
-      <div *ngFor="let appointment of filteredAppointments" class="appointment-card">
+      <div
+        *ngFor="let appointment of filteredAppointments"
+        class="appointment-card"
+      >
         <div class="appointment-header">
           <h3>{{ getServiceName(appointment.serviceId) }}</h3>
           <span class="estado" [ngClass]="getStatusClass(appointment.status)">
@@ -14,29 +17,144 @@
         </div>
 
         <div class="appointment-details">
-          <div class="detail-item">
-            <span class="label">Técnico:</span>
-            <span class="value">{{
-              getTechnicianName(appointment.technicianId)
-            }}</span>
+          <!-- Información del Servicio -->
+          <div class="detail-section">
+            <h4 class="section-title">Información del Servicio</h4>
+            <div class="detail-item">
+              <span class="label">Servicio:</span>
+              <span class="value">{{
+                getServiceName(appointment.serviceId)
+              }}</span>
+            </div>
+            <div class="detail-item" *ngIf="getServiceInfo(appointment).brand">
+              <span class="label">Marca:</span>
+              <span class="value">{{ getServiceInfo(appointment).brand }}</span>
+            </div>
+            <div
+              class="detail-item"
+              *ngIf="getServiceInfo(appointment).product"
+            >
+              <span class="label">Producto:</span>
+              <span class="value">{{
+                getServiceInfo(appointment).product
+              }}</span>
+            </div>
+            <div class="detail-item" *ngIf="getServiceInfo(appointment).model">
+              <span class="label">Modelo:</span>
+              <span class="value">{{ getServiceInfo(appointment).model }}</span>
+            </div>
+            <div
+              class="detail-item"
+              *ngIf="getServiceInfo(appointment).symptoms"
+            >
+              <span class="label">Síntomas:</span>
+              <span class="value">{{
+                getServiceInfo(appointment).symptoms
+              }}</span>
+            </div>
           </div>
-          <div class="detail-item" *ngIf="currentTechnicianId">
-            <span class="label">Cliente:</span>
-            <span class="value">{{ getClientName(appointment.clientId) }}</span>
+
+          <!-- Información Personal (solo para técnicos) -->
+          <div class="detail-section" *ngIf="currentTechnicianId">
+            <h4 class="section-title">Datos Personales del Cliente</h4>
+            <div class="detail-item">
+              <span class="label">Nombre:</span>
+              <span class="value">{{
+                getClientName(appointment.clientId)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Email:</span>
+              <span class="value">{{
+                getClientEmail(appointment.clientId)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Teléfono:</span>
+              <span class="value">{{
+                getClientPhone(appointment.clientId)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Dirección:</span>
+              <span class="value">{{
+                getClientAddress(appointment.clientId)
+              }}</span>
+            </div>
           </div>
-          <div class="detail-item">
-            <span class="label">Fecha:</span>
-            <span class="value">{{
-              appointment.date | date : "dd/MM/yyyy"
-            }}</span>
+
+          <!-- Información Personal (solo para clientes) -->
+          <div class="detail-section" *ngIf="currentClientId">
+            <h4 class="section-title">Mis Datos Personales</h4>
+            <div class="detail-item">
+              <span class="label">Nombre:</span>
+              <span class="value">{{
+                getClientName(appointment.clientId)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Email:</span>
+              <span class="value">{{
+                getClientEmail(appointment.clientId)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Teléfono:</span>
+              <span class="value">{{
+                getClientPhone(appointment.clientId)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Dirección:</span>
+              <span class="value">{{
+                getClientAddress(appointment.clientId)
+              }}</span>
+            </div>
           </div>
-          <div class="detail-item">
-            <span class="label">Hora:</span>
-            <span class="value">{{ appointment.time }}</span>
+
+          <!-- Información del Técnico -->
+          <div class="detail-section">
+            <h4 class="section-title">Información del Técnico</h4>
+            <div class="detail-item">
+              <span class="label">Técnico:</span>
+              <span class="value">{{
+                getTechnicianName(appointment.technicianId)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Especialidad:</span>
+              <span class="value">{{
+                getTechnicianSpecialty(appointment.technicianId)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Calificación:</span>
+              <span class="value"
+                >{{ getTechnicianRating(appointment.technicianId) }} ⭐</span
+              >
+            </div>
           </div>
-          <div class="detail-item" *ngIf="appointment.notes">
-            <span class="label">Notas:</span>
-            <span class="value">{{ appointment.notes }}</span>
+
+          <!-- Información de Fecha y Hora -->
+          <div class="detail-section">
+            <h4 class="section-title">Programación</h4>
+            <div class="detail-item">
+              <span class="label">Fecha:</span>
+              <span class="value">{{ formatDate(appointment.date) }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Hora:</span>
+              <span class="value">{{ appointment.time }}</span>
+            </div>
+            <div
+              class="detail-item"
+              *ngIf="getServiceInfo(appointment).location"
+            >
+              <span class="label">Ubicación:</span>
+              <span class="value">{{
+                getServiceInfo(appointment).location
+              }}</span>
+            </div>
           </div>
         </div>
 
@@ -60,8 +178,16 @@
   </div>
 
   <div class="actions-footer">
-    <button class="btn btn-primary" (click)="goBack()">
-      Volver al Inicio
-    </button>
+    <button class="btn btn-primary" (click)="goBack()">Volver al Inicio</button>
   </div>
 </div>
+
+<!-- Modal de Reseñas -->
+<app-reviews
+  *ngIf="showReviewModal"
+  [technicianId]="reviewTechnicianId"
+  [clientId]="reviewClientId"
+  [clientName]="reviewClientName"
+  (reviewSubmitted)="onReviewSubmitted()"
+  (closeModal)="closeReviewModal()"
+></app-reviews>

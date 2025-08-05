@@ -73,7 +73,10 @@ export class AppointmentService {
   }
 
   getAppointments(): Observable<Appointment[]> {
-    return this.appointmentsSubject.asObservable();
+    // Obtener datos directamente del storage para asegurar sincronización
+    return this.storageService.getAppointments().pipe(
+      map(citas => citas.map(cita => this.mapCitaToAppointment(cita)))
+    );
   }
 
   getAppointmentsByClient(clientId: string): Observable<Appointment[]> {

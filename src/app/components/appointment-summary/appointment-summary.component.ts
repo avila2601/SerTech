@@ -79,7 +79,8 @@ export class AppointmentSummaryComponent implements OnInit {
     const loggedClientId = localStorage.getItem('loggedClient');
 
     if (loggedClientId) {
-      // Use existing logged client
+      // Use existing logged client and save email for filtering
+      localStorage.setItem('emailLogin', this.email);
       this.createAppointmentWithClient(loggedClientId).subscribe({
         next: (createdAppointment) => {
           this.handleAppointmentSuccess();
@@ -100,8 +101,11 @@ export class AppointmentSummaryComponent implements OnInit {
 
       this.clientService.addClient(clientData).pipe(
         switchMap(createdClient => {
-          // Store client as logged in
+          console.log('Cliente creado:', createdClient);
+          // Store client as logged in and save email for filtering
           localStorage.setItem('loggedClient', createdClient.id);
+          localStorage.setItem('emailLogin', createdClient.email);
+          console.log('Cliente guardado en localStorage:', createdClient.id, createdClient.email);
           return this.createAppointmentWithClient(createdClient.id);
         })
       ).subscribe({
@@ -133,12 +137,24 @@ export class AppointmentSummaryComponent implements OnInit {
 
   private handleAppointmentSuccess() {
     alert('¡Cita agendada exitosamente!');
+
+    // Get the logged client ID
+    const loggedClientId = localStorage.getItem('loggedClient');
+
     // Trigger storage event to update navbar
     window.dispatchEvent(new StorageEvent('storage', {
       key: 'loggedClient',
-      newValue: localStorage.getItem('loggedClient')
+      newValue: loggedClientId
     }));
-    this.router.navigate(['/my-appointments']);
+
+    // Navigate to my-appointments with client parameter
+    if (loggedClientId) {
+      this.router.navigate(['/my-appointments'], {
+        queryParams: { clientId: loggedClientId }
+      });
+    } else {
+      this.router.navigate(['/my-appointments']);
+    }
   }
 
   private handleAppointmentError(error: any) {
