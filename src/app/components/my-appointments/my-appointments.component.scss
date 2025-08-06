@@ -160,7 +160,7 @@
   min-width: 0;
   border-right: none;
   border-top: 1px solid rgba(255,255,255,0.1);
-  margin-top: -1rem;
+  margin-top: -0.5rem;
   background: rgba(255,255,255,0.04);
 }
 
@@ -194,8 +194,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.5rem;
-  padding: 0.3rem 0;
+  padding: 0.15rem 0;
 }
 
 .detail-item:last-child {
@@ -215,7 +214,6 @@
   color: #e0e0e0;
   font-weight: 600;
   font-size: 1rem;
-  text-align: right;
   flex: 1;
   word-break: break-word;
 }
