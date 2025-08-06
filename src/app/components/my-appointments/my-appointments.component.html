@@ -11,13 +11,41 @@
         class="appointment-card"
       >
         <div class="appointment-header">
-          <h3>{{ getServiceName(appointment.serviceId) }}</h3>
-          <span class="estado" [ngClass]="getStatusClass(appointment.status)">
-            {{ getStatusText(appointment.status) }}
-          </span>
+          <div class="service-status-row">
+            <h3>{{ getServiceName(appointment.serviceId) }}</h3>
+            <span
+              class="status-badge"
+              [ngClass]="getStatusClass(appointment.status)"
+            >
+              {{ getStatusText(appointment.status) }}
+            </span>
+          </div>
+
+          <!-- Información de Fecha y Hora (movida aquí) -->
+          <div class="schedule-info">
+            <div class="schedule-item">
+              <span class="schedule-label">Fecha:</span>
+              <span class="schedule-value">{{
+                formatDate(appointment.date)
+              }}</span>
+            </div>
+            <div class="schedule-item">
+              <span class="schedule-label">Hora:</span>
+              <span class="schedule-value">{{ appointment.time }}</span>
+            </div>
+            <div
+              class="schedule-item"
+              *ngIf="getServiceInfo(appointment).location"
+            >
+              <span class="schedule-label">Ubicación:</span>
+              <span class="schedule-value">{{
+                getServiceInfo(appointment).location
+              }}</span>
+            </div>
+          </div>
         </div>
 
-        <div class="appointment-details">
+        <div class="appointment-details three-column-layout">
           <!-- Información del Servicio -->
           <div class="detail-section">
             <h4 class="section-title">Información del Servicio</h4>
@@ -135,29 +163,19 @@
               >
             </div>
           </div>
-
-          <!-- Información de Fecha y Hora -->
-          <div class="detail-section">
-            <h4 class="section-title">Programación</h4>
+          <!-- Sección de Costo del Servicio -->
+        <div class="cost-section">
+          <div class="detail-section cost">
+            <h4 class="section-title">COSTO DEL SERVICIO</h4>
             <div class="detail-item">
-              <span class="label">Fecha:</span>
-              <span class="value">{{ formatDate(appointment.date) }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Hora:</span>
-              <span class="value">{{ appointment.time }}</span>
-            </div>
-            <div
-              class="detail-item"
-              *ngIf="getServiceInfo(appointment).location"
-            >
-              <span class="label">Ubicación:</span>
-              <span class="value">{{
-                getServiceInfo(appointment).location
-              }}</span>
+              <span class="label">Valor:</span>
+              <span class="value cost-value">$50,000</span>
             </div>
           </div>
         </div>
+        </div>
+
+
       </div>
     </div>
   </div>
