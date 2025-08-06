@@ -63,6 +63,10 @@ export class ReviewService {
     );
   }
 
+  getAllReviews(): Observable<Review[]> {
+    return this.getReviews();
+  }
+
   getReviewsByTechnician(technicianId: string): Observable<Review[]> {
     return this.getReviews().pipe(
       switchMap(reviews => {

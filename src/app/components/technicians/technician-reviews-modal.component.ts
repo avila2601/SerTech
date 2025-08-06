@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { forkJoin } from 'rxjs';
 import { ReviewService } from '../../services/review.service';
 import { TechnicianService } from '../../services/technician.service';
 
@@ -193,25 +194,26 @@ export class TechnicianReviewsModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadTechnicianData();
-    this.loadReviews();
+    forkJoin({
+      technician: this.technicianService.getTechnicianById(this.technicianId),
+      reviews: this.reviewService.getReviewsByTechnician(this.technicianId)
+    }).subscribe(({ technician, reviews }) => {
+      this.technician = technician;
+      this.reviews = reviews;
+
+      if (this.technician && this.reviews.length > 0) {
+        const totalRating = this.reviews.reduce((acc, review) => acc + review.rating, 0);
+        const averageRating = totalRating / this.reviews.length;
+        this.technician.rating = parseFloat(averageRating.toFixed(1));
+      } else if (this.technician) {
+        this.technician.rating = 0;
+      }
+    });
   }
 
   @HostListener('document:keydown.escape')
   onEscapePress() {
     this.onClose();
-  }
-
-  loadTechnicianData() {
-    this.technicianService.getTechnicianById(this.technicianId).subscribe(technician => {
-      this.technician = technician;
-    });
-  }
-
-  loadReviews() {
-    this.reviewService.getReviewsByTechnician(this.technicianId).subscribe(reviews => {
-      this.reviews = reviews;
-    });
   }
 
   getStars(rating: number): string[] {

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, forkJoin, map } from 'rxjs';
 import { Technician } from '../models';
+import { ReviewService, Review } from './review.service';
 
 // Temporary interface for reading Spanish data files
 interface TecnicoData {
@@ -20,22 +21,37 @@ interface TecnicoData {
 export class TechnicianService {
   private url = 'assets/data/technicians.json';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private reviewService: ReviewService) {}
 
   // Primary English interface methods
   getTechnicians(): Observable<Technician[]> {
-    return this.http.get<TecnicoData[]>(this.url).pipe(
-      map((tecnicos: TecnicoData[]) =>
-        tecnicos.map(tecnico => ({
-          id: tecnico.id,
-          name: tecnico.nombre,
-          specialty: tecnico.especialidad,
-          available: tecnico.disponible,
-          rating: tecnico.calificacion,
-          photo: tecnico.foto,
-          password: tecnico.contraseña
-        }) as Technician)
-      )
+    return forkJoin({
+      technicians: this.http.get<any[]>(this.url).pipe(
+        map(tecnicos => tecnicos.map(t => ({
+          id: t.id,
+          name: t.nombre,
+          specialty: t.especialidad,
+          available: t.disponible,
+          rating: t.calificacion,
+          photo: t.foto,
+          password: t.contraseña
+        } as Technician)))
+      ),
+      reviews: this.reviewService.getAllReviews()
+    }).pipe(
+      map(({ technicians, reviews }) => {
+        return technicians.map(technician => {
+          const reviewsForTechnician = reviews.filter(review => review.technicianId === technician.id);
+          if (reviewsForTechnician.length > 0) {
+            const totalRating = reviewsForTechnician.reduce((acc, review) => acc + review.rating, 0);
+            const averageRating = totalRating / reviewsForTechnician.length;
+            technician.rating = parseFloat(averageRating.toFixed(1));
+          } else {
+            technician.rating = 0;
+          }
+          return technician;
+        });
+      })
     );
   }
 
