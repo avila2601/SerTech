@@ -198,13 +198,13 @@ export class MyAppointmentsComponent implements OnInit {
   getAppointmentStatus(appointment: Appointment): string {
     const appointmentDate = new Date(appointment.date);
     const [hours, minutes] = appointment.time.split(':').map(Number);
-    
+
     // Crear fecha completa con hora y minutos
     const appointmentDateTime = new Date(appointmentDate);
     appointmentDateTime.setHours(hours, minutes, 0, 0);
-    
+
     const currentDateTime = new Date();
-    
+
     // Si la fecha y hora ya pasaron, está terminada
     if (appointmentDateTime < currentDateTime) {
       return 'Terminada';

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReviewService } from '../../services/review.service';
@@ -11,6 +11,13 @@ import { ReviewService } from '../../services/review.service';
   styleUrls: ['./reviews.component.scss']
 })
 export class ReviewsComponent {
+  @HostListener('document:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.closeModal();
+    }
+  }
+
   @Input() technicianId: string = '';
   @Input() clientId: string = '';
   @Input() clientName: string = '';
