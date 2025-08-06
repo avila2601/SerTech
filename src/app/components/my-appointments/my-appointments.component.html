@@ -91,12 +91,7 @@
             <div
               class="detail-item"
               *ngIf="getServiceInfo(appointment).symptoms"
-            >
-              <span class="label">Síntomas:</span>
-              <span class="value">{{
-                getServiceInfo(appointment).symptoms
-              }}</span>
-            </div>
+            ></div>
           </div>
 
           <!-- Información Personal (solo para técnicos) -->
@@ -172,6 +167,16 @@
                 getTechnicianSpecialty(appointment.technicianId)
               }}</span>
             </div>
+          </div>
+          <!-- Sección de Síntomas -->
+          <div
+            class="symptoms-section full-width"
+            *ngIf="getServiceInfo(appointment).symptoms"
+          >
+            <h4 class="section-title"></h4>
+            <p class="symptoms-text"> <span class="label">Síntomas Reportados:</span>
+              {{ getServiceInfo(appointment).symptoms }}
+            </p>
           </div>
           <!-- Sección de Costo del Servicio -->
           <div class="cost-section">
