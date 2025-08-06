@@ -147,13 +147,21 @@ export class AppointmentSummaryComponent implements OnInit {
       location: this.location
     };
 
+    // Fix date timezone issue - create date in local timezone
+    const dateParts = this.date.split('-'); // Assuming format YYYY-MM-DD
+    const localDate = new Date(
+      parseInt(dateParts[0]), // year
+      parseInt(dateParts[1]) - 1, // month (0-based)
+      parseInt(dateParts[2]) // day
+    );
+
     // Create appointment
     const appointmentData: Omit<Appointment, 'id' | 'status'> = {
       clientId: clientId,
       technicianId: this.technicianId,
       serviceId: this.serviceId,
       equipmentId: undefined,
-      date: new Date(this.date),
+      date: localDate,
       time: this.time,
       notes: JSON.stringify(serviceInfo), // Store service info as JSON string
       address: this.location

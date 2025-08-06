@@ -29,6 +29,10 @@
                 formatDate(appointment.date)
               }}</span>
             </div>
+            <div class="schedule-item">
+              <span class="schedule-label">Hora:</span>
+              <span class="schedule-value">{{ appointment.time }}</span>
+            </div>
             <div
               class="schedule-item"
               *ngIf="getServiceInfo(appointment).location"
@@ -38,9 +42,21 @@
                 getServiceInfo(appointment).location
               }}</span>
             </div>
-            <div class="schedule-item">
-              <span class="schedule-label">Hora:</span>
-              <span class="schedule-value">{{ appointment.time }}</span>
+
+            <!-- Botón Evaluar Servicio - Solo para citas terminadas -->
+            <div
+              class="schedule-item evaluate-service-container"
+              *ngIf="
+                getAppointmentStatus(appointment) === 'Terminada' &&
+                !isAlreadyEvaluated(appointment)
+              "
+            >
+              <button
+                class="evaluate-service-btn"
+                (click)="openReviewModal(appointment)"
+              >
+                Evaluar Servicio
+              </button>
             </div>
           </div>
         </div>
