@@ -82,10 +82,8 @@ export class UserStateService {
   }
 
   logout(): void {
-    // Clear all auth-related localStorage items
-    localStorage.removeItem('loggedTechnician');
-    localStorage.removeItem('loggedClient');
-    localStorage.removeItem('emailLogin');
+    // Clear all localStorage completely
+    localStorage.clear();
 
     this.userStateSubject.next({
       isLoggedIn: false,

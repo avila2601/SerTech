@@ -15,9 +15,9 @@
             <h3>{{ getServiceName(appointment.serviceId) }}</h3>
             <span
               class="status-badge"
-              [ngClass]="getStatusClass(appointment.status)"
+              [ngClass]="getAppointmentStatusClass(appointment)"
             >
-              {{ getStatusText(appointment.status) }}
+              {{ getAppointmentStatus(appointment) }}
             </span>
           </div>
 
@@ -164,18 +164,16 @@
             </div>
           </div>
           <!-- Sección de Costo del Servicio -->
-        <div class="cost-section">
-          <div class="detail-section cost">
-            <h4 class="section-title">COSTO DEL SERVICIO</h4>
-            <div class="detail-item">
-              <span class="label">Valor:</span>
-              <span class="value cost-value">$50,000</span>
+          <div class="cost-section">
+            <div class="detail-section cost">
+              <h4 class="section-title">COSTO DEL SERVICIO</h4>
+              <div class="detail-item">
+                <span class="label">Valor:</span>
+                <span class="value cost-value">$50,000</span>
+              </div>
             </div>
           </div>
         </div>
-        </div>
-
-
       </div>
     </div>
   </div>

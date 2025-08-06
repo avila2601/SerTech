@@ -186,7 +186,8 @@ export class MyAppointmentsComponent implements OnInit {
   getServiceInfo(appointment: Appointment): any {
     try {
       if (appointment.notes) {
-        return JSON.parse(appointment.notes);
+        const parsed = JSON.parse(appointment.notes);
+        return parsed;
       }
     } catch (error) {
       console.error('Error parsing service info:', error);
@@ -196,8 +197,16 @@ export class MyAppointmentsComponent implements OnInit {
 
   getAppointmentStatus(appointment: Appointment): string {
     const appointmentDate = new Date(appointment.date);
-    const currentDate = new Date();
-    if (appointmentDate < currentDate) {
+    const [hours, minutes] = appointment.time.split(':').map(Number);
+    
+    // Crear fecha completa con hora y minutos
+    const appointmentDateTime = new Date(appointmentDate);
+    appointmentDateTime.setHours(hours, minutes, 0, 0);
+    
+    const currentDateTime = new Date();
+    
+    // Si la fecha y hora ya pasaron, está terminada
+    if (appointmentDateTime < currentDateTime) {
       return 'Terminada';
     }
     return 'Pendiente';
@@ -205,7 +214,7 @@ export class MyAppointmentsComponent implements OnInit {
 
   getAppointmentStatusClass(appointment: Appointment): string {
     const status = this.getAppointmentStatus(appointment);
-    return status === 'Pendiente' ? 'status-pending' : 'status-completed';
+    return status === 'Pendiente' ? 'pending' : 'completed';
   }
 
   getStatusClass(status: string): string {

@@ -126,6 +126,15 @@ export class AppointmentSummaryComponent implements OnInit {
   }
 
   private createAppointmentWithClient(clientId: string) {
+    // Create service info object with all the details
+    const serviceInfo = {
+      brand: this.brand,
+      product: this.product,
+      model: this.model,
+      symptoms: this.symptoms,
+      location: this.location
+    };
+
     // Create appointment
     const appointmentData: Omit<Appointment, 'id' | 'status'> = {
       clientId: clientId,
@@ -134,9 +143,14 @@ export class AppointmentSummaryComponent implements OnInit {
       equipmentId: undefined,
       date: new Date(this.date),
       time: this.time,
-      notes: this.symptoms,
+      notes: JSON.stringify(serviceInfo), // Store service info as JSON string
       address: this.location
     };
+
+    console.log('=== APPOINTMENT DATA ===');
+    console.log('Service info object:', serviceInfo);
+    console.log('Notes field:', appointmentData.notes);
+    console.log('Complete appointment data:', appointmentData);
 
     return this.appointmentService.createAppointment(appointmentData);
   }
