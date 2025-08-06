@@ -4,13 +4,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TechnicianService } from '../../services/technician.service';
 import { ClientService } from '../../services/client.service';
 import { Technician, Client } from '../../models';
-// TODO: Implement TechnicianReviewsModalComponent in English
-// import { TechnicianReviewsModalComponent } from './technician-reviews-modal.component';
+import { TechnicianReviewsModalComponent } from './technician-reviews-modal.component';
 
 @Component({
   selector: 'app-technicians',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TechnicianReviewsModalComponent],
   templateUrl: './technicians.component.html',
   styleUrls: ['./technicians.component.scss']
 })
@@ -65,7 +64,7 @@ export class TechniciansComponent implements OnInit {
 
       // Check if client is already logged in
       const loggedClientId = localStorage.getItem('loggedClient');
-      
+
       if (loggedClientId) {
         // Get client data to populate the summary
         this.clientService.getClientById(loggedClientId).subscribe({
@@ -76,7 +75,7 @@ export class TechniciansComponent implements OnInit {
               preservedParams.email = client.email;
               preservedParams.phone = client.phone;
               preservedParams.address = client.address;
-              
+
               // Navigate directly to appointment-summary
               this.router.navigate(['/appointment-summary'], {
                 queryParams: preservedParams
