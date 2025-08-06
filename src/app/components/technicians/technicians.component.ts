@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TechnicianService } from '../../services/technician.service';
-import { Technician } from '../../models';
+import { ClientService } from '../../services/client.service';
+import { Technician, Client } from '../../models';
 // TODO: Implement TechnicianReviewsModalComponent in English
 // import { TechnicianReviewsModalComponent } from './technician-reviews-modal.component';
 
@@ -20,6 +21,7 @@ export class TechniciansComponent implements OnInit {
 
   constructor(
     private technicianService: TechnicianService,
+    private clientService: ClientService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -61,10 +63,45 @@ export class TechniciansComponent implements OnInit {
       if (params['date']) preservedParams.date = params['date'];
       if (params['time']) preservedParams.time = params['time'];
 
-      // Navigate to clients component (using English route)
-      this.router.navigate(['/clients'], {
-        queryParams: preservedParams
-      });
+      // Check if client is already logged in
+      const loggedClientId = localStorage.getItem('loggedClient');
+      
+      if (loggedClientId) {
+        // Get client data to populate the summary
+        this.clientService.getClientById(loggedClientId).subscribe({
+          next: (client: Client | undefined) => {
+            if (client) {
+              // Add client data to params for appointment summary
+              preservedParams.name = client.name;
+              preservedParams.email = client.email;
+              preservedParams.phone = client.phone;
+              preservedParams.address = client.address;
+              
+              // Navigate directly to appointment-summary
+              this.router.navigate(['/appointment-summary'], {
+                queryParams: preservedParams
+              });
+            } else {
+              // If client not found, go to clients page
+              this.router.navigate(['/clients'], {
+                queryParams: preservedParams
+              });
+            }
+          },
+          error: (error) => {
+            console.error('Error getting client data:', error);
+            // Fallback to clients page
+            this.router.navigate(['/clients'], {
+              queryParams: preservedParams
+            });
+          }
+        });
+      } else {
+        // Navigate to clients component (using English route)
+        this.router.navigate(['/clients'], {
+          queryParams: preservedParams
+        });
+      }
     });
   }
 

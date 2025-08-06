@@ -29,10 +29,6 @@
                 formatDate(appointment.date)
               }}</span>
             </div>
-            <div class="schedule-item">
-              <span class="schedule-label">Hora:</span>
-              <span class="schedule-value">{{ appointment.time }}</span>
-            </div>
             <div
               class="schedule-item"
               *ngIf="getServiceInfo(appointment).location"
@@ -41,6 +37,10 @@
               <span class="schedule-value">{{
                 getServiceInfo(appointment).location
               }}</span>
+            </div>
+            <div class="schedule-item">
+              <span class="schedule-label">Hora:</span>
+              <span class="schedule-value">{{ appointment.time }}</span>
             </div>
           </div>
         </div>

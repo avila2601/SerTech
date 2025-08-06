@@ -28,26 +28,11 @@ export class ClientService {
   }
 
   getClientById(id: string): Observable<Client | undefined> {
-    const ClienteData = this.storageService.getClientById(id);
-    if (!ClienteData) {
-      return new Observable(observer => {
-        observer.next(undefined);
-        observer.complete();
-      });
-    }
-
-    const client: Client = {
-      id: ClienteData.id,
-      name: ClienteData.nombre,
-      email: ClienteData.email,
-      phone: ClienteData.telefono,
-      address: ClienteData.direccion
-    };
-
-    return new Observable(observer => {
-      observer.next(client);
-      observer.complete();
-    });
+    return this.getClients().pipe(
+      map(clients => {
+        return clients.find(client => client.id === id);
+      })
+    );
   }
 
   addClient(client: Omit<Client, 'id'>): Observable<Client> {

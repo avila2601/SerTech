@@ -77,19 +77,31 @@ export class AppointmentSummaryComponent implements OnInit {
 
     // Check if client is already logged in
     const loggedClientId = localStorage.getItem('loggedClient');
+    console.log('=== CONFIRM APPOINTMENT DEBUG ===');
+    console.log('Logged client ID:', loggedClientId);
+    console.log('Form data:', {
+      name: this.name,
+      email: this.email,
+      phone: this.phone,
+      address: this.address
+    });
 
     if (loggedClientId) {
+      console.log('Using existing logged client:', loggedClientId);
       // Use existing logged client and save email for filtering
       localStorage.setItem('emailLogin', this.email);
       this.createAppointmentWithClient(loggedClientId).subscribe({
         next: (createdAppointment) => {
+          console.log('Appointment created for existing client:', createdAppointment);
           this.handleAppointmentSuccess();
         },
         error: (error: any) => {
+          console.error('Error creating appointment for existing client:', error);
           this.handleAppointmentError(error);
         }
       });
     } else {
+      console.log('No logged client found, creating new client');
       // Create new client
       const clientData: Client = {
         id: '',
