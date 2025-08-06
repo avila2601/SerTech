@@ -29,6 +29,7 @@ export class MyAppointmentsComponent implements OnInit {
   reviewTechnicianId = '';
   reviewClientId = '';
   reviewClientName = '';
+  reviewAppointmentId = '';
   evaluatedAppointments: Set<string> = new Set();
 
   constructor(
@@ -120,11 +121,7 @@ export class MyAppointmentsComponent implements OnInit {
   checkEvaluatedAppointments(): void {
     this.filteredAppointments.forEach(appointment => {
       if (this.getAppointmentStatus(appointment) === 'Terminada') {
-        const technicianId = appointment.technicianId;
-        const clientId = appointment.clientId;
-        const clientName = this.getClientName(appointment.clientId);
-
-        this.reviewService.reviewExists(technicianId, clientId, clientName).subscribe(exists => {
+        this.reviewService.reviewExists(appointment.id).subscribe(exists => {
           if (exists) {
             this.evaluatedAppointments.add(appointment.id);
           }
@@ -244,6 +241,7 @@ export class MyAppointmentsComponent implements OnInit {
   }
 
   openReviewModal(appointment: Appointment) {
+    this.reviewAppointmentId = appointment.id;
     this.reviewTechnicianId = appointment.technicianId;
     this.reviewClientId = appointment.clientId;
     this.reviewClientName = this.getClientName(appointment.clientId);

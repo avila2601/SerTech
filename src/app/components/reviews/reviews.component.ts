@@ -21,6 +21,7 @@ export class ReviewsComponent {
   @Input() technicianId: string = '';
   @Input() clientId: string = '';
   @Input() clientName: string = '';
+  @Input() appointmentId: string = '';
   @Output() modalClosed = new EventEmitter<void>();
   @Output() reviewSubmitted = new EventEmitter<void>();
   rating: number = 0;
@@ -38,6 +39,7 @@ export class ReviewsComponent {
     this.isSubmitting = true;
 
     const newReview = {
+      appointmentId: this.appointmentId,
       technicianId: this.technicianId,
       clientId: this.clientId,
       clientName: this.clientName,

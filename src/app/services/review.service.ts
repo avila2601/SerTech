@@ -5,6 +5,7 @@ import { Observable, switchMap, map } from 'rxjs';
 // English interface for reviews
 export interface Review {
   id: string;
+  appointmentId: string;
   technicianId: string;
   clientId: string;
   clientName: string;
@@ -16,6 +17,7 @@ export interface Review {
 // Spanish interface for backward compatibility
 export interface Resena {
   id: string;
+  citaId: string; // Corresponds to appointmentId
   tecnicoId: string;
   clienteId: string;
   cliente: string;
@@ -36,6 +38,7 @@ export class ReviewService {
   private mapResenaToReview(resena: Resena): Review {
     return {
       id: resena.id,
+      appointmentId: resena.citaId,
       technicianId: resena.tecnicoId,
       clientId: resena.clienteId,
       clientName: resena.cliente,
@@ -48,6 +51,7 @@ export class ReviewService {
   private mapReviewToResena(review: Partial<Review>): Partial<Resena> {
     const resena: Partial<Resena> = {};
     if (review.id) resena.id = review.id;
+    if (review.appointmentId) resena.citaId = review.appointmentId;
     if (review.technicianId) resena.tecnicoId = review.technicianId;
     if (review.clientId) resena.clienteId = review.clientId;
     if (review.clientName) resena.cliente = review.clientName;
@@ -79,21 +83,9 @@ export class ReviewService {
     );
   }
 
-  reviewExists(technicianId: string, clientId: string, clientName?: string): Observable<boolean> {
+  reviewExists(appointmentId: string): Observable<boolean> {
     return this.getReviews().pipe(
-      map(reviews => {
-        return reviews.some(review => {
-          // Check by clientId (more reliable)
-          if (review.technicianId === technicianId && review.clientId === clientId) {
-            return true;
-          }
-          // Check by client name as fallback
-          if (clientName && review.technicianId === technicianId && review.clientName === clientName) {
-            return true;
-          }
-          return false;
-        });
-      })
+      map(reviews => reviews.some(review => review.appointmentId === appointmentId))
     );
   }
 
@@ -106,6 +98,7 @@ export class ReviewService {
 
         const newResena: Resena = {
           id: newId,
+          citaId: review.appointmentId,
           tecnicoId: review.technicianId,
           clienteId: review.clientId,
           cliente: review.clientName,
