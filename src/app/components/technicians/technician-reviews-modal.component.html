@@ -1,0 +1,44 @@
+<div class="modal-backdrop" (click)="onClose()"></div>
+<div class="modal-ingreso reviews-modal" (click)="$event.stopPropagation()">
+  <h2>Mis Reseñas</h2>
+
+  <div *ngIf="technician" class="technician-info">
+    <h3>{{ technician.name }}</h3>
+    <p>{{ technician.specialty }}</p>
+    <div class="rating">
+      <span class="stars">
+        <span
+          *ngFor="let star of getStars(technician.rating)"
+          [innerHTML]="star"
+        ></span>
+      </span>
+      <span class="rating-value">({{ technician.rating }}/5)</span>
+    </div>
+  </div>
+
+  <div class="reviews-section">
+    <h4>Reseñas de Clientes</h4>
+    <div *ngIf="reviews.length === 0" class="no-reviews">
+      No tienes reseñas aún.
+    </div>
+
+    <div *ngFor="let review of reviews" class="review-item">
+      <div class="review-header">
+        <strong>{{ review.clientName }}</strong>
+        <span class="review-date">{{ formatDate(review.date) }}</span>
+      </div>
+      <div class="review-rating">
+        <span
+          *ngFor="let star of getStars(review.rating)"
+          [innerHTML]="star"
+        ></span>
+        <span class="rating-value">({{ review.rating }}/5)</span>
+      </div>
+      <p class="review-comment">{{ review.comment }}</p>
+    </div>
+  </div>
+
+  <button (click)="onClose()" class="btn btn-primary btn-ingresar">
+    Cerrar
+  </button>
+</div>

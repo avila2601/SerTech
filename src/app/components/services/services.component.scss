@@ -26,7 +26,7 @@
   margin-bottom: 1rem;
 }
 
-.service-seleccionado {
+.selected-service {
   width: 100%;
   max-width: 500px;
   display: flex;
@@ -88,11 +88,11 @@
   text-align: left;
 }
 
-.marca-selector {
+.brand-selector {
   margin-bottom: 1rem;
 }
 
-.marca-select {
+.brand-select {
   width: 100%;
   padding: 12px 16px;
   border: 2px solid rgba(255, 255, 255, 0.2);
@@ -105,27 +105,27 @@
   cursor: pointer;
 }
 
-.marca-select:focus {
+.brand-select:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.marca-select option {
+.brand-select option {
   background: rgba(31, 41, 55, 0.9);
   color: #e0e0e0;
   padding: 8px;
 }
 
-.marca-select option:disabled {
+.brand-select option:disabled {
   color: #666;
   font-style: italic;
 }
 
-.producto-selector {
+.product-selector {
   margin-top: 15px;
 
-  .producto-select {
+  .product-select {
     width: 100%;
     padding: 12px 15px;
     border: 2px solid rgba(255, 255, 255, 0.1);
@@ -149,10 +149,10 @@
   }
 }
 
-.modelo-selector {
+.model-selector {
   margin-top: 15px;
 
-  .modelo-select {
+  .model-select {
     width: 100%;
     padding: 12px 15px;
     border: 2px solid rgba(255, 255, 255, 0.1);
@@ -258,7 +258,7 @@
     margin-bottom: 0.8rem;
   }
 
-  .service-seleccionado {
+  .selected-service {
     gap: 1rem;
   }
 
@@ -281,12 +281,12 @@
     margin-bottom: 1rem;
   }
 
-  .marca-select {
+  .brand-select {
     padding: 10px 14px;
     font-size: 0.95rem;
   }
 
-  .producto-select {
+  .product-select {
     padding: 10px 14px;
     font-size: 0.95rem;
   }
@@ -340,42 +340,42 @@
     margin-bottom: 0.8rem;
   }
 
-  .marca-select {
+  .brand-select {
     padding: 8px 12px;
     font-size: 0.9rem;
   }
 
-  .producto-select {
+  .product-select {
     padding: 8px 12px;
     font-size: 0.9rem;
   }
 
-  .ubicacion-select {
+  .location-select {
     padding: 8px 12px;
     font-size: 0.9rem;
   }
 
-  .fecha-hora-selector {
-    .fecha-hora-inputs {
+  .date-time-selector {
+    .date-time-inputs {
       display: grid !important;
       grid-template-columns: 1fr !important;
       gap: 15px !important;
 
-      .fecha-selector,
-      .hora-selector {
+      .date-selector,
+      .time-selector {
         display: flex !important;
         flex-direction: column !important;
         gap: 8px !important;
       }
 
-      .hora-selector {
+      .time-selector {
         order: 2 !important;
       }
     }
   }
 
-  .fecha-input,
-  .hora-select {
+  .date-input,
+  .time-select {
     padding: 8px 12px;
     font-size: 0.9rem;
   }
@@ -387,10 +387,10 @@
   }
 }
 
-.modelo-ayuda {
+.model-help {
   margin-top: 8px;
   text-align: left;
-  .ayuda-link {
+  .help-link {
     color: #7faaff;
     text-decoration: underline;
     cursor: pointer;
@@ -402,7 +402,7 @@
   }
 }
 
-.modal-modelo {
+.model-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -429,7 +429,7 @@
     flex-direction: column;
     align-items: center;
   }
-  .cerrar-modal {
+  .close-modal {
     position: absolute;
     top: 10px;
     right: 16px;
@@ -445,7 +445,7 @@
   }
 }
 
-.modal-titulo {
+.modal-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #a3c9ff;
@@ -454,14 +454,14 @@
   letter-spacing: 0.5px;
 }
 
-.modal-descripcion {
+.modal-description {
   font-size: 1rem;
   color: #e0e6f0;
   margin-bottom: 16px;
   text-align: center;
 }
 
-.modal-subtitulo {
+.modal-subtitle {
   font-size: 1.1rem;
   font-weight: 600;
   color: #7faaff;
@@ -470,7 +470,7 @@
   text-align: center;
 }
 
-.modal-lista {
+.modal-list {
   padding-left: 18px;
   color: #e0e6f0;
   font-size: 0.98rem;
@@ -481,7 +481,7 @@
   }
 }
 
-.sintomas-box {
+.symptoms-box {
   margin-top: 16px;
   width: 100%;
   display: flex;
@@ -489,7 +489,7 @@
   align-items: stretch;
 }
 
-.sintomas-textarea {
+.symptoms-textarea {
   width: 100%;
   min-height: 70px;
   max-height: 180px;
@@ -507,12 +507,12 @@
   font-family: inherit;
 }
 
-.sintomas-textarea:focus {
+.symptoms-textarea:focus {
   border-color: #7faaff;
   box-shadow: 0 0 0 2px #7faaff33;
 }
 
-.modelo-info {
+.model-info {
   margin-top: 6px;
   font-size: 14px;
   color: #b3c6e0;
@@ -521,11 +521,11 @@
   text-align: left;
 }
 
-.ubicacion-selector {
+.location-selector {
   margin-top: 16px;
   width: 100%;
 
-  .ubicacion-select {
+  .location-select {
     width: 100%;
     padding: 12px 15px;
     border: 2px solid rgba(255, 255, 255, 0.1);
@@ -549,16 +549,16 @@
   }
 }
 
-.fecha-hora-selector {
+.date-time-selector {
   margin-top: 16px;
 
-  .fecha-hora-inputs {
+  .date-time-inputs {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
 
-    .fecha-selector,
-    .hora-selector {
+    .date-selector,
+    .time-selector {
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -569,8 +569,8 @@
         font-size: 14px;
       }
 
-      .fecha-input,
-      .hora-select {
+      .date-input,
+      .time-select {
         width: 100%;
         padding: 12px 15px;
         border: 2px solid rgba(255, 255, 255, 0.1);
@@ -588,7 +588,7 @@
         }
       }
 
-      .hora-select option {
+      .time-select option {
         background: #1a1a2e;
         color: #fff;
       }
@@ -596,18 +596,18 @@
   }
 }
 
-.producto-select {
+.product-select {
   padding: 10px 14px;
   font-size: 0.95rem;
 }
 
-.ubicacion-select {
+.location-select {
   padding: 10px 14px;
   font-size: 0.95rem;
 }
 
-.fecha-input,
-.hora-select {
+.date-input,
+.time-select {
   padding: 10px 14px;
   font-size: 0.95rem;
 }

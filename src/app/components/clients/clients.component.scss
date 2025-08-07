@@ -4,31 +4,31 @@
   padding: 0 20px;
 }
 
-.agendar-header {
+.client-header {
   text-align: center;
   padding: 2rem 0;
 }
 
-.agendar-header h1 {
+.client-header h1 {
   font-size: 2.5rem;
   color: #e0e0e0;
   margin-bottom: 1rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.agendar-header p {
+.client-header p {
   font-size: 1.1rem;
   color: #b0b0b0;
   max-width: 600px;
   margin: 0 auto;
 }
 
-.agendar-content {
+.client-content {
   max-width: 800px;
   margin: 0 auto;
 }
 
-.agendar-form {
+.client-form {
   background: rgba(31, 41, 55, 0.8);
   border-radius: 16px;
   padding: 2rem;
@@ -178,7 +178,7 @@
   font-size: 0.8rem;
 }
 
-.experiencia {
+.experience {
   color: #9ca3af;
   font-size: 0.8rem;
 }
@@ -265,20 +265,20 @@
     padding: 0 15px;
   }
 
-  .agendar-header {
+  .client-header {
     margin-bottom: 2rem;
     padding: 1.5rem 0;
   }
 
-  .agendar-header h1 {
+  .client-header h1 {
     font-size: 2rem;
   }
 
-  .agendar-header p {
+  .client-header p {
     font-size: 1rem;
   }
 
-  .agendar-form {
+  .client-form {
     padding: 1.5rem;
   }
 
@@ -352,20 +352,20 @@
     padding: 0 10px;
   }
 
-  .agendar-header {
+  .client-header {
     margin-bottom: 1.5rem;
     padding: 1rem 0;
   }
 
-  .agendar-header h1 {
+  .client-header h1 {
     font-size: 1.6rem;
   }
 
-  .agendar-header p {
+  .client-header p {
     font-size: 0.9rem;
   }
 
-  .agendar-form {
+  .client-form {
     padding: 1rem;
   }
 

@@ -1,4 +1,4 @@
-.resumen-cita-container {
+.appointment-summary-container {
   max-width: 500px;
   margin: 2rem auto;
   background: rgba(30, 41, 59, 0.95);
@@ -8,28 +8,28 @@
   color: #fff;
 }
 
-.resumen-section {
+.summary-section {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-.resumen-section:last-child {
+.summary-section:last-child {
   border-bottom: none;
 }
 
-.resumen-section h3 {
+.summary-section h3 {
   margin-bottom: 0.7rem;
   color: #a5b4fc;
   font-size: 1.1rem;
 }
 
-.resumen-section p {
+.summary-section p {
   margin: 0.2rem 0;
   font-size: 1rem;
 }
 
-.resumen-actions {
+.summary-actions {
   display: flex;
   justify-content: center;
   gap: 1rem;
@@ -77,12 +77,12 @@
 }
 
 // Estilos para estados de disponibilidad del técnico
-.disponible {
+.available {
   color: #10b981;
   font-weight: 600;
 }
 
-.no-disponible {
+.unavailable {
   color: #ef4444;
   font-weight: 600;
 }

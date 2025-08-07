@@ -2,5 +2,27 @@
     "conventionalCommits.scopes": [
         "tecnicos",
         "login"
-    ]
+    ],
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true,
+        "**/.angular/cache/**": true,
+        "**/dist/**": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.angular/cache": true,
+        "**/dist": true
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.angular/cache": true,
+        "**/dist": true
+    }
 }
