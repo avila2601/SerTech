@@ -85,21 +85,4 @@ export class ClientService {
       })
     );
   }
-
-  // Backward compatibility Spanish interface methods (deprecated)
-  getClienteData(): Observable<ClienteData[]> {
-    return this.storageService.getClients();
-  }
-
-  getClienteDataById(id: string): ClienteData | undefined {
-    return this.storageService.getClientById(id);
-  }
-
-  agregarClienteData(ClienteData: Omit<ClienteData, 'id'>): Observable<ClienteData> {
-    return this.storageService.addClient(ClienteData);
-  }
-
-  actualizarClienteData(id: string, datos: Partial<ClienteData>) {
-    return this.storageService.updateClient(id, datos);
-  }
 }

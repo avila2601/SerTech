@@ -107,10 +107,4 @@ export class UserStateService {
   getUserId(): string | null {
     return this.userStateSubject.value.userId;
   }
-
-  // Spanish compatibility methods (deprecated)
-  loginTecnico = this.loginTechnician;
-  loginCliente = this.loginClient;
-  esTecnico = this.isTechnician;
-  esCliente = this.isClient;
 }

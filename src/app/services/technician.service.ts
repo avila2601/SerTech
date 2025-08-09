@@ -72,27 +72,4 @@ export class TechnicianService {
       });
     });
   }
-
-  // Backward compatibility Spanish interface methods (deprecated)
-  getTecnicos(): Observable<TecnicoData[]> {
-    return this.http.get<TecnicoData[]>(this.url);
-  }
-
-  getTecnicoById(id: string): Observable<TecnicoData | undefined> {
-    return new Observable(observer => {
-      this.getTecnicos().subscribe(tecnicos => {
-        observer.next(tecnicos.find(tecnico => tecnico.id === id));
-        observer.complete();
-      });
-    });
-  }
-
-  getTecnicosDisponibles(): Observable<TecnicoData[]> {
-    return new Observable(observer => {
-      this.getTecnicos().subscribe(tecnicos => {
-        observer.next(tecnicos.filter((t: TecnicoData) => t.disponible));
-        observer.complete();
-      });
-    });
-  }
 }

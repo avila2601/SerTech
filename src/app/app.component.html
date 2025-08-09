@@ -1,0 +1,104 @@
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand">
+      <h2>SerTech</h2>
+    </div>
+
+    <!-- Menú hamburguesa para móviles -->
+    <div class="hamburger" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <ul class="nav-menu" [class.active]="isMenuOpen">
+      <li>
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMenu()"
+          >Inicio</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/about-us"
+          routerLinkActive="active"
+          (click)="closeMenu()"
+          >¿Quienes Somos?</a
+        >
+      </li>
+      <li *ngIf="loggedTechnician || isLoggedAsClient">
+        <a
+          routerLink="/my-appointments"
+          routerLinkActive="active"
+          (click)="closeMenu()"
+          >Mis Citas</a
+        >
+      </li>
+      <li *ngIf="!loggedTechnician && !isLoggedAsClient">
+        <a
+          href="#"
+          routerLinkActive="active"
+          class=""
+          (click)="openTechniciansModal(); closeMenu(); $event.preventDefault()"
+          >Técnicos</a
+        >
+      </li>
+      <li *ngIf="!isLoggedAsClient && !loggedTechnician">
+        <a
+          href="#"
+          (click)="openLoginModal(); closeMenu(); $event.preventDefault()"
+          >Ingreso clientes</a
+        >
+      </li>
+      <li *ngIf="loggedTechnician">
+        <a
+          href="#"
+          (click)="
+            openTechnicianReviewsModal(); closeMenu(); $event.preventDefault()
+          "
+          >Mis reseñas</a
+        >
+      </li>
+      <li *ngIf="loggedTechnician">
+        <a href="#" (click)="logoutTechnician(); $event.preventDefault()"
+          >Cerrar sesión</a
+        >
+      </li>
+      <li *ngIf="isLoggedAsClient">
+        <a href="#" (click)="logoutClient(); $event.preventDefault()"
+          >Cerrar sesión</a
+        >
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<app-technician-login
+  *ngIf="showTechniciansModal"
+  (close)="closeTechniciansModal()"
+  (loginSuccess)="loginTechnician($event)"
+></app-technician-login>
+<app-login
+  *ngIf="showLoginModal"
+  (close)="closeLoginModal()"
+  (loginSuccess)="updateUserState()"
+></app-login>
+
+<app-technician-reviews-modal
+  *ngIf="showTechnicianReviewsModal"
+  [technicianId]="technicianIdForReviews"
+  (close)="closeTechnicianReviewsModal()"
+></app-technician-reviews-modal>
+
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2024 SerTech. Todos los derechos reservados.</p>
+  </div>
+</footer>

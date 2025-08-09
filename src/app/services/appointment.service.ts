@@ -110,28 +110,4 @@ export class AppointmentService {
       this.refreshAppointments();
     });
   }
-
-  // Backward compatibility Spanish interface methods (deprecated)
-  getCitas(): Observable<CitaData[]> {
-    return this.storageService.getAppointments();
-  }
-
-  getCitasPorCliente(clienteId: string): Observable<CitaData[]> {
-    return this.storageService.getAppointmentsByClient(clienteId);
-  }
-
-  crearCita(cita: Omit<CitaData, 'id' | 'estado'>): Observable<CitaData> {
-    return this.storageService.createAppointment(cita);
-  }
-
-  cancelarCita(citaId: string): void {
-    this.storageService.cancelAppointment(citaId);
-    this.refreshAppointments();
-  }
-
-  actualizarClienteEnCita(citaId: string, clienteId: string): void {
-    this.storageService.updateAppointment(citaId, { clienteId }).subscribe(() => {
-      this.refreshAppointments();
-    });
-  }
 }

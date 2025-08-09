@@ -15,15 +15,6 @@ export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
   { path: 'debug', loadComponent: () => import('./components/debug/debug.component').then(m => m.DebugComponent) },
 
-  // Spanish compatibility routes (redirects to English versions)
-  { path: 'quienes-somos', redirectTo: 'about-us' },
-  { path: 'clientes', redirectTo: 'clients' },
-  { path: 'servicios', redirectTo: 'services' },
-  { path: 'tecnicos', redirectTo: 'technicians' },
-  { path: 'mis-citas', redirectTo: 'my-appointments' },
-  { path: 'resenas', redirectTo: 'reviews' },
-  { path: 'resumen-cita', redirectTo: 'appointment-summary' },
-
   // Fallback
   { path: '**', redirectTo: '' }
 ];
