@@ -4,6 +4,33 @@
     <p>Gestiona tus servicios técnicos programados</p>
   </div>
 
+  <div class="filter-buttons">
+    <button
+      class="btn"
+      [class.btn-primary]="currentFilter === 'ALL'"
+      [class.btn-secondary]="currentFilter !== 'ALL'"
+      (click)="setFilter('ALL')"
+    >
+      Todas
+    </button>
+    <button
+      class="btn"
+      [class.btn-primary]="currentFilter === 'PENDING'"
+      [class.btn-secondary]="currentFilter !== 'PENDING'"
+      (click)="setFilter('PENDING')"
+    >
+      Pendientes
+    </button>
+    <button
+      class="btn"
+      [class.btn-primary]="currentFilter === 'COMPLETED'"
+      [class.btn-secondary]="currentFilter !== 'COMPLETED'"
+      (click)="setFilter('COMPLETED')"
+    >
+      Historial
+    </button>
+  </div>
+
   <div class="appointments-content" *ngIf="filteredAppointments.length > 0">
     <div class="appointments-grid">
       <div
@@ -174,7 +201,8 @@
             *ngIf="getServiceInfo(appointment).symptoms"
           >
             <h4 class="section-title"></h4>
-            <p class="symptoms-text"> <span class="label">Síntomas Reportados:</span>
+            <p class="symptoms-text">
+              <span class="label">Síntomas Reportados:</span>
               {{ getServiceInfo(appointment).symptoms }}
             </p>
           </div>

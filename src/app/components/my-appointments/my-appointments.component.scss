@@ -32,6 +32,13 @@
   flex-wrap: wrap;
 }
 
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
 .status-btn {
   padding: 0.75rem 1.5rem;
   border: 2px solid rgba(102, 126, 234, 0.3);

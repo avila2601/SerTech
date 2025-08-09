@@ -31,6 +31,7 @@ export class MyAppointmentsComponent implements OnInit {
   reviewClientName = '';
   reviewAppointmentId = '';
   evaluatedAppointments: Set<string> = new Set();
+  currentFilter: 'ALL' | 'PENDING' | 'COMPLETED' = 'ALL';
 
   constructor(
     private appointmentService: AppointmentService,
@@ -96,25 +97,40 @@ export class MyAppointmentsComponent implements OnInit {
     });
   }
 
+  setFilter(filter: 'ALL' | 'PENDING' | 'COMPLETED'): void {
+    this.currentFilter = filter;
+    this.filterAppointments();
+  }
+
   filterAppointments(): void {
+    let userAppointments: Appointment[];
     if (this.currentClientId) {
-      this.filteredAppointments = this.appointments.filter(
+      userAppointments = this.appointments.filter(
         appointment => appointment.clientId === this.currentClientId
       );
     } else if (this.currentTechnicianId) {
-      this.filteredAppointments = this.appointments.filter(
+      userAppointments = this.appointments.filter(
         appointment => appointment.technicianId === this.currentTechnicianId
       );
     } else {
       const emailLogin = localStorage.getItem('emailLogin');
       if (emailLogin) {
-        this.filteredAppointments = this.appointments.filter(appointment => {
+        userAppointments = this.appointments.filter(appointment => {
           const client = this.clients.find(cl => cl.id === appointment.clientId);
           return client?.email === emailLogin;
         });
       } else {
-        this.filteredAppointments = [...this.appointments];
+        userAppointments = [...this.appointments];
       }
+    }
+
+    if (this.currentFilter === 'ALL') {
+      this.filteredAppointments = userAppointments;
+    } else {
+      const statusToFilter = this.currentFilter === 'PENDING' ? 'Pendiente' : 'Terminada';
+      this.filteredAppointments = userAppointments.filter(
+        app => this.getAppointmentStatus(app) === statusToFilter
+      );
     }
   }
 
