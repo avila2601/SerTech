@@ -8,7 +8,7 @@ export const routes: Routes = [
   { path: 'about-us', loadComponent: () => import('./components/about-us/about-us.component').then(m => m.AboutUsComponent) },
   { path: 'clients', loadComponent: () => import('./components/clients/clients.component').then(m => m.ClientsComponent) },
   { path: 'services', loadComponent: () => import('./components/services/services.component').then(m => m.ServicesComponent) },
-  { path: 'technicians', loadComponent: () => import('./components/technicians/technicians.component').then(m => m.TechniciansComponent) },
+  { path: 'technicians', loadComponent: () => import('./features/technicians/technicians.component').then(m => m.TechniciansComponent) },
   { path: 'my-appointments', loadComponent: () => import('./components/my-appointments/my-appointments.component').then(m => m.MyAppointmentsComponent), canActivate: [AuthGuard] },
   { path: 'reviews', loadComponent: () => import('./components/reviews/reviews.component').then(m => m.ReviewsComponent) },
   { path: 'appointment-summary', loadComponent: () => import('./components/appointment-summary/appointment-summary.component').then(m => m.AppointmentSummaryComponent) },

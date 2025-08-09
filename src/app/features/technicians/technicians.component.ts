@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TechnicianService } from '../../services/technician.service';
+import { Observable } from 'rxjs';
 import { ClientService } from '../../services/client.service';
-import { Technician, Client } from '../../models';
+import { Client } from '../../models';
+import { Technician } from '../../core/domain/models/technician.model';
+import { GetAllTechniciansUseCase } from '../../core/application/use-cases/get-all-technicians.usecase';
 import { TechnicianReviewsModalComponent } from './technician-reviews-modal.component';
 
 @Component({
@@ -14,25 +16,19 @@ import { TechnicianReviewsModalComponent } from './technician-reviews-modal.comp
   styleUrls: ['./technicians.component.scss']
 })
 export class TechniciansComponent implements OnInit {
-  technicians: Technician[] = [];
+  technicians$!: Observable<Technician[]>;
   showReviewsModal: boolean = false;
   modalTechnicianId: string = '';
 
   constructor(
-    private technicianService: TechnicianService,
+    private getAllTechniciansUseCase: GetAllTechniciansUseCase,
     private clientService: ClientService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.loadTechnicians();
-  }
-
-  loadTechnicians(): void {
-    this.technicianService.getTechnicians().subscribe(technicians => {
-      this.technicians = technicians;
-    });
+    this.technicians$ = this.getAllTechniciansUseCase.execute();
   }
 
   getStars(rating: number): number[] {

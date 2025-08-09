@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { TechnicianLoginComponent } from './components/technicians/technician-login.component';
-import { TechnicianReviewsModalComponent } from './components/technicians/technician-reviews-modal.component';
+import { TechnicianLoginComponent } from './features/technicians/technician-login.component';
+import { TechnicianReviewsModalComponent } from './features/technicians/technician-reviews-modal.component';
 import { Router } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 

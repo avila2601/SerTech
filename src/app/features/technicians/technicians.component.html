@@ -5,7 +5,10 @@
   </div>
 
   <div class="technicians-grid">
-    <div *ngFor="let technician of technicians" class="technician-card">
+    <div
+      *ngFor="let technician of technicians$ | async"
+      class="technician-card"
+    >
       <div class="technician-avatar">
         <img
           [src]="technician.photo || getRandomAvatar(technician.id)"
@@ -42,7 +45,7 @@
     </div>
   </div>
 
-  <div *ngIf="technicians.length === 0" class="no-technicians">
+  <div *ngIf="!(technicians$ | async)?.length" class="no-technicians">
     <p>No hay técnicos disponibles en este momento.</p>
   </div>
 
