@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,7 +15,7 @@ import { ClientService } from '../../services/client.service';
       <form (ngSubmit)="login()" autocomplete="off">
         <div class="form-group">
           <label for="email">Ingresa tu e-mail</label>
-          <input id="email" name="email" type="email" [(ngModel)]="email" required autocomplete="off" />
+          <input #emailInput id="email" name="email" type="email" [(ngModel)]="email" required autocomplete="off" />
         </div>
         <button class="btn btn-primary btn-ingresar" type="submit">Ingresar</button>
       </form>
@@ -100,13 +100,21 @@ import { ClientService } from '../../services/client.service';
     }
   `]
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
   email: string = '';
   @Output() close = new EventEmitter<void>();
   @Output() loginSuccess = new EventEmitter<void>();
+  @ViewChild('emailInput') emailInput!: ElementRef<HTMLInputElement>;
   errorMessage: string = '';
 
   constructor(private router: Router, private clientService: ClientService) {}
+
+  ngAfterViewInit() {
+    // Usar setTimeout para asegurar que el DOM esté completamente renderizado
+    setTimeout(() => {
+      this.emailInput.nativeElement.focus();
+    }, 100);
+  }
 
   @HostListener('document:keydown.escape')
   onEscapePress() {

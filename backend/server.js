@@ -86,6 +86,59 @@ app.get('/resenas', (req, res) => {
   });
 });
 
+// Endpoint para obtener reseñas por técnico (para el nuevo repositorio)
+app.get('/api/reviews/:technicianId', (req, res) => {
+  const technicianId = req.params.technicianId;
+  fs.readFile(REVIEWS_PATH, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'No se pudo leer el archivo de reseñas.' });
+    }
+    const reviews = JSON.parse(data);
+    const technicianReviews = reviews.filter(review => review.technicianId === technicianId);
+    res.json(technicianReviews);
+  });
+});
+
+// Endpoint para verificar si existe una reseña para una cita
+app.get('/api/reviews/exists/:appointmentId', (req, res) => {
+  const appointmentId = req.params.appointmentId;
+  fs.readFile(REVIEWS_PATH, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'No se pudo leer el archivo de reseñas.' });
+    }
+    const reviews = JSON.parse(data);
+    const exists = reviews.some(review => review.appointmentId === appointmentId);
+    res.json({ exists });
+  });
+});
+
+// Endpoint para crear una nueva reseña
+app.post('/api/reviews', (req, res) => {
+  const newReview = req.body;
+  fs.readFile(REVIEWS_PATH, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'No se pudo leer el archivo de reseñas.' });
+    }
+    const reviews = JSON.parse(data);
+
+    // Generar nuevo ID
+    const newId = (reviews.length + 1).toString();
+    const reviewWithId = {
+      id: newId,
+      ...newReview
+    };
+
+    reviews.push(reviewWithId);
+
+    fs.writeFile(REVIEWS_PATH, JSON.stringify(reviews, null, 2), 'utf8', err => {
+      if (err) {
+        return res.status(500).json({ error: 'No se pudo guardar la reseña.' });
+      }
+      res.status(201).json(reviewWithId);
+    });
+  });
+});
+
 // Endpoint para actualizar todas las reseñas (PUT)
 app.put('/resenas', (req, res) => {
   const nuevasResenas = req.body;

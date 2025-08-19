@@ -1,1 +1,42 @@
-[]
+[
+  {
+    "id": "1",
+    "appointmentId": "1",
+    "technicianId": "2",
+    "clientId": "1",
+    "clientName": "Diego Avila",
+    "comment": "Awe!",
+    "rating": 5,
+    "date": "2025-08-19"
+  },
+  {
+    "id": "2",
+    "appointmentId": "1",
+    "technicianId": "2",
+    "clientId": "1",
+    "clientName": "Diego Avila",
+    "comment": "A!",
+    "rating": 5,
+    "date": "2025-08-19"
+  },
+  {
+    "id": "3",
+    "appointmentId": "1",
+    "technicianId": "2",
+    "clientId": "1",
+    "clientName": "Diego Avila",
+    "comment": "d",
+    "rating": 5,
+    "date": "2025-08-19"
+  },
+  {
+    "id": "4",
+    "appointmentId": "2",
+    "technicianId": "1",
+    "clientId": "1",
+    "clientName": "Diego Avila",
+    "comment": "Ausome!",
+    "rating": 5,
+    "date": "2025-08-19"
+  }
+]

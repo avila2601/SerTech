@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, HostListener } from '@angular/core';
+import { Component, EventEmitter, Output, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GetTechnicianByIdUseCase } from '../../core/application/use-cases/technicians/get-technician-by-id.usecase';
@@ -14,6 +14,7 @@ import { GetTechnicianByIdUseCase } from '../../core/application/use-cases/techn
         <div class="form-group">
           <label for="technicianId">ID de Técnico</label>
           <input
+            #technicianIdInput
             id="technicianId"
             [(ngModel)]="technicianId"
             name="technicianId"
@@ -133,15 +134,23 @@ import { GetTechnicianByIdUseCase } from '../../core/application/use-cases/techn
     }
   `]
 })
-export class TechnicianLoginComponent {
+export class TechnicianLoginComponent implements AfterViewInit {
   @Output() close = new EventEmitter<void>();
   @Output() loginSuccess = new EventEmitter<string>();
+  @ViewChild('technicianIdInput') technicianIdInput!: ElementRef<HTMLInputElement>;
 
   technicianId: string = '';
   password: string = '';
   errorMessage: string = '';
 
   constructor(private getTechnicianByIdUseCase: GetTechnicianByIdUseCase) {}
+
+  ngAfterViewInit() {
+    // Usar setTimeout para asegurar que el DOM esté completamente renderizado
+    setTimeout(() => {
+      this.technicianIdInput.nativeElement.focus();
+    }, 100);
+  }
 
   @HostListener('document:keydown.escape')
   onEscapePress() {

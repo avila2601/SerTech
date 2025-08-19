@@ -138,9 +138,14 @@ export class MyAppointmentsComponent implements OnInit {
   checkEvaluatedAppointments(): void {
     this.filteredAppointments.forEach(appointment => {
       if (this.getAppointmentStatus(appointment) === 'Terminada') {
-        this.checkReviewExistsUseCase.execute(appointment.id).subscribe(exists => {
-          if (exists) {
-            this.evaluatedAppointments.add(appointment.id);
+        this.checkReviewExistsUseCase.execute(appointment.id).subscribe({
+          next: (exists) => {
+            if (exists) {
+              this.evaluatedAppointments.add(appointment.id);
+            }
+          },
+          error: (error) => {
+            console.error(`Error checking review exists for appointment ${appointment.id}:`, error);
           }
         });
       }

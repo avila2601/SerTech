@@ -8,9 +8,8 @@ import { Review } from '../../../core/domain/models/review.model';
 @Injectable({
   providedIn: 'root'
 })
-export class
-ReviewJsonRepository extends IReviewRepository {
-  private apiUrl = '/api/reviews';
+export class ReviewJsonRepository extends IReviewRepository {
+  private apiUrl = 'https://sertech-backend.onrender.com/api/reviews';
 
   constructor(private http: HttpClient) {
     super();
