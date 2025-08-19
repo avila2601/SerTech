@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { ClientService } from '../../services/client.service';
 import { Client } from '../../models';
 import { Technician } from '../../core/domain/models/technician.model';
-import { GetAllTechniciansUseCase } from '../../core/application/use-cases/get-all-technicians.usecase';
+import { GetAllTechniciansUseCase } from '../../core/application/use-cases/technicians/get-all-technicians.usecase';
 import { TechnicianReviewsModalComponent } from './technician-reviews-modal.component';
 
 @Component({

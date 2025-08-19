@@ -4,11 +4,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AppointmentService } from '../../services/appointment.service';
 import { ServiceService } from '../../services/service.service';
-import { TechnicianService } from '../../services/technician.service';
 import { ClientService } from '../../services/client.service';
-import { ReviewService } from '../../services/review.service';
-import { Appointment, Service, Technician, Client } from '../../models';
-import { ReviewsComponent } from '../reviews/reviews.component';
+import { Appointment, Service, Client } from '../../models';
+import { Technician } from '../../core/domain/models/technician.model';
+import { ReviewsComponent } from '../../features/reviews/reviews.component';
+import { GetAllTechniciansUseCase } from '../../core/application/use-cases/technicians/get-all-technicians.usecase';
+import { CheckReviewExistsUseCase } from '../../core/application/use-cases/reviews/check-review-exists.usecase';
 
 @Component({
   selector: 'app-my-appointments',
@@ -36,9 +37,9 @@ export class MyAppointmentsComponent implements OnInit {
   constructor(
     private appointmentService: AppointmentService,
     private serviceService: ServiceService,
-    private technicianService: TechnicianService,
+    private getAllTechniciansUseCase: GetAllTechniciansUseCase,
     private clientService: ClientService,
-    private reviewService: ReviewService,
+    private checkReviewExistsUseCase: CheckReviewExistsUseCase,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -75,7 +76,7 @@ export class MyAppointmentsComponent implements OnInit {
     forkJoin({
       appointments: this.appointmentService.getAppointments(),
       services: this.serviceService.getServices(),
-      technicians: this.technicianService.getTechnicians(),
+      technicians: this.getAllTechniciansUseCase.execute(),
       clients: this.clientService.getClients()
     }).subscribe({
       next: (data) => {
@@ -137,7 +138,7 @@ export class MyAppointmentsComponent implements OnInit {
   checkEvaluatedAppointments(): void {
     this.filteredAppointments.forEach(appointment => {
       if (this.getAppointmentStatus(appointment) === 'Terminada') {
-        this.reviewService.reviewExists(appointment.id).subscribe(exists => {
+        this.checkReviewExistsUseCase.execute(appointment.id).subscribe(exists => {
           if (exists) {
             this.evaluatedAppointments.add(appointment.id);
           }

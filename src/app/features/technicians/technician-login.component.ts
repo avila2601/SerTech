@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TechnicianService } from '../../services/technician.service';
+import { GetTechnicianByIdUseCase } from '../../core/application/use-cases/technicians/get-technician-by-id.usecase';
 
 @Component({
   selector: 'app-technician-login',
@@ -141,7 +141,7 @@ export class TechnicianLoginComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private technicianService: TechnicianService) {}
+  constructor(private getTechnicianByIdUseCase: GetTechnicianByIdUseCase) {}
 
   @HostListener('document:keydown.escape')
   onEscapePress() {
@@ -155,8 +155,7 @@ export class TechnicianLoginComponent {
     }
 
     // Buscar el técnico por ID
-    this.technicianService.getTechnicians().subscribe(technicians => {
-      const technician = technicians.find(t => t.id === this.technicianId);
+    this.getTechnicianByIdUseCase.execute(this.technicianId).subscribe(technician => {
       if (technician && technician.password === this.password) {
         this.loginSuccess.emit(this.technicianId);
         this.onClose();

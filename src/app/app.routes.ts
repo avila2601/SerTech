@@ -10,7 +10,7 @@ export const routes: Routes = [
   { path: 'services', loadComponent: () => import('./components/services/services.component').then(m => m.ServicesComponent) },
   { path: 'technicians', loadComponent: () => import('./features/technicians/technicians.component').then(m => m.TechniciansComponent) },
   { path: 'my-appointments', loadComponent: () => import('./components/my-appointments/my-appointments.component').then(m => m.MyAppointmentsComponent), canActivate: [AuthGuard] },
-  { path: 'reviews', loadComponent: () => import('./components/reviews/reviews.component').then(m => m.ReviewsComponent) },
+  { path: 'reviews', loadComponent: () => import('./features/reviews/reviews.component').then(m => m.ReviewsComponent) },
   { path: 'appointment-summary', loadComponent: () => import('./components/appointment-summary/appointment-summary.component').then(m => m.AppointmentSummaryComponent) },
   { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
   { path: 'debug', loadComponent: () => import('./components/debug/debug.component').then(m => m.DebugComponent) },

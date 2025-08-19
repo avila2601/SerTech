@@ -5,6 +5,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 import { ITechnicianRepository } from './core/domain/repositories/technician.repository';
 import { TechnicianJsonRepository } from './infrastructure/driven-adapters/json-repository/technician.json.repository';
+import { IReviewRepository } from './core/domain/repositories/review.repository';
+import { ReviewJsonRepository } from './infrastructure/driven-adapters/json-repository/review.json.repository';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
 
     // Clean Architecture providers
-    { provide: ITechnicianRepository, useClass: TechnicianJsonRepository }
+    { provide: ITechnicianRepository, useClass: TechnicianJsonRepository },
+    { provide: IReviewRepository, useClass: ReviewJsonRepository }
   ]
 };

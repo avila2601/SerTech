@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppointmentService } from '../../services/appointment.service';
 import { ClientService } from '../../services/client.service';
-import { TechnicianService } from '../../services/technician.service';
-import { Client, Appointment, Technician } from '../../models';
+import { GetTechnicianByIdUseCase } from '../../core/application/use-cases/technicians/get-technician-by-id.usecase';
+import { Client, Appointment } from '../../models';
+import { Technician } from '../../core/domain/models/technician.model';
 import { switchMap } from 'rxjs/operators';
 
 @Component({
@@ -39,7 +40,7 @@ export class AppointmentSummaryComponent implements OnInit {
     private router: Router,
     private appointmentService: AppointmentService,
     private clientService: ClientService,
-    private technicianService: TechnicianService
+    private getTechnicianByIdUseCase: GetTechnicianByIdUseCase
   ) {}
 
   ngOnInit(): void {
@@ -65,8 +66,10 @@ export class AppointmentSummaryComponent implements OnInit {
   }
 
   loadTechnicianData(): void {
-    this.technicianService.getTechnicians().subscribe(technicians => {
-      this.technician = technicians.find(tech => tech.id === this.technicianId) || null;
+    this.getTechnicianByIdUseCase.execute(this.technicianId).subscribe(technician => {
+      if (technician) {
+        this.technician = technician;
+      }
     });
   }
 

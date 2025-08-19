@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, Output, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
-import { ReviewService } from '../../services/review.service';
-import { TechnicianService } from '../../services/technician.service';
+import { Technician } from '../../core/domain/models/technician.model';
+import { Review } from '../../core/domain/models/review.model';
+import { GetTechnicianByIdUseCase } from '../../core/application/use-cases/technicians/get-technician-by-id.usecase';
+import { GetReviewsByTechnicianIdUseCase } from '../../core/application/use-cases/reviews/get-reviews-by-technician-id.usecase';
 
 @Component({
   selector: 'app-technician-reviews-modal',
@@ -15,28 +17,33 @@ export class TechnicianReviewsModalComponent implements OnInit {
   @Input() technicianId: string = '';
   @Output() close = new EventEmitter<void>();
 
-  technician: any = null;
-  reviews: any[] = [];
+  technician: Technician | undefined;
+  reviews: Review[] = [];
+  averageRating: number = 0;
 
   constructor(
-    private reviewService: ReviewService,
-    private technicianService: TechnicianService
+    private getTechnicianById: GetTechnicianByIdUseCase,
+    private getReviewsById: GetReviewsByTechnicianIdUseCase
   ) {}
 
   ngOnInit() {
+    if (!this.technicianId) return;
+
+    const technician$ = this.getTechnicianById.execute(this.technicianId);
+    const reviews$ = this.getReviewsById.execute(this.technicianId);
+
     forkJoin({
-      technician: this.technicianService.getTechnicianById(this.technicianId),
-      reviews: this.reviewService.getReviewsByTechnician(this.technicianId)
+      technician: technician$,
+      reviews: reviews$
     }).subscribe(({ technician, reviews }) => {
       this.technician = technician;
       this.reviews = reviews;
 
-      if (this.technician && this.reviews.length > 0) {
-        const totalRating = this.reviews.reduce((acc, review) => acc + review.rating, 0);
-        const averageRating = totalRating / this.reviews.length;
-        this.technician.rating = parseFloat(averageRating.toFixed(1));
-      } else if (this.technician) {
-        this.technician.rating = 0;
+      if (reviews && reviews.length > 0) {
+        const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+        this.averageRating = parseFloat((totalRating / reviews.length).toFixed(1));
+      } else {
+        this.averageRating = 0;
       }
     });
   }
@@ -55,12 +62,12 @@ export class TechnicianReviewsModalComponent implements OnInit {
       stars.push('★');
     }
 
-    if (hasHalfStar) {
+    if (hasHalfStar && stars.length < 5) {
+      // This logic can be improved, but for now keeps original intent
       stars.push('☆');
     }
 
-    const emptyStars = 5 - stars.length;
-    for (let i = 0; i < emptyStars; i++) {
+    while(stars.length < 5) {
       stars.push('☆');
     }
 
