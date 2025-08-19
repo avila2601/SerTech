@@ -21,10 +21,17 @@ app.get('/', (req, res) => {
 app.get('/citas', (req, res) => {
   fs.readFile(DATA_PATH, 'utf8', (err, data) => {
     if (err) {
-      return res.status(500).json({ error: 'No se pudo leer el archivo de citas.' });
+      console.log('Error reading appointments file:', err);
+      // Si el archivo no existe, retornar array vacío
+      return res.json([]);
     }
-    const json = JSON.parse(data);
-    res.json(json.citas); // Solo el array de citas
+    try {
+      const json = JSON.parse(data);
+      res.json(json.citas || []); // Solo el array de citas
+    } catch (parseError) {
+      console.log('Error parsing appointments JSON:', parseError);
+      res.json([]);
+    }
   });
 });
 
@@ -32,10 +39,16 @@ app.get('/citas', (req, res) => {
 app.put('/citas', (req, res) => {
   const nuevasCitas = req.body;
   fs.readFile(DATA_PATH, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).json({ error: 'No se pudo leer el archivo de citas.' });
+    let json = { citas: [], clientes: [], ultimoIdCliente: 0, ultimoIdCita: 0 };
+    
+    if (!err) {
+      try {
+        json = JSON.parse(data);
+      } catch (parseError) {
+        console.log('Error parsing existing appointments file:', parseError);
+      }
     }
-    let json = JSON.parse(data);
+    
     json.citas = nuevasCitas;
     fs.writeFile(DATA_PATH, JSON.stringify(json, null, 2), 'utf8', err => {
       if (err) {
@@ -46,14 +59,102 @@ app.put('/citas', (req, res) => {
   });
 });
 
+// API endpoints para compatibilidad con Angular
+app.get('/api/appointments', (req, res) => {
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
+    if (err) {
+      console.log('Error reading appointments file:', err);
+      // Si el archivo no existe, retornar array vacío
+      return res.json([]);
+    }
+    try {
+      const json = JSON.parse(data);
+      res.json(json.citas || []); // Solo el array de citas
+    } catch (parseError) {
+      console.log('Error parsing appointments JSON:', parseError);
+      res.json([]);
+    }
+  });
+});
+
+app.put('/api/appointments', (req, res) => {
+  const nuevasCitas = req.body;
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
+    let json = { citas: [], clientes: [], ultimoIdCliente: 0, ultimoIdCita: 0 };
+    
+    if (!err) {
+      try {
+        json = JSON.parse(data);
+      } catch (parseError) {
+        console.log('Error parsing existing appointments file:', parseError);
+      }
+    }
+    
+    json.citas = nuevasCitas;
+    fs.writeFile(DATA_PATH, JSON.stringify(json, null, 2), 'utf8', err => {
+      if (err) {
+        return res.status(500).json({ error: 'No se pudo guardar el archivo de citas.' });
+      }
+      res.json({ mensaje: 'Citas actualizadas correctamente.' });
+    });
+  });
+});
+
+app.get('/api/clients', (req, res) => {
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
+    if (err) {
+      console.log('Error reading clients file:', err);
+      // Si el archivo no existe, retornar array vacío
+      return res.json([]);
+    }
+    try {
+      const json = JSON.parse(data);
+      res.json(json.clientes || []); // Solo el array de clientes
+    } catch (parseError) {
+      console.log('Error parsing clients JSON:', parseError);
+      res.json([]);
+    }
+  });
+});
+
+app.put('/api/clients', (req, res) => {
+  const nuevosClientes = req.body;
+  fs.readFile(DATA_PATH, 'utf8', (err, data) => {
+    let json = { citas: [], clientes: [], ultimoIdCliente: 0, ultimoIdCita: 0 };
+    
+    if (!err) {
+      try {
+        json = JSON.parse(data);
+      } catch (parseError) {
+        console.log('Error parsing existing clients file:', parseError);
+      }
+    }
+    
+    json.clientes = nuevosClientes;
+    fs.writeFile(DATA_PATH, JSON.stringify(json, null, 2), 'utf8', err => {
+      if (err) {
+        return res.status(500).json({ error: 'No se pudo guardar el archivo de clientes.' });
+      }
+      res.json({ mensaje: 'Clientes actualizados correctamente.' });
+    });
+  });
+});
+
 // Endpoint para obtener todos los clientes
 app.get('/clientes', (req, res) => {
   fs.readFile(DATA_PATH, 'utf8', (err, data) => {
     if (err) {
-      return res.status(500).json({ error: 'No se pudo leer el archivo de clientes.' });
+      console.log('Error reading clients file:', err);
+      // Si el archivo no existe, retornar array vacío
+      return res.json([]);
     }
-    const json = JSON.parse(data);
-    res.json(json.clientes); // Solo el array de clientes
+    try {
+      const json = JSON.parse(data);
+      res.json(json.clientes || []); // Solo el array de clientes
+    } catch (parseError) {
+      console.log('Error parsing clients JSON:', parseError);
+      res.json([]);
+    }
   });
 });
 
@@ -61,10 +162,16 @@ app.get('/clientes', (req, res) => {
 app.put('/clientes', (req, res) => {
   const nuevosClientes = req.body;
   fs.readFile(DATA_PATH, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).json({ error: 'No se pudo leer el archivo de clientes.' });
+    let json = { citas: [], clientes: [], ultimoIdCliente: 0, ultimoIdCita: 0 };
+    
+    if (!err) {
+      try {
+        json = JSON.parse(data);
+      } catch (parseError) {
+        console.log('Error parsing existing clients file:', parseError);
+      }
     }
-    let json = JSON.parse(data);
+    
     json.clientes = nuevosClientes;
     fs.writeFile(DATA_PATH, JSON.stringify(json, null, 2), 'utf8', err => {
       if (err) {
