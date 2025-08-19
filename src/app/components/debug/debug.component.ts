@@ -81,20 +81,21 @@ export class DebugComponent {
   updateJsonData(): void {
     // Obtener datos de Render (clientes y citas)
     Promise.all([
-      this.http.get<any>('https://sertech-backend.onrender.com/clientes').toPromise(),
-      this.http.get<any>('https://sertech-backend.onrender.com/citas').toPromise()
+      this.http.get<any>('https://sertech-backend.onrender.com/clients').toPromise(),
+      this.http.get<any>('https://sertech-backend.onrender.com/appointments').toPromise()
     ]).then(([clients, appointments]) => {
       this.jsonData = JSON.stringify({ clientes: clients, citas: appointments }, null, 2);
-    }).catch(() => {
-      this.jsonData = 'Error al obtener datos de Render';
+    }).catch((error) => {
+      console.error('Error al obtener datos de Render:', error);
+      this.jsonData = 'Error al obtener datos de Render: ' + (error.message || error);
     });
   }
 
   exportData(): void {
     // Descargar datos de Render como JSON
     Promise.all([
-      this.http.get<any>('https://sertech-backend.onrender.com/clientes').toPromise(),
-      this.http.get<any>('https://sertech-backend.onrender.com/citas').toPromise()
+      this.http.get<any>('https://sertech-backend.onrender.com/clients').toPromise(),
+      this.http.get<any>('https://sertech-backend.onrender.com/appointments').toPromise()
     ]).then(([clients, appointments]) => {
       const data = JSON.stringify({ clientes: clients, citas: appointments }, null, 2);
       const blob = new Blob([data], { type: 'application/json' });
@@ -104,6 +105,9 @@ export class DebugComponent {
       a.download = 'sertech_data_render.json';
       a.click();
       window.URL.revokeObjectURL(url);
+    }).catch((error) => {
+      console.error('Error al exportar datos:', error);
+      alert('Error al exportar datos: ' + (error.message || error));
     });
   }
 

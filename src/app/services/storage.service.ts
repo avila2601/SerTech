@@ -155,39 +155,12 @@ export class StorageService {
     );
   }
 
-  /**
-   * Envía el JSON actualizado de citas al archivo assets/data/citas.json usando PUT
-   * (esto solo funcionará si hay un backend que acepte la petición)
-   */
-  putAppointmentsJson(): void {
-    const url = 'assets/data/appointments.json';
-    this.http.put(url, this.data).subscribe({
-      next: () => console.log('Archivo citas.json actualizado'),
-      error: err => console.error('Error al actualizar citas.json:', err)
-    });
-  }
-
   cancelAppointment(appointmentId: string): void {
     const appointmentIndex = this.data.citas.findIndex(appointment => appointment.id === appointmentId);
     if (appointmentIndex !== -1) {
       this.data.citas[appointmentIndex].estado = AppointmentStatus.CANCELLED;
       this.saveData();
     }
-  }
-
-  // Método para obtener datos del archivo JSON inicial (opcional)
-  loadInitialData(): Observable<DataStorage> {
-    return this.http.get<DataStorage>('assets/data/appointments.json').pipe(
-      map(data => {
-        this.data = data;
-        this.saveData();
-        return data;
-      }),
-      catchError(error => {
-        console.error('Error loading initial data:', error);
-        return of(this.data);
-      })
-    );
   }
 
   // Método para exportar datos (útil para debugging)
