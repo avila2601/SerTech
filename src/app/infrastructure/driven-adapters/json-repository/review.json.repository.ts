@@ -9,7 +9,7 @@ import { Review } from '../../../core/domain/models/review.model';
   providedIn: 'root'
 })
 export class ReviewJsonRepository extends IReviewRepository {
-  private apiUrl = 'https://sertech-backend.onrender.com/api/reviews';
+  private apiUrl = 'https://sertech-backend.onrender.com/reviews';
 
   constructor(private http: HttpClient) {
     super();

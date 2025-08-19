@@ -59,14 +59,14 @@ export class StorageService {
 
   // Métodos para clientes
   getClients(): Observable<ClienteData[]> {
-    return this.http.get<ClienteData[]>('https://sertech-backend.onrender.com/clientes');
+    return this.http.get<ClienteData[]>('https://sertech-backend.onrender.com/clients');
   }
 
   addClient(client: Omit<ClienteData, 'id'>): Observable<ClienteData> {
     console.log('=== STORAGE SERVICE: Iniciando addClient ===');
     console.log('Cliente a agregar:', client);
 
-    return this.http.get<ClienteData[]>('https://sertech-backend.onrender.com/clientes').pipe(
+    return this.http.get<ClienteData[]>('https://sertech-backend.onrender.com/clients').pipe(
       switchMap((clients: ClienteData[]) => {
         console.log('Clientes existentes obtenidos:', clients);
         // Asegurar que clientes sea un array
@@ -88,7 +88,7 @@ export class StorageService {
         console.log('Lista actualizada de clientes:', updatedClients);
 
         return this.http.put<ClienteData[]>(
-          'https://sertech-backend.onrender.com/clientes',
+          'https://sertech-backend.onrender.com/clients',
           updatedClients
         ).pipe(
           map(() => {
@@ -113,7 +113,7 @@ export class StorageService {
         const updatedClients = [...clients];
         updatedClients[idx] = updatedClient;
         return this.http.put<ClienteData[]>(
-          'https://sertech-backend.onrender.com/clientes',
+          'https://sertech-backend.onrender.com/clients',
           updatedClients
         ).pipe(map(() => updatedClient));
       })
@@ -122,7 +122,7 @@ export class StorageService {
 
   // Métodos para citas
   getAppointments(): Observable<CitaData[]> {
-    return this.http.get<CitaData[]>('https://sertech-backend.onrender.com/citas');
+    return this.http.get<CitaData[]>('https://sertech-backend.onrender.com/appointments');
   }
 
   getAppointmentsByClient(clientId: string): Observable<CitaData[]> {
@@ -148,7 +148,7 @@ export class StorageService {
         const updatedAppointments = [...appointments, newAppointment];
         // Hacer PUT al backend con el array actualizado
         return this.http.put<CitaData[]>(
-          'https://sertech-backend.onrender.com/citas',
+          'https://sertech-backend.onrender.com/appointments',
           updatedAppointments
         ).pipe(map(() => newAppointment));
       })
