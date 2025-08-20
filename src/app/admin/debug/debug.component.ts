@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-debug',
@@ -74,7 +73,7 @@ import { StorageService } from '../../services/storage.service';
 export class DebugComponent {
   jsonData: string = '';
 
-  constructor(private storageService: StorageService, private http: HttpClient) {
+  constructor(private http: HttpClient) {
     this.updateJsonData();
   }
 

@@ -171,9 +171,9 @@ export class AppointmentJsonRepository extends AppointmentRepository {
   }
 
   delete(id: string): Observable<boolean> {
-    // This would need to be implemented in StorageService
+    // TODO: Implement appointment deletion through AppointmentStorageRepository
     return new Observable<boolean>(observer => {
-      console.warn('Delete appointment not implemented in StorageService yet');
+      console.warn('Delete appointment not yet implemented');
       observer.next(false);
       observer.complete();
     });
