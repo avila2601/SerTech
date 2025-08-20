@@ -140,10 +140,14 @@ export class StorageService {
         }
         // Calcular el nuevo ID
         const newId = appointments.length > 0 ? (Math.max(...appointments.map(c => +c.id)) + 1).toString() : '1';
+
+        // Calcular el estado basado en fecha y hora
+        const appointmentStatus = this.calculateAppointmentStatus(appointment.fecha, appointment.hora);
+
         const newAppointment: CitaData = {
           ...appointment,
           id: newId,
-          estado: AppointmentStatus.PENDING
+          estado: appointmentStatus
         };
         const updatedAppointments = [...appointments, newAppointment];
         // Hacer PUT al backend con el array actualizado
@@ -153,6 +157,23 @@ export class StorageService {
         ).pipe(map(() => newAppointment));
       })
     );
+  }
+
+  private calculateAppointmentStatus(date: Date, time: string): AppointmentStatus {
+    const appointmentDate = new Date(date);
+    const [hours, minutes] = time.split(':').map(Number);
+
+    // Crear fecha completa con hora y minutos
+    const appointmentDateTime = new Date(appointmentDate);
+    appointmentDateTime.setHours(hours, minutes, 0, 0);
+
+    const currentDateTime = new Date();
+
+    // Si la fecha y hora ya pasaron, está terminada
+    if (appointmentDateTime < currentDateTime) {
+      return AppointmentStatus.COMPLETED;
+    }
+    return AppointmentStatus.PENDING;
   }
 
   cancelAppointment(appointmentId: string): void {

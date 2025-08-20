@@ -85,6 +85,7 @@ export class MyAppointmentsComponent implements OnInit {
         this.technicians = data.technicians || [];
         this.clients = data.clients || [];
         this.filterAppointments();
+        // Ejecutar checkEvaluatedAppointments DESPUÉS de filtrar
         this.checkEvaluatedAppointments();
       },
       error: (error) => {
@@ -101,6 +102,8 @@ export class MyAppointmentsComponent implements OnInit {
   setFilter(filter: 'ALL' | 'PENDING' | 'COMPLETED'): void {
     this.currentFilter = filter;
     this.filterAppointments();
+    // Verificar reseñas después de filtrar
+    this.checkEvaluatedAppointments();
   }
 
   filterAppointments(): void {
