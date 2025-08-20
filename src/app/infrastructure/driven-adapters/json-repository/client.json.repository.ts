@@ -2,19 +2,19 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Client } from '../../../core/domain/models/client.model';
 import { ClientRepository } from '../../../core/domain/repositories/client.repository';
-import { StorageService } from '../../../services/storage.service';
+import { ClientStorageRepository } from '../../../core/domain/repositories/client-storage.repository';
 import { ClienteData } from '../../../models/data-types';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientJsonRepository extends ClientRepository {
-  constructor(private storageService: StorageService) {
+  constructor(private clientStorageRepository: ClientStorageRepository) {
     super();
   }
 
   getAll(): Observable<Client[]> {
-    return this.storageService.getClients().pipe(
+    return this.clientStorageRepository.getAll().pipe(
       map((clienteData: ClienteData[]) =>
         clienteData.map(this.mapToClient)
       )
@@ -53,7 +53,7 @@ export class ClientJsonRepository extends ClientRepository {
 
     console.log('Cliente convertido (Spanish):', clienteData);
 
-    return this.storageService.addClient(clienteData).pipe(
+    return this.clientStorageRepository.create(clienteData).pipe(
       map((createdClienteData: ClienteData) => {
         const convertedClient = this.mapToClient(createdClienteData);
         console.log('Cliente retornado (English):', convertedClient);
@@ -70,7 +70,7 @@ export class ClientJsonRepository extends ClientRepository {
     if (data.phone) datosClienteData.telefono = data.phone;
     if (data.address) datosClienteData.direccion = data.address;
 
-    return this.storageService.updateClient(id, datosClienteData).pipe(
+    return this.clientStorageRepository.update(id, datosClienteData).pipe(
       map((updatedClienteData: ClienteData | null) => {
         if (!updatedClienteData) return null;
         return this.mapToClient(updatedClienteData);
@@ -79,13 +79,7 @@ export class ClientJsonRepository extends ClientRepository {
   }
 
   delete(id: string): Observable<boolean> {
-    // This would need to be implemented in StorageService
-    // For now, we'll return a placeholder
-    return new Observable<boolean>(observer => {
-      console.warn('Delete client not implemented in StorageService yet');
-      observer.next(false);
-      observer.complete();
-    });
+    return this.clientStorageRepository.delete(id);
   }
 
   private mapToClient(clienteData: ClienteData): Client {

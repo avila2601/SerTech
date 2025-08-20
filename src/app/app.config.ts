@@ -13,6 +13,10 @@ import { AppointmentRepository } from './core/domain/repositories/appointment.re
 import { AppointmentJsonRepository } from './infrastructure/driven-adapters/json-repository/appointment.json.repository';
 import { ServiceRepository } from './core/domain/repositories/service.repository';
 import { ServiceJsonRepository } from './infrastructure/driven-adapters/json-repository/service.json.repository';
+import { ClientStorageRepository } from './core/domain/repositories/client-storage.repository';
+import { StorageClientRepository } from './infrastructure/driven-adapters/storage/storage-client.repository';
+import { AppointmentStorageRepository } from './core/domain/repositories/appointment-storage.repository';
+import { StorageAppointmentRepository } from './infrastructure/driven-adapters/storage/storage-appointment.repository';
 import { CalculateAppointmentStatusUseCase } from './core/application/use-cases/appointments';
 import { SelectTechnicianUseCase } from './core/application/use-cases/technicians';
 import {
@@ -50,6 +54,10 @@ export const appConfig: ApplicationConfig = {
     { provide: ClientRepository, useClass: ClientJsonRepository },
     { provide: AppointmentRepository, useClass: AppointmentJsonRepository },
     { provide: ServiceRepository, useClass: ServiceJsonRepository },
+
+    // Storage repositories
+    { provide: ClientStorageRepository, useClass: StorageClientRepository },
+    { provide: AppointmentStorageRepository, useClass: StorageAppointmentRepository },
 
     // Use Cases
     CalculateAppointmentStatusUseCase,

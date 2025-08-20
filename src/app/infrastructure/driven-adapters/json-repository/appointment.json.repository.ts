@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Appointment } from '../../../core/domain/models/appointment.model';
 import { AppointmentRepository } from '../../../core/domain/repositories/appointment.repository';
-import { StorageService } from '../../../services/storage.service';
+import { AppointmentStorageRepository } from '../../../core/domain/repositories/appointment-storage.repository';
 import { CitaData } from '../../../models/data-types';
 import { AppointmentStatus } from '../../../models';
 
@@ -13,14 +13,14 @@ import { AppointmentStatus } from '../../../models';
 export class AppointmentJsonRepository extends AppointmentRepository {
   private appointmentsSubject = new BehaviorSubject<Appointment[]>([]);
 
-  constructor(private storageService: StorageService) {
+  constructor(private appointmentStorageRepository: AppointmentStorageRepository) {
     super();
     this.refreshAppointments();
   }
 
   private refreshAppointments(): void {
-    this.storageService.getAppointments().subscribe(citas => {
-      const appointments = citas.map(cita => this.mapCitaToAppointment(cita));
+    this.appointmentStorageRepository.getAll().subscribe((citas: CitaData[]) => {
+      const appointments = citas.map((cita: CitaData) => this.mapCitaToAppointment(cita));
       this.appointmentsSubject.next(appointments);
     });
   }
@@ -76,9 +76,9 @@ export class AppointmentJsonRepository extends AppointmentRepository {
 
   getAll(): Observable<Appointment[]> {
     // Siempre obtener datos frescos del backend en lugar de usar cache local
-    return this.storageService.getAppointments().pipe(
-      map(citas => {
-        const appointments = citas.map(cita => this.mapCitaToAppointment(cita));
+    return this.appointmentStorageRepository.getAll().pipe(
+      map((citas: CitaData[]) => {
+        const appointments = citas.map((cita: CitaData) => this.mapCitaToAppointment(cita));
         // Actualizar el subject para otros suscriptores
         this.appointmentsSubject.next(appointments);
         return appointments;
@@ -120,13 +120,13 @@ export class AppointmentJsonRepository extends AppointmentRepository {
       direccion: appointment.address
     };
 
-    return this.storageService.createAppointment(citaData).pipe(
+    return this.appointmentStorageRepository.create(citaData).pipe(
       map((createdCita: CitaData) => {
         const convertedAppointment = this.mapCitaToAppointment(createdCita);
-        
+
         // Refresh the local cache
         this.refreshAppointments();
-        
+
         return convertedAppointment;
       })
     );
@@ -141,10 +141,10 @@ export class AppointmentJsonRepository extends AppointmentRepository {
 
     const spanishStatus = statusMap[status];
 
-    return this.storageService.updateAppointment(id, { estado: spanishStatus }).pipe(
-      map(() => {
+    return this.appointmentStorageRepository.updateStatus(id, status).pipe(
+      map((updatedAppointment: CitaData | null) => {
         this.refreshAppointments();
-        return null; // StorageService doesn't return the updated appointment
+        return updatedAppointment ? this.mapCitaToAppointment(updatedAppointment) : null;
       })
     );
   }
@@ -152,20 +152,21 @@ export class AppointmentJsonRepository extends AppointmentRepository {
   update(id: string, data: Partial<Appointment>): Observable<Appointment | null> {
     const citaData = this.mapAppointmentToCita(data);
 
-    return this.storageService.updateAppointment(id, citaData).pipe(
-      map(() => {
+    return this.appointmentStorageRepository.update(id, citaData).pipe(
+      map((updatedCita: CitaData | null) => {
         this.refreshAppointments();
-        return null; // StorageService doesn't return the updated appointment
+        return updatedCita ? this.mapCitaToAppointment(updatedCita) : null;
       })
     );
   }
 
   cancel(id: string): Observable<boolean> {
     return new Observable<boolean>(observer => {
-      this.storageService.cancelAppointment(id);
-      this.refreshAppointments();
-      observer.next(true);
-      observer.complete();
+      this.appointmentStorageRepository.cancel(id).subscribe(() => {
+        this.refreshAppointments();
+        observer.next(true);
+        observer.complete();
+      });
     });
   }
 

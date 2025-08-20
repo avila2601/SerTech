@@ -6,6 +6,11 @@ import { Appointment, Client, AppointmentStatus } from '../models';
 import { CitaData, ClienteData } from '../models/data-types';
 import { CalculateAppointmentStatusUseCase } from '../core/application/use-cases/appointments';
 
+/**
+ * @deprecated This service is being replaced by ClientStorageRepository and AppointmentStorageRepository
+ * for better separation of concerns following Clean Architecture principles.
+ * Use ClientStorageRepository for client operations and AppointmentStorageRepository for appointment operations.
+ */
 @Injectable({
   providedIn: 'root'
 })
