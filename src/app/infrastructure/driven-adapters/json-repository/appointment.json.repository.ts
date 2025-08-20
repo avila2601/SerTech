@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Appointment } from '../../../core/domain/models/appointment.model';
 import { AppointmentRepository } from '../../../core/domain/repositories/appointment.repository';
-import { AppointmentStorageRepository } from '../../../core/domain/repositories/appointment-storage.repository';
+import { AppointmentStorageRepository } from '../../../core/domain/repositories/storage';
 import { CitaData } from '../../../models/data-types';
 import { AppointmentStatus } from '../../../models';
 

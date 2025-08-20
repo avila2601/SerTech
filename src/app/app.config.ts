@@ -12,11 +12,15 @@ import { ClientJsonRepository } from './infrastructure/driven-adapters/json-repo
 import { AppointmentRepository } from './core/domain/repositories/appointment.repository';
 import { AppointmentJsonRepository } from './infrastructure/driven-adapters/json-repository/appointment.json.repository';
 import { ServiceRepository } from './core/domain/repositories/service.repository';
-import { ServiceJsonRepository } from './infrastructure/driven-adapters/json-repository/service.json.repository';
-import { ClientStorageRepository } from './core/domain/repositories/client-storage.repository';
-import { StorageClientRepository } from './infrastructure/driven-adapters/storage/storage-client.repository';
-import { AppointmentStorageRepository } from './core/domain/repositories/appointment-storage.repository';
-import { StorageAppointmentRepository } from './infrastructure/driven-adapters/storage/storage-appointment.repository';
+import {
+  ServiceJsonRepository,
+  StorageClientRepository,
+  StorageAppointmentRepository
+} from './infrastructure/driven-adapters';
+import {
+  ClientStorageRepository,
+  AppointmentStorageRepository
+} from './core/domain/repositories/storage';
 import { CalculateAppointmentStatusUseCase } from './core/application/use-cases/appointments';
 import { SelectTechnicianUseCase } from './core/application/use-cases/technicians';
 import {

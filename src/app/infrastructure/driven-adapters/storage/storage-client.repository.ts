@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { ClientStorageRepository } from '../../../core/domain/repositories/client-storage.repository';
+import { ClientStorageRepository } from '../../../core/domain/repositories/storage';
 import { ClienteData } from '../../../models/data-types';
-import { HttpDataSource } from '../http/http-data-source.service';
+import { HttpDataSource } from '../http';
 
 /**
  * Client storage repository implementation using HTTP backend

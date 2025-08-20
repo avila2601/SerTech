@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { AppointmentStorageRepository } from '../../../core/domain/repositories/appointment-storage.repository';
+import { AppointmentStorageRepository } from '../../../core/domain/repositories/storage';
 import { CitaData } from '../../../models/data-types';
 import { AppointmentStatus } from '../../../models';
-import { HttpDataSource } from '../http/http-data-source.service';
+import { HttpDataSource } from '../http';
 import { CalculateAppointmentStatusUseCase } from '../../../core/application/use-cases/appointments';
 
 /**

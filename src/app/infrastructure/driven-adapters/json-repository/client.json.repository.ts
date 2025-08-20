@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Client } from '../../../core/domain/models/client.model';
 import { ClientRepository } from '../../../core/domain/repositories/client.repository';
-import { ClientStorageRepository } from '../../../core/domain/repositories/client-storage.repository';
+import { ClientStorageRepository } from '../../../core/domain/repositories/storage';
 import { ClienteData } from '../../../models/data-types';
 
 @Injectable({

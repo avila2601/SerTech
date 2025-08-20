@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UserType } from '../../../models';
-import { UserStorageRepository } from '../../../infrastructure/driven-adapters/storage/user-storage.repository';
+import { UserStorageRepository } from '../../../infrastructure/driven-adapters';
 
 export interface UserState {
   isLoggedIn: boolean;
