@@ -61,7 +61,7 @@ export class StorageService {
 
   getClientById(id: string): Observable<ClienteData | undefined> {
     return this.getClients().pipe(
-      map((clients: ClienteData[]) => 
+      map((clients: ClienteData[]) =>
         clients.find(client => client.id === id)
       )
     );
@@ -90,7 +90,7 @@ export class StorageService {
 
   getAppointmentsByClient(clientId: string): Observable<CitaData[]> {
     return this.getAppointments().pipe(
-      map((appointments: CitaData[]) => 
+      map((appointments: CitaData[]) =>
         appointments.filter(appointment => appointment.clienteId === clientId)
       )
     );
@@ -160,7 +160,7 @@ export class StorageService {
   // Método para debugging - exportar datos del backend
   exportData(): Observable<string> {
     return this.getAppointments().pipe(
-      switchMap(appointments => 
+      switchMap(appointments =>
         this.getClients().pipe(
           map(clients => JSON.stringify({ appointments, clients }, null, 2))
         )

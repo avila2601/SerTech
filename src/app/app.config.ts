@@ -12,6 +12,7 @@ import { ClientJsonRepository } from './infrastructure/driven-adapters/json-repo
 import { AppointmentRepository } from './core/domain/repositories/appointment.repository';
 import { AppointmentJsonRepository } from './infrastructure/driven-adapters/json-repository/appointment.json.repository';
 import { CalculateAppointmentStatusUseCase } from './core/application/use-cases/appointments';
+import { SelectTechnicianUseCase } from './core/application/use-cases/technicians';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,6 +27,7 @@ export const appConfig: ApplicationConfig = {
     { provide: AppointmentRepository, useClass: AppointmentJsonRepository },
 
     // Use Cases
-    CalculateAppointmentStatusUseCase
+    CalculateAppointmentStatusUseCase,
+    SelectTechnicianUseCase
   ]
 };
