@@ -1,9 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ServiceService } from '../../services/service.service';
-import { Service, ServiceCategory } from '../../models';
+import {
+  GetAllServicesUseCase,
+  GetServicesByCategoryUseCase,
+  MapServiceTypeToCategoryUseCase,
+  ScheduleServiceUseCase
+} from '../../core/application/use-cases/services';
+import { Service } from '../../core/domain/models/service.model';
+import { ServiceCategory } from '../../models';
 
 interface ServiceCard {
   type: string;
@@ -86,11 +92,14 @@ export class ServicesComponent implements OnInit {
 
   serviceIcon: string = '';
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private serviceService: ServiceService
-  ) {
+  private getAllServicesUseCase = inject(GetAllServicesUseCase);
+  private getServicesByCategoryUseCase = inject(GetServicesByCategoryUseCase);
+  private mapServiceTypeToCategoryUseCase = inject(MapServiceTypeToCategoryUseCase);
+  private scheduleServiceUseCase = inject(ScheduleServiceUseCase);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  constructor() {
     // Minimum date is today
     const today = new Date();
     this.minDate = today.toISOString().split('T')[0];
@@ -110,7 +119,7 @@ export class ServicesComponent implements OnInit {
 
         // If no service selected, select a default one
         if (!this.selectedService) {
-          this.serviceService.getServicesByCategory(ServiceCategory.REPAIR).subscribe(services => {
+          this.getServicesByCategoryUseCase.execute(ServiceCategory.REPAIR).subscribe((services: Service[]) => {
             if (services && services.length > 0) {
               this.selectedService = services[0];
             }
@@ -125,7 +134,7 @@ export class ServicesComponent implements OnInit {
         const category = this.mapTypeToCategory(serviceType);
         if (category) {
           // Get the first service of that category
-          this.serviceService.getServicesByCategory(category).subscribe(services => {
+          this.getServicesByCategoryUseCase.execute(category).subscribe((services: Service[]) => {
             if (services && services.length > 0) {
               this.selectedService = services[0];
             }
@@ -140,7 +149,7 @@ export class ServicesComponent implements OnInit {
 
       // If no service selected by this point, select a default one
       if (!this.selectedService && !serviceType && !params['brand']) {
-        this.serviceService.getServicesByCategory(ServiceCategory.REPAIR).subscribe(services => {
+        this.getServicesByCategoryUseCase.execute(ServiceCategory.REPAIR).subscribe((services: Service[]) => {
           if (services && services.length > 0) {
             this.selectedService = services[0];
             this.serviceIcon = '🔧';
@@ -151,12 +160,7 @@ export class ServicesComponent implements OnInit {
   }
 
   private mapTypeToCategory(type: string): ServiceCategory | null {
-    const mapping: { [key: string]: ServiceCategory } = {
-      'maintenance': ServiceCategory.MAINTENANCE,
-      'repair': ServiceCategory.REPAIR,
-      'installation': ServiceCategory.INSTALLATION
-    };
-    return mapping[type] || null;
+    return this.mapServiceTypeToCategoryUseCase.getCategoryForType(type);
   }
 
   onBrandChange(): void {
@@ -169,42 +173,34 @@ export class ServicesComponent implements OnInit {
   }
 
   scheduleService(): void {
-    if (!this.selectedBrand) {
-      alert('Por favor selecciona una marca');
-      return;
-    }
-    // if (!this.selectedProduct) {
-    //   alert('Por favor selecciona un tipo de producto');
-    //   return;
-    // }
-    // if (!this.selectedLocation) {
-    //   alert('Por favor selecciona tu ubicación');
-    //   return;
-    // }
-    
-    // Here you can add the logic to schedule the service
-    console.log('Scheduling service:', {
-      service: this.selectedService,
+    const params = {
+      service: this.selectedService || undefined,
       brand: this.selectedBrand,
       product: this.selectedProduct,
       model: this.selectedModel,
       location: this.selectedLocation,
       symptoms: this.symptoms,
       date: this.selectedDate,
-      time: this.selectedTime
-    });
+      time: this.selectedTime,
+      serviceIcon: this.serviceIcon
+    };
 
-    // Navigate to technicians page with data (using English route)
-    this.router.navigate(['/technicians'], {
-      queryParams: {
-        service: this.selectedService?.id,
-        brand: this.selectedBrand,
-        product: this.selectedProduct,
-        model: this.selectedModel,
-        location: this.selectedLocation,
-        symptoms: this.symptoms,
-        date: this.selectedDate,
-        time: this.selectedTime
+    this.scheduleServiceUseCase.execute(params).subscribe({
+      next: (result) => {
+        if (result.isValid) {
+          this.router.navigate([result.navigationPath], {
+            queryParams: result.queryParams
+          });
+        } else {
+          // Handle validation errors
+          if (result.validationErrors && result.validationErrors.length > 0) {
+            alert(result.validationErrors[0]);
+          }
+        }
+      },
+      error: (error) => {
+        console.error('Error scheduling service:', error);
+        alert('Error al programar el servicio');
       }
     });
   }

@@ -11,8 +11,17 @@ import { ClientRepository } from './core/domain/repositories/client.repository';
 import { ClientJsonRepository } from './infrastructure/driven-adapters/json-repository/client.json.repository';
 import { AppointmentRepository } from './core/domain/repositories/appointment.repository';
 import { AppointmentJsonRepository } from './infrastructure/driven-adapters/json-repository/appointment.json.repository';
+import { ServiceRepository } from './core/domain/repositories/service.repository';
+import { ServiceJsonRepository } from './infrastructure/driven-adapters/json-repository/service.json.repository';
 import { CalculateAppointmentStatusUseCase } from './core/application/use-cases/appointments';
 import { SelectTechnicianUseCase } from './core/application/use-cases/technicians';
+import {
+  GetAllServicesUseCase,
+  GetServicesByCategoryUseCase,
+  GetServiceByIdUseCase,
+  MapServiceTypeToCategoryUseCase,
+  ScheduleServiceUseCase
+} from './core/application/use-cases/services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,9 +34,15 @@ export const appConfig: ApplicationConfig = {
     { provide: IReviewRepository, useClass: ReviewJsonRepository },
     { provide: ClientRepository, useClass: ClientJsonRepository },
     { provide: AppointmentRepository, useClass: AppointmentJsonRepository },
+    { provide: ServiceRepository, useClass: ServiceJsonRepository },
 
     // Use Cases
     CalculateAppointmentStatusUseCase,
-    SelectTechnicianUseCase
+    SelectTechnicianUseCase,
+    GetAllServicesUseCase,
+    GetServicesByCategoryUseCase,
+    GetServiceByIdUseCase,
+    MapServiceTypeToCategoryUseCase,
+    ScheduleServiceUseCase
   ]
 };
