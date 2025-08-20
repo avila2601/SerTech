@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AppointmentService } from '../../services/appointment.service';
-import { ClientService } from '../../services/client.service';
-import { Client } from '../../models';
+import {
+  UpdateClientInformationUseCase,
+  LoadClientFormDataUseCase,
+  NavigateToAppointmentSummaryUseCase
+} from '../../core/application/use-cases/clients';
 
 @Component({
   selector: 'app-clients',
@@ -24,13 +26,15 @@ export class ClientsComponent implements OnInit {
   selectedSymptoms: string = '';
   selectedLocation: string = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private appointmentService: AppointmentService,
-    private clientService: ClientService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
+  // Use Cases
+  private readonly fb = inject(FormBuilder);
+  private readonly updateClientInformationUseCase = inject(UpdateClientInformationUseCase);
+  private readonly loadClientFormDataUseCase = inject(LoadClientFormDataUseCase);
+  private readonly navigateToAppointmentSummaryUseCase = inject(NavigateToAppointmentSummaryUseCase);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
+  constructor() {
     this.informationForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -61,29 +65,17 @@ export class ClientsComponent implements OnInit {
       });
     });
 
-    // --- NEW: Load logged client data if exists ---
-    const clientId = localStorage.getItem('loggedClient');
-    if (clientId) {
-      this.clientService.getClients().subscribe(clients => {
-        const client = clients.find(c => c.id === clientId);
-        if (client) {
-          this.informationForm.patchValue({
-            name: client.name,
-            email: client.email,
-            phone: client.phone,
-            address: client.address
-          });
+    // Load client data using Clean Architecture
+    this.loadClientFormDataUseCase.execute().subscribe({
+      next: (clientData) => {
+        if (clientData) {
+          this.informationForm.patchValue(clientData);
         }
-      });
-    } else {
-      // If no logged client but there's an email in localStorage, prefill only the email
-      const emailLogin = localStorage.getItem('emailLogin');
-      if (emailLogin) {
-        this.informationForm.patchValue({
-          email: emailLogin
-        });
+      },
+      error: (error) => {
+        console.error('Error loading client form data:', error);
       }
-    }
+    });
   }
 
   onSubmit(): void {
@@ -92,52 +84,47 @@ export class ClientsComponent implements OnInit {
 
       const formValue = this.informationForm.value;
       const params = this.route.snapshot.queryParams;
-      const clientId = localStorage.getItem('loggedClient');
-      const appointmentId = localStorage.getItem('appointmentInProcess');
-      const emailLogin = localStorage.getItem('emailLogin');
 
-      const navigateToSummary = (newClientId?: string) => {
-        // If there's an appointment in process, update its clientId
-        if (appointmentId && newClientId) {
-          this.appointmentService.updateClientInAppointment(appointmentId, newClientId);
-          localStorage.removeItem('appointmentInProcess');
-        }
+      // Update client information using Clean Architecture
+      this.updateClientInformationUseCase.execute(formValue).subscribe({
+        next: (result) => {
+          if (result.success) {
+            // Navigate to appointment summary
+            const navigationParams = {
+              brand: this.selectedBrand,
+              product: this.selectedProduct,
+              model: this.selectedModel,
+              symptoms: this.selectedSymptoms,
+              location: this.selectedLocation,
+              date: formValue.date,
+              time: formValue.time,
+              name: formValue.name,
+              email: formValue.email,
+              phone: formValue.phone,
+              address: formValue.address,
+              technicianId: params['technicianId'] || '',
+              serviceId: params['serviceId'] || ''
+            };
 
-        this.router.navigate(['/appointment-summary'], {
-          queryParams: {
-            brand: this.selectedBrand,
-            product: this.selectedProduct,
-            model: this.selectedModel,
-            symptoms: this.selectedSymptoms,
-            location: this.selectedLocation,
-            date: formValue.date,
-            time: formValue.time,
-            name: formValue.name,
-            email: formValue.email,
-            phone: formValue.phone,
-            address: formValue.address,
-            technicianId: params['technicianId'] || '',
-            serviceId: params['serviceId'] || ''
+            this.navigateToAppointmentSummaryUseCase.execute(navigationParams).subscribe({
+              next: () => {
+                this.isSubmitting = false;
+              },
+              error: (error) => {
+                console.error('Error navigating:', error);
+                this.isSubmitting = false;
+              }
+            });
+          } else {
+            console.error('Error updating client:', result.message);
+            this.isSubmitting = false;
           }
-        });
-      };
-
-      if (clientId) {
-        // Update client data in backend
-        this.clientService.updateClient(clientId, {
-          name: formValue.name,
-          email: formValue.email,
-          phone: formValue.phone,
-          address: formValue.address
-        }).subscribe({
-          next: () => navigateToSummary(),
-          error: () => navigateToSummary() // If it fails, still navigate
-        });
-      } else {
-        // If no logged client, simply navigate to summary
-        // This will allow creating the client during final appointment confirmation
-        navigateToSummary();
-      }
+        },
+        error: (error) => {
+          console.error('Error in client update process:', error);
+          this.isSubmitting = false;
+        }
+      });
     }
   }
 

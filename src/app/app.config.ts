@@ -25,8 +25,16 @@ import {
 import {
   CreateAppointmentFromSummaryUseCase,
   ValidateAppointmentDataUseCase,
-  GetCurrentUserAppointmentDataUseCase
+  GetCurrentUserAppointmentDataUseCase,
+  LoadAppointmentDataUseCase,
+  FilterAppointmentsByUserUseCase,
+  GetAppointmentDisplayDataUseCase
 } from './core/application/use-cases/appointments';
+import {
+  UpdateClientInformationUseCase,
+  LoadClientFormDataUseCase,
+  NavigateToAppointmentSummaryUseCase
+} from './core/application/use-cases/clients';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -51,7 +59,13 @@ export const appConfig: ApplicationConfig = {
     ScheduleServiceUseCase,
     CreateAppointmentFromSummaryUseCase,
     ValidateAppointmentDataUseCase,
-    GetCurrentUserAppointmentDataUseCase
+    GetCurrentUserAppointmentDataUseCase,
+    UpdateClientInformationUseCase,
+    LoadClientFormDataUseCase,
+    NavigateToAppointmentSummaryUseCase,
+    LoadAppointmentDataUseCase,
+    FilterAppointmentsByUserUseCase,
+    GetAppointmentDisplayDataUseCase
   ]
 };
 

@@ -10,3 +10,6 @@ export { CalculateAppointmentStatusUseCase } from './calculate-appointment-statu
 export { CreateAppointmentFromSummaryUseCase } from './create-appointment-from-summary.usecase';
 export { ValidateAppointmentDataUseCase } from './validate-appointment-data.usecase';
 export { GetCurrentUserAppointmentDataUseCase } from './get-current-user-appointment-data.usecase';
+export { LoadAppointmentDataUseCase } from './load-appointment-data.usecase';
+export { FilterAppointmentsByUserUseCase } from './filter-appointments-by-user.usecase';
+export { GetAppointmentDisplayDataUseCase } from './get-appointment-display-data.usecase';

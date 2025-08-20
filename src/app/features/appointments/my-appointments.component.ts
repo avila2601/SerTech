@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
-import { AppointmentService } from '../../services/appointment.service';
-import { ServiceService } from '../../services/service.service';
-import { ClientService } from '../../services/client.service';
+import {
+  LoadAppointmentDataUseCase,
+  FilterAppointmentsByUserUseCase,
+  GetAppointmentDisplayDataUseCase
+} from '../../core/application/use-cases/appointments';
+import { CheckReviewExistsUseCase } from '../../core/application/use-cases/reviews/check-review-exists.usecase';
 import { Appointment, Service, Client } from '../../models';
 import { Technician } from '../../core/domain/models/technician.model';
 import { ReviewsComponent } from '../../features/reviews/reviews.component';
-import { GetAllTechniciansUseCase } from '../../core/application/use-cases/technicians/get-all-technicians.usecase';
-import { CheckReviewExistsUseCase } from '../../core/application/use-cases/reviews/check-review-exists.usecase';
 
 @Component({
   selector: 'app-my-appointments',
@@ -34,15 +34,13 @@ export class MyAppointmentsComponent implements OnInit {
   evaluatedAppointments: Set<string> = new Set();
   currentFilter: 'ALL' | 'PENDING' | 'COMPLETED' = 'ALL';
 
-  constructor(
-    private appointmentService: AppointmentService,
-    private serviceService: ServiceService,
-    private getAllTechniciansUseCase: GetAllTechniciansUseCase,
-    private clientService: ClientService,
-    private checkReviewExistsUseCase: CheckReviewExistsUseCase,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  // Use Cases
+  private readonly loadAppointmentDataUseCase = inject(LoadAppointmentDataUseCase);
+  private readonly filterAppointmentsByUserUseCase = inject(FilterAppointmentsByUserUseCase);
+  private readonly getAppointmentDisplayDataUseCase = inject(GetAppointmentDisplayDataUseCase);
+  private readonly checkReviewExistsUseCase = inject(CheckReviewExistsUseCase);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -81,19 +79,14 @@ export class MyAppointmentsComponent implements OnInit {
   }
 
   loadData(): void {
-    forkJoin({
-      appointments: this.appointmentService.getAppointments(),
-      services: this.serviceService.getServices(),
-      technicians: this.getAllTechniciansUseCase.execute(),
-      clients: this.clientService.getClients()
-    }).subscribe({
+    this.loadAppointmentDataUseCase.execute().subscribe({
       next: (data) => {
-        this.appointments = data.appointments || [];
-        this.services = data.services || [];
-        this.technicians = data.technicians || [];
-        this.clients = data.clients || [];
+        this.appointments = data.appointments;
+        this.services = data.services;
+        this.technicians = data.technicians;
+        this.clients = data.clients;
         this.filterAppointments();
-        // Ejecutar checkEvaluatedAppointments DESPUÉS de filtrar
+        // Execute checkEvaluatedAppointments AFTER filtering
         this.checkEvaluatedAppointments();
       },
       error: (error) => {
@@ -115,35 +108,21 @@ export class MyAppointmentsComponent implements OnInit {
   }
 
   filterAppointments(): void {
-    let userAppointments: Appointment[];
-    if (this.currentClientId) {
-      userAppointments = this.appointments.filter(
-        appointment => appointment.clientId === this.currentClientId
-      );
-    } else if (this.currentTechnicianId) {
-      userAppointments = this.appointments.filter(
-        appointment => appointment.technicianId === this.currentTechnicianId
-      );
-    } else {
-      const emailLogin = localStorage.getItem('emailLogin');
-      if (emailLogin) {
-        userAppointments = this.appointments.filter(appointment => {
-          const client = this.clients.find(cl => cl.id === appointment.clientId);
-          return client?.email === emailLogin;
-        });
-      } else {
-        userAppointments = [...this.appointments];
+    this.filterAppointmentsByUserUseCase.execute({
+      appointments: this.appointments,
+      clients: this.clients,
+      currentClientId: this.currentClientId,
+      currentTechnicianId: this.currentTechnicianId,
+      filterType: this.currentFilter
+    }).subscribe({
+      next: (result) => {
+        this.filteredAppointments = result.filteredAppointments;
+      },
+      error: (error) => {
+        console.error('Error filtering appointments:', error);
+        this.filteredAppointments = [];
       }
-    }
-
-    if (this.currentFilter === 'ALL') {
-      this.filteredAppointments = userAppointments;
-    } else {
-      const statusToFilter = this.currentFilter === 'PENDING' ? 'Pendiente' : 'Terminada';
-      this.filteredAppointments = userAppointments.filter(
-        app => this.getAppointmentStatus(app) === statusToFilter
-      );
-    }
+    });
   }
 
   checkEvaluatedAppointments(): void {
@@ -160,16 +139,6 @@ export class MyAppointmentsComponent implements OnInit {
           }
         });
       }
-    });
-  }
-
-  formatDate(date: Date): string {
-    const dateObj = new Date(date);
-    return dateObj.toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
     });
   }
 
@@ -214,10 +183,21 @@ export class MyAppointmentsComponent implements OnInit {
   }
 
   getServiceInfo(appointment: Appointment): any {
+    this.getAppointmentDisplayDataUseCase.execute({
+      appointment,
+      services: this.services,
+      clients: this.clients,
+      technicians: this.technicians
+    }).subscribe({
+      next: (displayData) => {
+        return displayData.serviceInfo;
+      }
+    });
+
+    // Fallback for immediate return
     try {
       if (appointment.notes) {
-        const parsed = JSON.parse(appointment.notes);
-        return parsed;
+        return JSON.parse(appointment.notes);
       }
     } catch (error) {
       console.error('Error parsing service info:', error);
@@ -229,13 +209,13 @@ export class MyAppointmentsComponent implements OnInit {
     const appointmentDate = new Date(appointment.date);
     const [hours, minutes] = appointment.time.split(':').map(Number);
 
-    // Crear fecha completa con hora y minutos
+    // Create full date with hours and minutes
     const appointmentDateTime = new Date(appointmentDate);
     appointmentDateTime.setHours(hours, minutes, 0, 0);
 
     const currentDateTime = new Date();
 
-    // Si la fecha y hora ya pasaron, está terminada
+    // If date and time have passed, it's completed
     if (appointmentDateTime < currentDateTime) {
       return 'Terminada';
     }
@@ -245,6 +225,16 @@ export class MyAppointmentsComponent implements OnInit {
   getAppointmentStatusClass(appointment: Appointment): string {
     const status = this.getAppointmentStatus(appointment);
     return status === 'Pendiente' ? 'pending' : 'completed';
+  }
+
+  formatDate(date: Date): string {
+    const dateObj = new Date(date);
+    return dateObj.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 
   getStatusClass(status: string): string {
