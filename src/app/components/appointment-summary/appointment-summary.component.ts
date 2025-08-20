@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppointmentService } from '../../services/appointment.service';
-import { ClientService } from '../../services/client.service';
 import { GetTechnicianByIdUseCase } from '../../core/application/use-cases/technicians/get-technician-by-id.usecase';
-import { Client, Appointment } from '../../models';
+import {
+  CreateAppointmentFromSummaryUseCase,
+  ValidateAppointmentDataUseCase,
+  GetCurrentUserAppointmentDataUseCase
+} from '../../core/application/use-cases/appointments';
 import { Technician } from '../../core/domain/models/technician.model';
-import { switchMap } from 'rxjs/operators';
+import { UserStateService } from '../../services/user-state.service';
 
 @Component({
   selector: 'app-appointment-summary',
@@ -35,13 +37,14 @@ export class AppointmentSummaryComponent implements OnInit {
   // Technician information
   technician: Technician | null = null;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private appointmentService: AppointmentService,
-    private clientService: ClientService,
-    private getTechnicianByIdUseCase: GetTechnicianByIdUseCase
-  ) {}
+  // Use Cases
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly getTechnicianByIdUseCase = inject(GetTechnicianByIdUseCase);
+  private readonly createAppointmentFromSummaryUseCase = inject(CreateAppointmentFromSummaryUseCase);
+  private readonly validateAppointmentDataUseCase = inject(ValidateAppointmentDataUseCase);
+  private readonly getCurrentUserAppointmentDataUseCase = inject(GetCurrentUserAppointmentDataUseCase);
+  private readonly userStateService = inject(UserStateService);
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -76,119 +79,57 @@ export class AppointmentSummaryComponent implements OnInit {
   confirmAppointment(): void {
     if (this.isScheduling) return;
 
-    this.isScheduling = true;
-
-    // Check if client is already logged in
-    const loggedClientId = localStorage.getItem('loggedClient');
-    console.log('=== CONFIRM APPOINTMENT DEBUG ===');
-    console.log('Logged client ID:', loggedClientId);
-    console.log('Form data:', {
-      name: this.name,
-      email: this.email,
-      phone: this.phone,
-      address: this.address
-    });
-
-    if (loggedClientId) {
-      console.log('Using existing logged client:', loggedClientId);
-      // Use existing logged client and save email for filtering
-      localStorage.setItem('emailLogin', this.email);
-      this.createAppointmentWithClient(loggedClientId).subscribe({
-        next: (createdAppointment) => {
-          console.log('Appointment created for existing client:', createdAppointment);
-          this.handleAppointmentSuccess();
-        },
-        error: (error: any) => {
-          console.error('Error creating appointment for existing client:', error);
-          this.handleAppointmentError(error);
-        }
-      });
-    } else {
-      console.log('No logged client found, creating new client');
-      // Create new client
-      const clientData: Client = {
-        id: '',
-        name: this.name,
-        email: this.email,
-        phone: this.phone,
-        address: this.address
-      };
-
-      console.log('=== INICIANDO CREACIÓN DE CLIENTE ===');
-      console.log('Datos del cliente a crear:', clientData);
-
-      this.clientService.addClient(clientData).pipe(
-        switchMap(createdClient => {
-          console.log('Cliente creado exitosamente:', createdClient);
-          // Store client as logged in and save email for filtering
-          localStorage.setItem('loggedClient', createdClient.id);
-          localStorage.setItem('emailLogin', createdClient.email);
-          console.log('Cliente guardado en localStorage:', createdClient.id, createdClient.email);
-          console.log('=== INICIANDO CREACIÓN DE CITA ===');
-          return this.createAppointmentWithClient(createdClient.id);
-        })
-      ).subscribe({
-        next: (createdAppointment) => {
-          console.log('Cita creada exitosamente:', createdAppointment);
-          this.handleAppointmentSuccess();
-        },
-        error: (error: any) => {
-          console.error('Error en el proceso completo:', error);
-          this.handleAppointmentError(error);
-        }
-      });
-    }
-  }
-
-  private createAppointmentWithClient(clientId: string) {
-    // Create service info object with all the details
-    const serviceInfo = {
+    // First validate the appointment data
+    const appointmentData = {
       brand: this.brand,
       product: this.product,
       model: this.model,
       symptoms: this.symptoms,
-      location: this.location
-    };
-
-    // Fix date timezone issue - create date in local timezone
-    const dateParts = this.date.split('-'); // Assuming format YYYY-MM-DD
-    const localDate = new Date(
-      parseInt(dateParts[0]), // year
-      parseInt(dateParts[1]) - 1, // month (0-based)
-      parseInt(dateParts[2]) // day
-    );
-
-    // Create appointment
-    const appointmentData: Omit<Appointment, 'id' | 'status'> = {
-      clientId: clientId,
-      technicianId: this.technicianId,
-      serviceId: this.serviceId,
-      equipmentId: undefined,
-      date: localDate,
+      location: this.location,
+      date: this.date,
       time: this.time,
-      notes: JSON.stringify(serviceInfo), // Store service info as JSON string
-      address: this.location
+      name: this.name,
+      email: this.email,
+      phone: this.phone,
+      address: this.address,
+      technicianId: this.technicianId,
+      serviceId: this.serviceId
     };
 
-    console.log('=== APPOINTMENT DATA ===');
-    console.log('Service info object:', serviceInfo);
-    console.log('Notes field:', appointmentData.notes);
-    console.log('Complete appointment data:', appointmentData);
+    this.validateAppointmentDataUseCase.execute(appointmentData).subscribe({
+      next: (validationResult) => {
+        if (!validationResult.isValid) {
+          alert(`Error de validación:\n${validationResult.errors.join('\n')}`);
+          return;
+        }
 
-    return this.appointmentService.createAppointment(appointmentData);
+        this.isScheduling = true;
+        console.log('=== CONFIRM APPOINTMENT DEBUG ===');
+        console.log('Appointment data:', appointmentData);
+
+        this.createAppointmentFromSummaryUseCase.execute(appointmentData).subscribe({
+          next: (result) => {
+            console.log('Appointment created successfully:', result);
+            this.handleAppointmentSuccess();
+          },
+          error: (error: any) => {
+            console.error('Error creating appointment:', error);
+            this.handleAppointmentError(error);
+          }
+        });
+      },
+      error: (error: any) => {
+        console.error('Error validating appointment data:', error);
+        alert('Error al validar los datos de la cita.');
+      }
+    });
   }
 
   private handleAppointmentSuccess() {
     alert('¡Cita agendada exitosamente!');
 
-    // Get the logged client ID
-    const loggedClientId = localStorage.getItem('loggedClient');
-
-    // Trigger storage event to update navbar
-    window.dispatchEvent(new StorageEvent('storage', {
-      key: 'loggedClient',
-      newValue: loggedClientId
-    }));
+    // Get the logged client ID from UserStateService
+    const loggedClientId = this.userStateService.getUserId();
 
     // Navigate to my-appointments with client parameter
     if (loggedClientId) {

@@ -7,3 +7,6 @@ export { UpdateAppointmentStatusUseCase } from './update-appointment-status.usec
 export { UpdateAppointmentUseCase } from './update-appointment.usecase';
 export { CancelAppointmentUseCase } from './cancel-appointment.usecase';
 export { CalculateAppointmentStatusUseCase } from './calculate-appointment-status.usecase';
+export { CreateAppointmentFromSummaryUseCase } from './create-appointment-from-summary.usecase';
+export { ValidateAppointmentDataUseCase } from './validate-appointment-data.usecase';
+export { GetCurrentUserAppointmentDataUseCase } from './get-current-user-appointment-data.usecase';

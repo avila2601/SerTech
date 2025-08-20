@@ -22,6 +22,11 @@ import {
   MapServiceTypeToCategoryUseCase,
   ScheduleServiceUseCase
 } from './core/application/use-cases/services';
+import {
+  CreateAppointmentFromSummaryUseCase,
+  ValidateAppointmentDataUseCase,
+  GetCurrentUserAppointmentDataUseCase
+} from './core/application/use-cases/appointments';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -43,6 +48,10 @@ export const appConfig: ApplicationConfig = {
     GetServicesByCategoryUseCase,
     GetServiceByIdUseCase,
     MapServiceTypeToCategoryUseCase,
-    ScheduleServiceUseCase
+    ScheduleServiceUseCase,
+    CreateAppointmentFromSummaryUseCase,
+    ValidateAppointmentDataUseCase,
+    GetCurrentUserAppointmentDataUseCase
   ]
 };
+
