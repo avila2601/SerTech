@@ -7,6 +7,8 @@ import { ITechnicianRepository } from './core/domain/repositories/technician.rep
 import { TechnicianJsonRepository } from './infrastructure/driven-adapters/json-repository/technician.json.repository';
 import { IReviewRepository } from './core/domain/repositories/review.repository';
 import { ReviewJsonRepository } from './infrastructure/driven-adapters/json-repository/review.json.repository';
+import { ClientRepository } from './core/domain/repositories/client.repository';
+import { ClientJsonRepository } from './infrastructure/driven-adapters/json-repository/client.json.repository';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +18,7 @@ export const appConfig: ApplicationConfig = {
 
     // Clean Architecture providers
     { provide: ITechnicianRepository, useClass: TechnicianJsonRepository },
-    { provide: IReviewRepository, useClass: ReviewJsonRepository }
+    { provide: IReviewRepository, useClass: ReviewJsonRepository },
+    { provide: ClientRepository, useClass: ClientJsonRepository }
   ]
 };

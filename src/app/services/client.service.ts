@@ -1,88 +1,44 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Client } from '../models';
-import { ClienteData } from '../models/data-types';
-import { StorageService } from './storage.service';
 import { map } from 'rxjs/operators';
+import { Client } from '../models';
+import { GetAllClientsUseCase, GetClientByIdUseCase, GetClientByEmailUseCase, CreateClientUseCase, UpdateClientUseCase } from '../core/application/use-cases/clients';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientService {
-  constructor(private storageService: StorageService) {}
+  constructor(
+    private getAllClientsUseCase: GetAllClientsUseCase,
+    private getClientByIdUseCase: GetClientByIdUseCase,
+    private getClientByEmailUseCase: GetClientByEmailUseCase,
+    private createClientUseCase: CreateClientUseCase,
+    private updateClientUseCase: UpdateClientUseCase
+  ) {}
 
-  // Primary English interface methods
+  // Primary English interface methods using Clean Architecture
   getClients(): Observable<Client[]> {
-    // Use migrated English method from StorageService
-    return this.storageService.getClients().pipe(
-      map((ClienteData: ClienteData[]) =>
-        ClienteData.map(ClienteData => ({
-          id: ClienteData.id,
-          name: ClienteData.nombre,
-          email: ClienteData.email,
-          phone: ClienteData.telefono,
-          address: ClienteData.direccion
-        }) as Client)
-      )
-    );
+    return this.getAllClientsUseCase.execute();
   }
 
   getClientById(id: string): Observable<Client | undefined> {
-    return this.getClients().pipe(
-      map(clients => {
-        return clients.find(client => client.id === id);
-      })
+    return this.getClientByIdUseCase.execute(id).pipe(
+      map((client: Client | null) => client || undefined)
     );
+  }
+
+  getClientByEmail(email: string): Observable<Client | null> {
+    return this.getClientByEmailUseCase.execute(email);
   }
 
   addClient(client: Omit<Client, 'id'>): Observable<Client> {
     console.log('=== CLIENT SERVICE: Iniciando addClient ===');
     console.log('Cliente recibido (English):', client);
 
-    // Convert English client to Spanish format for storage
-    const ClienteData: Omit<ClienteData, 'id'> = {
-      nombre: client.name,
-      email: client.email,
-      telefono: client.phone,
-      direccion: client.address
-    };
-
-    console.log('Cliente convertido (Spanish):', ClienteData);
-
-    return this.storageService.addClient(ClienteData).pipe(
-      map((ClienteData: ClienteData) => {
-        const convertedClient = {
-          id: ClienteData.id,
-          name: ClienteData.nombre,
-          email: ClienteData.email,
-          phone: ClienteData.telefono,
-          address: ClienteData.direccion
-        } as Client;
-        console.log('Cliente retornado (English):', convertedClient);
-        return convertedClient;
-      })
-    );
+    return this.createClientUseCase.execute(client);
   }
 
   updateClient(id: string, data: Partial<Client>): Observable<Client | null> {
-    // Convert English data to Spanish format for storage
-    const datosClienteData: Partial<ClienteData> = {};
-    if (data.name) datosClienteData.nombre = data.name;
-    if (data.email) datosClienteData.email = data.email;
-    if (data.phone) datosClienteData.telefono = data.phone;
-    if (data.address) datosClienteData.direccion = data.address;
-
-    return this.storageService.updateClient(id, datosClienteData).pipe(
-      map((ClienteData: ClienteData | null) => {
-        if (!ClienteData) return null;
-        return {
-          id: ClienteData.id,
-          name: ClienteData.nombre,
-          email: ClienteData.email,
-          phone: ClienteData.telefono,
-          address: ClienteData.direccion
-        } as Client;
-      })
-    );
+    return this.updateClientUseCase.execute(id, data);
   }
 }

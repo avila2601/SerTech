@@ -1,0 +1,100 @@
+import { Injectable } from '@angular/core';
+import { Observable, map } from 'rxjs';
+import { Client } from '../../../core/domain/models/client.model';
+import { ClientRepository } from '../../../core/domain/repositories/client.repository';
+import { StorageService } from '../../../services/storage.service';
+import { ClienteData } from '../../../models/data-types';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ClientJsonRepository extends ClientRepository {
+  constructor(private storageService: StorageService) {
+    super();
+  }
+
+  getAll(): Observable<Client[]> {
+    return this.storageService.getClients().pipe(
+      map((clienteData: ClienteData[]) =>
+        clienteData.map(this.mapToClient)
+      )
+    );
+  }
+
+  getById(id: string): Observable<Client | null> {
+    return this.getAll().pipe(
+      map(clients => {
+        const client = clients.find(client => client.id === id);
+        return client || null;
+      })
+    );
+  }
+
+  getByEmail(email: string): Observable<Client | null> {
+    return this.getAll().pipe(
+      map(clients => {
+        const client = clients.find(client => client.email === email);
+        return client || null;
+      })
+    );
+  }
+
+  create(client: Omit<Client, 'id'>): Observable<Client> {
+    console.log('=== CLIENT JSON REPOSITORY: Iniciando create ===');
+    console.log('Cliente recibido (English):', client);
+
+    // Convert English client to Spanish format for storage
+    const clienteData: Omit<ClienteData, 'id'> = {
+      nombre: client.name,
+      email: client.email,
+      telefono: client.phone,
+      direccion: client.address
+    };
+
+    console.log('Cliente convertido (Spanish):', clienteData);
+
+    return this.storageService.addClient(clienteData).pipe(
+      map((createdClienteData: ClienteData) => {
+        const convertedClient = this.mapToClient(createdClienteData);
+        console.log('Cliente retornado (English):', convertedClient);
+        return convertedClient;
+      })
+    );
+  }
+
+  update(id: string, data: Partial<Client>): Observable<Client | null> {
+    // Convert English data to Spanish format for storage
+    const datosClienteData: Partial<ClienteData> = {};
+    if (data.name) datosClienteData.nombre = data.name;
+    if (data.email) datosClienteData.email = data.email;
+    if (data.phone) datosClienteData.telefono = data.phone;
+    if (data.address) datosClienteData.direccion = data.address;
+
+    return this.storageService.updateClient(id, datosClienteData).pipe(
+      map((updatedClienteData: ClienteData | null) => {
+        if (!updatedClienteData) return null;
+        return this.mapToClient(updatedClienteData);
+      })
+    );
+  }
+
+  delete(id: string): Observable<boolean> {
+    // This would need to be implemented in StorageService
+    // For now, we'll return a placeholder
+    return new Observable<boolean>(observer => {
+      console.warn('Delete client not implemented in StorageService yet');
+      observer.next(false);
+      observer.complete();
+    });
+  }
+
+  private mapToClient(clienteData: ClienteData): Client {
+    return {
+      id: clienteData.id,
+      name: clienteData.nombre,
+      email: clienteData.email,
+      phone: clienteData.telefono,
+      address: clienteData.direccion
+    };
+  }
+}
