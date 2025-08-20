@@ -1,3 +1,5 @@
+import { AppointmentStatus } from '../../../models';
+
 export interface Appointment {
   id: string;
   clientId: string;
@@ -6,7 +8,7 @@ export interface Appointment {
   equipmentId?: string;
   date: Date;
   time: string;
-  status: string;
+  status: AppointmentStatus;
   notes?: string;
   address?: string;
 }

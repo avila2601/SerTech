@@ -68,7 +68,15 @@ export class MyAppointmentsComponent implements OnInit {
           this.currentTechnicianId = null;
         }
       }
-      this.loadData();
+
+      // Si viene de crear una cita, agregar un pequeño delay para permitir sincronización
+      if (params['fromAppointment'] === 'true') {
+        setTimeout(() => {
+          this.loadData();
+        }, 1500); // 1.5 segundos de delay
+      } else {
+        this.loadData();
+      }
     });
   }
 

@@ -193,10 +193,12 @@ export class AppointmentSummaryComponent implements OnInit {
     // Navigate to my-appointments with client parameter
     if (loggedClientId) {
       this.router.navigate(['/my-appointments'], {
-        queryParams: { clientId: loggedClientId }
+        queryParams: { clientId: loggedClientId, fromAppointment: 'true' }
       });
     } else {
-      this.router.navigate(['/my-appointments']);
+      this.router.navigate(['/my-appointments'], {
+        queryParams: { fromAppointment: 'true' }
+      });
     }
   }
 

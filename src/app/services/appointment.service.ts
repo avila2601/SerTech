@@ -1,113 +1,52 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Appointment, AppointmentStatus } from '../models';
-import { CitaData } from '../models/data-types';
-import { StorageService } from './storage.service';
-import { map } from 'rxjs/operators';
+import { GetAllAppointmentsUseCase, GetAppointmentByIdUseCase, GetAppointmentsByClientUseCase, GetAppointmentsByTechnicianUseCase, CreateAppointmentUseCase, UpdateAppointmentStatusUseCase, UpdateAppointmentUseCase, CancelAppointmentUseCase } from '../core/application/use-cases/appointments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentService {
-  private appointmentsSubject = new BehaviorSubject<Appointment[]>([]);
+  constructor(
+    private getAllAppointmentsUseCase: GetAllAppointmentsUseCase,
+    private getAppointmentByIdUseCase: GetAppointmentByIdUseCase,
+    private getAppointmentsByClientUseCase: GetAppointmentsByClientUseCase,
+    private getAppointmentsByTechnicianUseCase: GetAppointmentsByTechnicianUseCase,
+    private createAppointmentUseCase: CreateAppointmentUseCase,
+    private updateAppointmentStatusUseCase: UpdateAppointmentStatusUseCase,
+    private updateAppointmentUseCase: UpdateAppointmentUseCase,
+    private cancelAppointmentUseCase: CancelAppointmentUseCase
+  ) {}
 
-  constructor(private storageService: StorageService) {
-    this.refreshAppointments();
-  }
-
-  private refreshAppointments(): void {
-    this.storageService.getAppointments().subscribe(citas => {
-      const appointments = citas.map(cita => this.mapCitaToAppointment(cita));
-      this.appointmentsSubject.next(appointments);
-    });
-  }
-
-  private mapCitaToAppointment(cita: CitaData): Appointment {
-    return {
-      id: cita.id,
-      clientId: cita.clienteId,
-      technicianId: cita.tecnicoId,
-      serviceId: cita.servicioId,
-      equipmentId: cita.equipoId,
-      date: cita.fecha,
-      time: cita.hora,
-      status: this.mapStatusToEnglish(cita.estado),
-      notes: cita.notas,
-      address: cita.direccion
-    };
-  }
-
-  private mapStatusToEnglish(estado: string): AppointmentStatus {
-    // Map Spanish status strings to AppointmentStatus enum
-    switch (estado) {
-      case 'Pendiente':
-        return AppointmentStatus.PENDING;
-      case 'Confirmada':
-        return AppointmentStatus.CONFIRMED;
-      case 'En Proceso':
-        return AppointmentStatus.IN_PROGRESS;
-      case 'Completada':
-        return AppointmentStatus.COMPLETED;
-      case 'Cancelada':
-        return AppointmentStatus.CANCELLED;
-      default:
-        return AppointmentStatus.PENDING;
-    }
-  }
-
-  private mapAppointmentToCita(appointment: Partial<Appointment>): Partial<CitaData> {
-    const cita: Partial<CitaData> = {};
-    if (appointment.clientId) cita.clienteId = appointment.clientId;
-    if (appointment.technicianId) cita.tecnicoId = appointment.technicianId;
-    if (appointment.serviceId) cita.servicioId = appointment.serviceId;
-    if (appointment.equipmentId) cita.equipoId = appointment.equipmentId;
-    if (appointment.date) cita.fecha = appointment.date;
-    if (appointment.time) cita.hora = appointment.time;
-    if (appointment.notes) cita.notas = appointment.notes;
-    if (appointment.address) cita.direccion = appointment.address;
-    if (appointment.status) {
-      // Since EstadoCita is now an alias for AppointmentStatus, direct assignment works
-      cita.estado = appointment.status;
-    }
-    return cita;
-  }
-
+  // Primary English interface methods using Clean Architecture
   getAppointments(): Observable<Appointment[]> {
-    // Obtener datos directamente del storage para asegurar sincronización
-    return this.storageService.getAppointments().pipe(
-      map(citas => citas.map(cita => this.mapCitaToAppointment(cita)))
-    );
+    return this.getAllAppointmentsUseCase.execute();
+  }
+
+  getAppointmentById(id: string): Observable<Appointment | null> {
+    return this.getAppointmentByIdUseCase.execute(id);
   }
 
   getAppointmentsByClient(clientId: string): Observable<Appointment[]> {
-    return this.storageService.getAppointmentsByClient(clientId).pipe(
-      map(citas => citas.map(this.mapCitaToAppointment))
-    );
+    return this.getAppointmentsByClientUseCase.execute(clientId);
+  }
+
+  getAppointmentsByTechnician(technicianId: string): Observable<Appointment[]> {
+    return this.getAppointmentsByTechnicianUseCase.execute(technicianId);
   }
 
   createAppointment(appointment: Omit<Appointment, 'id' | 'status'>): Observable<Appointment> {
-    return new Observable(observer => {
-      const citaData = this.mapAppointmentToCita(appointment);
-      this.storageService.createAppointment(citaData as Omit<CitaData, 'id' | 'estado'>).subscribe({
-        next: (nuevaCita) => {
-          const newAppointment = this.mapCitaToAppointment(nuevaCita);
-          observer.next(newAppointment);
-          this.refreshAppointments();
-          observer.complete();
-        },
-        error: (error) => observer.error(error)
-      });
-    });
+    return this.createAppointmentUseCase.execute(appointment);
+  }  updateAppointmentStatus(id: string, status: AppointmentStatus): Observable<Appointment | null> {
+    return this.updateAppointmentStatusUseCase.execute(id, status);
   }
 
-  cancelAppointment(appointmentId: string): void {
-    this.storageService.cancelAppointment(appointmentId);
-    this.refreshAppointments();
+  cancelAppointment(appointmentId: string): Observable<boolean> {
+    return this.cancelAppointmentUseCase.execute(appointmentId);
   }
 
+  // Legacy methods for backward compatibility
   updateClientInAppointment(appointmentId: string, clientId: string): void {
-    this.storageService.updateAppointment(appointmentId, { clienteId: clientId }).subscribe(() => {
-      this.refreshAppointments();
-    });
+    this.updateAppointmentUseCase.execute(appointmentId, { clientId }).subscribe();
   }
 }
