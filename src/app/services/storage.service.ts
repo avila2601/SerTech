@@ -4,58 +4,17 @@ import { Observable, of } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { Appointment, Client, AppointmentStatus } from '../models';
 import { CitaData, ClienteData } from '../models/data-types';
-
-interface DataStorage {
-  citas: CitaData[];
-  clientes: ClienteData[];
-  ultimoIdCliente: number;
-  ultimoIdCita: number;
-}
+import { CalculateAppointmentStatusUseCase } from '../core/application/use-cases/appointments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
-  private readonly STORAGE_KEY = 'sertech_data';
-  private data: DataStorage = {
-    citas: [],
-    clientes: [],
-    ultimoIdCliente: 0,
-    ultimoIdCita: 0
-  };
 
-  constructor(private http: HttpClient) {
-    this.loadData();
-  }
-
-  private loadData(): void {
-    const savedData = localStorage.getItem(this.STORAGE_KEY);
-    if (savedData) {
-      try {
-        this.data = JSON.parse(savedData);
-      } catch (error) {
-        console.error('Error loading data from localStorage:', error);
-      }
-    }
-  }
-
-  private saveData(): void {
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.data));
-    } catch (error) {
-      console.error('Error saving data to localStorage:', error);
-    }
-  }
-
-  updateAppointment(appointmentId: string, update: Partial<CitaData>): Observable<void> {
-    const index = this.data.citas.findIndex(c => c.id === appointmentId);
-    if (index !== -1) {
-      this.data.citas[index] = { ...this.data.citas[index], ...update };
-      this.saveData();
-      return of(void 0);
-    }
-    return of(void 0);
-  }
+  constructor(
+    private http: HttpClient,
+    private calculateAppointmentStatusUseCase: CalculateAppointmentStatusUseCase
+  ) {}
 
   // Métodos para clientes
   getClients(): Observable<ClienteData[]> {
@@ -100,8 +59,12 @@ export class StorageService {
     );
   }
 
-  getClientById(id: string): ClienteData | undefined {
-    return this.data.clientes.find(client => client.id === id);
+  getClientById(id: string): Observable<ClienteData | undefined> {
+    return this.getClients().pipe(
+      map((clients: ClienteData[]) => 
+        clients.find(client => client.id === id)
+      )
+    );
   }
 
   updateClient(id: string, data: Partial<ClienteData>): Observable<ClienteData | null> {
@@ -126,8 +89,11 @@ export class StorageService {
   }
 
   getAppointmentsByClient(clientId: string): Observable<CitaData[]> {
-    const clientAppointments = this.data.citas.filter(appointment => appointment.clienteId === clientId);
-    return of(clientAppointments);
+    return this.getAppointments().pipe(
+      map((appointments: CitaData[]) => 
+        appointments.filter(appointment => appointment.clienteId === clientId)
+      )
+    );
   }
 
   createAppointment(appointment: Omit<CitaData, 'id' | 'estado'>): Observable<CitaData> {
@@ -141,8 +107,8 @@ export class StorageService {
         // Calcular el nuevo ID
         const newId = appointments.length > 0 ? (Math.max(...appointments.map(c => +c.id)) + 1).toString() : '1';
 
-        // Calcular el estado basado en fecha y hora
-        const appointmentStatus = this.calculateAppointmentStatus(appointment.fecha, appointment.hora);
+        // Calcular el estado basado en fecha y hora usando Use Case
+        const appointmentStatus = this.calculateAppointmentStatusUseCase.execute(appointment.fecha, appointment.hora);
 
         const newAppointment: CitaData = {
           ...appointment,
@@ -159,44 +125,46 @@ export class StorageService {
     );
   }
 
-  private calculateAppointmentStatus(date: Date, time: string): AppointmentStatus {
-    const appointmentDate = new Date(date);
-    const [hours, minutes] = time.split(':').map(Number);
-
-    // Crear fecha completa con hora y minutos
-    const appointmentDateTime = new Date(appointmentDate);
-    appointmentDateTime.setHours(hours, minutes, 0, 0);
-
-    const currentDateTime = new Date();
-
-    // Si la fecha y hora ya pasaron, está terminada
-    if (appointmentDateTime < currentDateTime) {
-      return AppointmentStatus.COMPLETED;
-    }
-    return AppointmentStatus.PENDING;
+  updateAppointment(appointmentId: string, update: Partial<CitaData>): Observable<void> {
+    return this.getAppointments().pipe(
+      switchMap((appointments: CitaData[]) => {
+        const index = appointments.findIndex(c => c.id === appointmentId);
+        if (index !== -1) {
+          appointments[index] = { ...appointments[index], ...update };
+          return this.http.put<CitaData[]>(
+            'https://sertech-backend.onrender.com/appointments',
+            appointments
+          ).pipe(map(() => void 0));
+        }
+        return of(void 0);
+      })
+    );
   }
 
-  cancelAppointment(appointmentId: string): void {
-    const appointmentIndex = this.data.citas.findIndex(appointment => appointment.id === appointmentId);
-    if (appointmentIndex !== -1) {
-      this.data.citas[appointmentIndex].estado = AppointmentStatus.CANCELLED;
-      this.saveData();
-    }
+  cancelAppointment(appointmentId: string): Observable<void> {
+    return this.getAppointments().pipe(
+      switchMap((appointments: CitaData[]) => {
+        const appointmentIndex = appointments.findIndex(appointment => appointment.id === appointmentId);
+        if (appointmentIndex !== -1) {
+          appointments[appointmentIndex].estado = AppointmentStatus.CANCELLED;
+          return this.http.put<CitaData[]>(
+            'https://sertech-backend.onrender.com/appointments',
+            appointments
+          ).pipe(map(() => void 0));
+        }
+        return of(void 0);
+      })
+    );
   }
 
-  // Método para exportar datos (útil para debugging)
-  exportData(): string {
-    return JSON.stringify(this.data, null, 2);
-  }
-
-  // Método para limpiar datos (útil para testing)
-  clearData(): void {
-    this.data = {
-      citas: [],
-      clientes: [],
-      ultimoIdCliente: 0,
-      ultimoIdCita: 0
-    };
-    this.saveData();
+  // Método para debugging - exportar datos del backend
+  exportData(): Observable<string> {
+    return this.getAppointments().pipe(
+      switchMap(appointments => 
+        this.getClients().pipe(
+          map(clients => JSON.stringify({ appointments, clients }, null, 2))
+        )
+      )
+    );
   }
 }

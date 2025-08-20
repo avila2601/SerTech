@@ -11,6 +11,7 @@ import { ClientRepository } from './core/domain/repositories/client.repository';
 import { ClientJsonRepository } from './infrastructure/driven-adapters/json-repository/client.json.repository';
 import { AppointmentRepository } from './core/domain/repositories/appointment.repository';
 import { AppointmentJsonRepository } from './infrastructure/driven-adapters/json-repository/appointment.json.repository';
+import { CalculateAppointmentStatusUseCase } from './core/application/use-cases/appointments';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,6 +23,9 @@ export const appConfig: ApplicationConfig = {
     { provide: ITechnicianRepository, useClass: TechnicianJsonRepository },
     { provide: IReviewRepository, useClass: ReviewJsonRepository },
     { provide: ClientRepository, useClass: ClientJsonRepository },
-    { provide: AppointmentRepository, useClass: AppointmentJsonRepository }
+    { provide: AppointmentRepository, useClass: AppointmentJsonRepository },
+
+    // Use Cases
+    CalculateAppointmentStatusUseCase
   ]
 };
