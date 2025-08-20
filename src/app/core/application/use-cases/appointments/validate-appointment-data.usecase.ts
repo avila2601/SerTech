@@ -74,16 +74,7 @@ export class ValidateAppointmentDataUseCase {
       errors.push('La dirección es requerida');
     }
 
-    // Validate date is not in the past
-    if (data.date) {
-      const selectedDate = new Date(data.date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      if (selectedDate < today) {
-        errors.push('La fecha no puede ser anterior a hoy');
-      }
-    }
+    // Note: Date validation removed to allow past dates for appointments
 
     return of({
       isValid: errors.length === 0,

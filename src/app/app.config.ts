@@ -33,7 +33,9 @@ import {
 import {
   UpdateClientInformationUseCase,
   LoadClientFormDataUseCase,
-  NavigateToAppointmentSummaryUseCase
+  NavigateToAppointmentSummaryUseCase,
+  AuthenticateClientUseCase,
+  HandleLoginSuccessUseCase
 } from './core/application/use-cases/clients';
 
 export const appConfig: ApplicationConfig = {
@@ -65,7 +67,9 @@ export const appConfig: ApplicationConfig = {
     NavigateToAppointmentSummaryUseCase,
     LoadAppointmentDataUseCase,
     FilterAppointmentsByUserUseCase,
-    GetAppointmentDisplayDataUseCase
+    GetAppointmentDisplayDataUseCase,
+    AuthenticateClientUseCase,
+    HandleLoginSuccessUseCase
   ]
 };
 

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TechnicianLoginComponent } from './features/technicians/technician-login.component';
 import { TechnicianReviewsModalComponent } from './features/technicians/technician-reviews-modal.component';
 import { Router } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './features/authentication/login.component';
 
 @Component({
   selector: 'app-root',

@@ -1,8 +1,11 @@
-import { Component, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ClientService } from '../../services/client.service';
+import {
+  AuthenticateClientUseCase,
+  HandleLoginSuccessUseCase
+} from '../../core/application/use-cases/clients';
 
 @Component({
   selector: 'app-login',
@@ -107,7 +110,10 @@ export class LoginComponent implements AfterViewInit {
   @ViewChild('emailInput') emailInput!: ElementRef<HTMLInputElement>;
   errorMessage: string = '';
 
-  constructor(private router: Router, private clientService: ClientService) {}
+  // Use Cases
+  private readonly router = inject(Router);
+  private readonly authenticateClientUseCase = inject(AuthenticateClientUseCase);
+  private readonly handleLoginSuccessUseCase = inject(HandleLoginSuccessUseCase);
 
   ngAfterViewInit() {
     // Usar setTimeout para asegurar que el DOM esté completamente renderizado
@@ -122,35 +128,35 @@ export class LoginComponent implements AfterViewInit {
   }
 
   login() {
-    if (!this.email) {
-      this.errorMessage = 'Por favor, ingresa tu e-mail.';
-      return;
-    }
+    this.errorMessage = '';
 
-    // Validar formato de e-mail
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.email)) {
-      this.errorMessage = 'Por favor, ingresa un e-mail válido.';
-      return;
-    }
-
-    this.clientService.getClients().subscribe((clients: any[]) => {
-      const client = clients.find(c => c.email === this.email);
-      if (client) {
-        // Guardar el clienteId como cliente logueado y limpiar emailLogin
-        localStorage.setItem('loggedClient', client.id);
-        localStorage.removeItem('emailLogin');
-      } else {
-        // Si el email no existe, guardar el email en emailLogin y limpiar loggedClient
-        localStorage.setItem('emailLogin', this.email);
-        localStorage.removeItem('loggedClient');
+    this.authenticateClientUseCase.execute({ email: this.email }).subscribe({
+      next: (result) => {
+        if (result.success) {
+          this.handleLoginSuccessUseCase.execute({
+            clientFound: result.clientFound,
+            clientId: result.clientId,
+            redirectToHome: true
+          }).subscribe({
+            next: () => {
+              this.loginSuccess.emit();
+              this.closeModal();
+            },
+            error: (error) => {
+              console.error('Error handling login success:', error);
+              // Still emit success and close modal even if navigation fails
+              this.loginSuccess.emit();
+              this.closeModal();
+            }
+          });
+        } else {
+          this.errorMessage = result.message;
+        }
+      },
+      error: (error) => {
+        console.error('Error during authentication:', error);
+        this.errorMessage = 'Error durante la autenticación. Intenta de nuevo.';
       }
-
-      this.errorMessage = '';
-      this.loginSuccess.emit();
-      this.closeModal();
-      // Siempre redirigir a inicio
-      this.router.navigate(['/']);
     });
   }
 
