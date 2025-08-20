@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { ClientRepository } from '../../../domain/repositories/client.repository';
 import { AppointmentRepository } from '../../../domain/repositories/appointment.repository';
-import { UserStateService } from '../../../../services/user-state.service';
+import { UserStateService } from '../../services/user-state.service';
 import { Client } from '../../../domain/models/client.model';
 
 export interface ClientInformationData {

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { ClientService } from '../../../../services/client.service';
-import { UserStateService } from '../../../../services/user-state.service';
+import { ClientRepository } from '../../../domain/repositories/client.repository';
+import { UserStateService } from '../../services/user-state.service';
 import { UserType } from '../../../../models';
 
 export interface TechnicianSelectionParams {
@@ -28,7 +28,7 @@ export interface NavigationResult {
 export class SelectTechnicianUseCase {
 
   constructor(
-    private clientService: ClientService,
+    private clientRepository: ClientRepository,
     private userStateService: UserStateService
   ) {}
 
@@ -55,7 +55,7 @@ export class SelectTechnicianUseCase {
 
     if (currentUserState.isLoggedIn && currentUserState.userId && currentUserState.userType === UserType.CLIENT) {
       // Get client data to populate the summary
-      return this.clientService.getClientById(currentUserState.userId).pipe(
+      return this.clientRepository.getById(currentUserState.userId).pipe(
         map((client) => {
           if (client) {
             // Add client data to params for appointment summary

@@ -8,7 +8,7 @@ import {
   GetCurrentUserAppointmentDataUseCase
 } from '../../core/application/use-cases/appointments';
 import { Technician } from '../../core/domain/models/technician.model';
-import { UserStateService } from '../../services/user-state.service';
+import { UserStateService } from '../../core/application/services/user-state.service';
 
 @Component({
   selector: 'app-appointment-summary',

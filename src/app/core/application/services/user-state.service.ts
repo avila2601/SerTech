@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { UserType } from '../models';
+import { UserType } from '../../../models';
+import { UserStorageRepository } from '../../../infrastructure/driven-adapters/storage/user-storage.repository';
 
 export interface UserState {
   isLoggedIn: boolean;
@@ -9,6 +10,12 @@ export interface UserState {
   email?: string;
 }
 
+/**
+ * User state management service
+ * Handles user authentication state using Clean Architecture principles
+ * - State management: BehaviorSubject for reactive state
+ * - Persistence: Delegates to UserStorageRepository (Infrastructure layer)
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -21,37 +28,27 @@ export class UserStateService {
 
   public userState$ = this.userStateSubject.asObservable();
 
-  constructor() {
+  constructor(private userStorageRepository: UserStorageRepository) {
     this.initializeUserState();
     this.listenToStorageChanges();
   }
 
   private initializeUserState(): void {
-    const loggedTechnician = localStorage.getItem('loggedTechnician');
-    const loggedClient = localStorage.getItem('loggedClient');
-    const emailLogin = localStorage.getItem('emailLogin');
+    const storedUser = this.userStorageRepository.getStoredUser();
 
-    if (loggedTechnician) {
+    if (storedUser) {
       this.userStateSubject.next({
         isLoggedIn: true,
-        userType: UserType.TECHNICIAN,
-        userId: loggedTechnician
-      });
-    } else if (loggedClient || emailLogin) {
-      this.userStateSubject.next({
-        isLoggedIn: true,
-        userType: UserType.CLIENT,
-        userId: loggedClient || emailLogin || '',
-        email: emailLogin || undefined
+        userType: storedUser.userType,
+        userId: storedUser.userId,
+        email: storedUser.email
       });
     }
   }
 
   private listenToStorageChanges(): void {
-    window.addEventListener('storage', (event) => {
-      if (event.key?.includes('Logueado') || event.key?.includes('logged') || event.key === 'emailLogin') {
-        this.initializeUserState();
-      }
+    this.userStorageRepository.onStorageChange(() => {
+      this.initializeUserState();
     });
   }
 
@@ -60,7 +57,7 @@ export class UserStateService {
   }
 
   loginTechnician(technicianId: string): void {
-    localStorage.setItem('loggedTechnician', technicianId);
+    this.userStorageRepository.storeTechnicianLogin(technicianId);
     this.userStateSubject.next({
       isLoggedIn: true,
       userType: UserType.TECHNICIAN,
@@ -69,10 +66,7 @@ export class UserStateService {
   }
 
   loginClient(clientId: string, email?: string): void {
-    localStorage.setItem('loggedClient', clientId);
-    if (email) {
-      localStorage.setItem('emailLogin', email);
-    }
+    this.userStorageRepository.storeClientLogin(clientId, email);
     this.userStateSubject.next({
       isLoggedIn: true,
       userType: UserType.CLIENT,
@@ -82,9 +76,7 @@ export class UserStateService {
   }
 
   logout(): void {
-    // Clear all localStorage completely
-    localStorage.clear();
-
+    this.userStorageRepository.clearStoredUser();
     this.userStateSubject.next({
       isLoggedIn: false,
       userType: null,

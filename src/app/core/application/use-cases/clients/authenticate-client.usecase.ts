@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { ClientRepository } from '../../../domain/repositories/client.repository';
-import { UserStateService } from '../../../../services/user-state.service';
+import { UserStateService } from '../../services/user-state.service';
 
 export interface AuthenticationData {
   email: string;

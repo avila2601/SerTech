@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
-import { AppointmentService } from '../../../../services/appointment.service';
-import { ClientService } from '../../../../services/client.service';
-import { UserStateService } from '../../../../services/user-state.service';
+import { AppointmentRepository } from '../../../domain/repositories/appointment.repository';
+import { ClientRepository } from '../../../domain/repositories/client.repository';
+import { UserStateService } from '../../services/user-state.service';
 import { Client, Appointment } from '../../../../models';
 
 export interface AppointmentSummaryData {
@@ -35,8 +35,8 @@ export interface CreateAppointmentResult {
 export class CreateAppointmentFromSummaryUseCase {
 
   constructor(
-    private appointmentService: AppointmentService,
-    private clientService: ClientService,
+    private appointmentRepository: AppointmentRepository,
+    private clientRepository: ClientRepository,
     private userStateService: UserStateService
   ) {}
 
@@ -59,7 +59,7 @@ export class CreateAppointmentFromSummaryUseCase {
   ): Observable<CreateAppointmentResult> {
     const appointmentData = this.buildAppointmentData(clientId, data);
 
-    return this.appointmentService.createAppointment(appointmentData).pipe(
+    return this.appointmentRepository.create(appointmentData).pipe(
       map(appointment => ({
         success: true,
         appointment,
@@ -76,14 +76,14 @@ export class CreateAppointmentFromSummaryUseCase {
       address: data.address
     };
 
-    return this.clientService.addClient(clientData).pipe(
-      switchMap(createdClient => {
+    return this.clientRepository.create(clientData).pipe(
+      switchMap((createdClient: Client) => {
         // Update user state to logged in
         this.userStateService.loginClient(createdClient.id, createdClient.email);
 
         const appointmentData = this.buildAppointmentData(createdClient.id, data);
 
-        return this.appointmentService.createAppointment(appointmentData).pipe(
+        return this.appointmentRepository.create(appointmentData).pipe(
           map(appointment => ({
             success: true,
             appointment,
