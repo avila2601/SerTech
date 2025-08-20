@@ -6,10 +6,10 @@ export const routes: Routes = [
   // Primary English routes
   { path: '', component: HomeComponent },
   { path: 'about-us', loadComponent: () => import('./components/about-us/about-us.component').then(m => m.AboutUsComponent) },
-  { path: 'clients', loadComponent: () => import('./components/clients/clients.component').then(m => m.ClientsComponent) },
+  { path: 'clients', loadComponent: () => import('./features/clients/clients.component').then(m => m.ClientsComponent) },
   { path: 'services', loadComponent: () => import('./components/services/services.component').then(m => m.ServicesComponent) },
   { path: 'technicians', loadComponent: () => import('./features/technicians/technicians.component').then(m => m.TechniciansComponent) },
-  { path: 'my-appointments', loadComponent: () => import('./components/my-appointments/my-appointments.component').then(m => m.MyAppointmentsComponent), canActivate: [AuthGuard] },
+  { path: 'my-appointments', loadComponent: () => import('./features/appointments/my-appointments.component').then(m => m.MyAppointmentsComponent), canActivate: [AuthGuard] },
   { path: 'reviews', loadComponent: () => import('./features/reviews/reviews.component').then(m => m.ReviewsComponent) },
   { path: 'appointment-summary', loadComponent: () => import('./components/appointment-summary/appointment-summary.component').then(m => m.AppointmentSummaryComponent) },
   { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
