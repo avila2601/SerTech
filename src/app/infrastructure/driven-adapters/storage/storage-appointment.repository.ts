@@ -5,7 +5,7 @@ import { AppointmentStorageRepository } from '../../../core/domain/repositories/
 import { CitaData } from '../../../models/data-types';
 import { AppointmentStatus } from '../../../models';
 import { HttpDataSource } from '../http';
-import { CalculateAppointmentStatusUseCase } from '../../../core/application/use-cases/appointments';
+import { AppointmentStatusCalculator } from '../../../core/domain/services/appointment-status-calculator.service';
 
 /**
  * Appointment storage repository implementation using HTTP backend
@@ -17,8 +17,7 @@ export class StorageAppointmentRepository extends AppointmentStorageRepository {
   private readonly endpoint = 'appointments';
 
   constructor(
-    private httpDataSource: HttpDataSource,
-    private calculateAppointmentStatusUseCase: CalculateAppointmentStatusUseCase
+    private httpDataSource: HttpDataSource
   ) {
     super();
   }
@@ -56,10 +55,10 @@ export class StorageAppointmentRepository extends AppointmentStorageRepository {
           ? (Math.max(...appointments.map(c => +c.id)) + 1).toString()
           : '1';
 
-        // Calcular el estado basado en fecha y hora usando Use Case
-        const appointmentStatus = this.calculateAppointmentStatusUseCase.execute(
-          appointment.fecha,
-          appointment.hora
+        // Calcular el estado basado en fecha y hora usando servicio de dominio
+        const appointmentStatus = AppointmentStatusCalculator.calculateStatus(
+          appointment.fecha.toString(),
+          appointment.hora.toString()
         );
 
         const newAppointment: CitaData = {

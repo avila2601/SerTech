@@ -15,11 +15,13 @@ import { ServiceRepository } from './core/domain/repositories/service.repository
 import {
   ServiceJsonRepository,
   StorageClientRepository,
-  StorageAppointmentRepository
+  StorageAppointmentRepository,
+  LocalStorageUserRepository
 } from './infrastructure/driven-adapters';
 import {
   ClientStorageRepository,
-  AppointmentStorageRepository
+  AppointmentStorageRepository,
+  UserStorageRepository
 } from './core/domain/repositories/storage';
 import { CalculateAppointmentStatusUseCase } from './core/application/use-cases/appointments';
 import { SelectTechnicianUseCase } from './core/application/use-cases/technicians';
@@ -62,6 +64,7 @@ export const appConfig: ApplicationConfig = {
     // Storage repositories
     { provide: ClientStorageRepository, useClass: StorageClientRepository },
     { provide: AppointmentStorageRepository, useClass: StorageAppointmentRepository },
+    { provide: UserStorageRepository, useClass: LocalStorageUserRepository },
 
     // Use Cases
     CalculateAppointmentStatusUseCase,

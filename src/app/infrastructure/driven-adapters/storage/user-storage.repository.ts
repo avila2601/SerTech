@@ -1,25 +1,20 @@
 import { Injectable } from '@angular/core';
 import { UserType } from '../../../models';
-
-export interface StoredUserData {
-  userId: string;
-  userType: UserType;
-  email?: string;
-}
+import { UserStorageRepository, StoredUser } from '../../../core/domain/repositories/user-storage.repository';
 
 /**
- * Repository for user authentication storage operations
- * Handles browser storage persistence for user state
+ * localStorage implementation of UserStorageRepository
+ * Handles user data persistence using browser's localStorage
  */
 @Injectable({
   providedIn: 'root'
 })
-export class UserStorageRepository {
+export class LocalStorageUserRepository extends UserStorageRepository {
 
   /**
    * Get stored user data from localStorage
    */
-  getStoredUser(): StoredUserData | null {
+  getStoredUser(): StoredUser | null {
     const loggedTechnician = localStorage.getItem('loggedTechnician');
     const loggedClient = localStorage.getItem('loggedClient');
     const emailLogin = localStorage.getItem('emailLogin');
