@@ -20,6 +20,21 @@
       <h2>🔑 Información de Acceso</h2>
 
       <div class="services-grid">
+
+<!-- Card de Cliente -->
+        <div class="service-card info-card">
+          <div class="service-icon">👤</div>
+          <h3>Área Cliente</h3>
+          <p class="no-credentials">
+            <strong>Sin credenciales necesarias</strong>
+          </p>
+          <p class="access-description">
+            Crea un servicio en el menú Inicio y diligencia la informacion
+            requerida. Al agendar un servicio, tus datos serán guardados y
+            podrás ingresar con tu correo por medio de Ingreso Clientes.
+          </p>
+        </div>
+
         <!-- Card de Técnico -->
         <div class="service-card credential-card">
           <div class="service-icon">👨‍🔧</div>
@@ -32,33 +47,17 @@
           </div>
           <button
             class="btn btn-primary copy-btn"
-            (click)="
-              copyToClipboard(
-                technicianCredentials.id +
-                  ' / ' +
-                  technicianCredentials.password
-              )
-            "
+            (click)="navigateAndFillCredentials()"
           >
-            📋 Copiar Credenciales
+            � Usar Credenciales
           </button>
           <p class="access-description">
-            Accede a la sección Técnicos para gestionar servicios, ver citas
-            asignadas y actualizar estados.
+            Accede a la sección Técnicos para ver citas
+            asignadas.
           </p>
         </div>
 
-        <!-- Card de Cliente -->
-        <div class="service-card info-card">
-          <div class="service-icon">👤</div>
-          <h3>Área Cliente</h3>
-          <p class="no-credentials">
-            <strong>Sin credenciales necesarias</strong>
-          </p>
-          <p class="access-description">
-            Crea un servicio en el menú Inicio y diligencia la informacion requerida. Al agendar un servicio, tus datos serán guardados y podrás ingresar con tu correo por medio de Ingreso Clientes.
-          </p>
-        </div>
+
 
         <!-- Guía de Uso -->
         <div class="service-card guide-card">
@@ -66,9 +65,7 @@
           <h3>Guía de Navegación</h3>
           <div class="guide-steps">
             <p><strong>1.</strong> Agenda servicios desde el menú Inicio</p>
-            <p>
-              <strong>2.</strong> Ingresa como cliente o técnico
-            </p>
+            <p><strong>2.</strong> Ingresa como cliente o técnico</p>
             <p><strong>3.</strong> Gestiona citas y servicios según tu rol</p>
           </div>
         </div>

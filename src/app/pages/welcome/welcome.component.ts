@@ -26,12 +26,23 @@ export class WelcomeComponent {
 
   constructor(private router: Router) {}
 
-  // Función para copiar credenciales
+  // Función para copiar credenciales (mantener para compatibilidad)
   copyToClipboard(text: string): void {
     navigator.clipboard.writeText(text).then(() => {
       alert('Credenciales copiadas al portapapeles!');
     }).catch(() => {
       alert('Error al copiar las credenciales');
     });
+  }
+
+  // Nueva función para navegar y auto-rellenar
+  navigateAndFillCredentials(): void {
+    // Usar un evento personalizado para comunicarse con el AppComponent
+    window.dispatchEvent(new CustomEvent('openTechnicianLogin', {
+      detail: {
+        credentials: this.technicianCredentials,
+        autoFill: true
+      }
+    }));
   }
 }

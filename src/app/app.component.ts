@@ -37,6 +37,44 @@ export class AppComponent implements OnInit {
     this.showTechniciansModal = true;
   }
 
+  // Nueva función para abrir modal con auto-rellenado
+  openTechniciansModalWithCredentials(details: any) {
+    this.showTechniciansModal = true;
+
+    // Esperar a que se renderice el modal y luego auto-rellenar
+    setTimeout(() => {
+      this.autoFillCredentials(details.credentials);
+    }, 100);
+  }
+
+  private autoFillCredentials(credentials: any) {
+    const technicianIdInput = document.querySelector('#technicianId') as HTMLInputElement;
+    const passwordInput = document.querySelector('#password') as HTMLInputElement;
+
+    if (technicianIdInput && passwordInput) {
+      // Rellenar los campos
+      technicianIdInput.value = credentials.id;
+      passwordInput.value = credentials.password;
+
+      // Disparar eventos para que Angular detecte los cambios
+      technicianIdInput.dispatchEvent(new Event('input', { bubbles: true }));
+      passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+      // Hacer focus en el botón de submit
+      setTimeout(() => {
+        const submitButton = document.querySelector('.btn-ingresar') as HTMLElement;
+        if (submitButton) {
+          submitButton.focus();
+        }
+      }, 50);
+
+      // Mostrar mensaje de confirmación
+      setTimeout(() => {
+        alert('¡Credenciales rellenadas automáticamente! Haz clic en "Ingresar" para continuar.');
+      }, 200);
+    }
+  }
+
   closeTechniciansModal() {
     this.showTechniciansModal = false;
   }
@@ -104,6 +142,11 @@ export class AppComponent implements OnInit {
       if (event.key?.includes('logged') || event.key === 'emailLogin') {
         this.reloadUserState();
       }
+    });
+
+    // Escuchar evento personalizado para abrir modal de técnicos con auto-rellenado
+    window.addEventListener('openTechnicianLogin', (event: any) => {
+      this.openTechniciansModalWithCredentials(event.detail);
     });
   }
 
