@@ -57,8 +57,8 @@ export class StorageAppointmentRepository extends AppointmentStorageRepository {
 
         // Calcular el estado basado en fecha y hora usando servicio de dominio
         const appointmentStatus = AppointmentStatusCalculator.calculateStatus(
-          appointment.fecha.toString(),
-          appointment.hora.toString()
+          appointment.fecha,
+          appointment.hora
         );
 
         const newAppointment: CitaData = {

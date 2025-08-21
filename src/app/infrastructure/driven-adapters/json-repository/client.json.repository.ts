@@ -40,9 +40,6 @@ export class ClientJsonRepository extends ClientRepository {
   }
 
   create(client: Omit<Client, 'id'>): Observable<Client> {
-    console.log('=== CLIENT JSON REPOSITORY: Iniciando create ===');
-    console.log('Cliente recibido (English):', client);
-
     // Convert English client to Spanish format for storage
     const clienteData: Omit<ClienteData, 'id'> = {
       nombre: client.name,
@@ -51,12 +48,9 @@ export class ClientJsonRepository extends ClientRepository {
       direccion: client.address
     };
 
-    console.log('Cliente convertido (Spanish):', clienteData);
-
     return this.clientStorageRepository.create(clienteData).pipe(
       map((createdClienteData: ClienteData) => {
         const convertedClient = this.mapToClient(createdClienteData);
-        console.log('Cliente retornado (English):', convertedClient);
         return convertedClient;
       })
     );

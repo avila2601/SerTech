@@ -31,16 +31,10 @@ export class StorageClientRepository extends ClientStorageRepository {
   }
 
   create(client: Omit<ClienteData, 'id'>): Observable<ClienteData> {
-    console.log('=== STORAGE CLIENT REPOSITORY: Iniciando create ===');
-    console.log('Cliente a agregar:', client);
-
     return this.getAll().pipe(
       switchMap((clients: ClienteData[]) => {
-        console.log('Clientes existentes obtenidos:', clients);
-
         // Asegurar que clientes sea un array
         if (!Array.isArray(clients)) {
-          console.log('Clientes no es array, inicializando como array vacío');
           clients = [];
         }
 
@@ -48,20 +42,16 @@ export class StorageClientRepository extends ClientStorageRepository {
         const newId = clients.length > 0
           ? (Math.max(...clients.map(c => +c.id)) + 1).toString()
           : '1';
-        console.log('Nuevo ID calculado:', newId);
 
         const newClient: ClienteData = {
           ...client,
           id: newId
         };
-        console.log('Cliente completo a crear:', newClient);
 
         const updatedClients = [...clients, newClient];
-        console.log('Lista actualizada de clientes:', updatedClients);
 
         return this.httpDataSource.put<ClienteData[]>(this.endpoint, updatedClients).pipe(
           map(() => {
-            console.log('Cliente guardado exitosamente en backend');
             return newClient;
           })
         );

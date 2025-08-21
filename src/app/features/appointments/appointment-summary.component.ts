@@ -104,12 +104,9 @@ export class AppointmentSummaryComponent implements OnInit {
         }
 
         this.isScheduling = true;
-        console.log('=== CONFIRM APPOINTMENT DEBUG ===');
-        console.log('Appointment data:', appointmentData);
 
         this.createAppointmentFromSummaryUseCase.execute(appointmentData).subscribe({
           next: (result) => {
-            console.log('Appointment created successfully:', result);
             this.handleAppointmentSuccess();
           },
           error: (error: any) => {

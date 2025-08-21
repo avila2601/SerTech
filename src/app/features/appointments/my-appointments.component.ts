@@ -7,9 +7,10 @@ import {
   GetAppointmentDisplayDataUseCase
 } from '../../core/application/use-cases/appointments';
 import { CheckReviewExistsUseCase } from '../../core/application/use-cases/reviews/check-review-exists.usecase';
-import { Appointment, Service, Client } from '../../models';
+import { Appointment, Service, Client, AppointmentStatus } from '../../models';
 import { Technician } from '../../core/domain/models/technician.model';
 import { ReviewsComponent } from '../../features/reviews/reviews.component';
+import { AppointmentStatusCalculator } from '../../core/domain/services/appointment-status-calculator.service';
 
 @Component({
   selector: 'app-my-appointments',
@@ -206,20 +207,8 @@ export class MyAppointmentsComponent implements OnInit {
   }
 
   getAppointmentStatus(appointment: Appointment): string {
-    const appointmentDate = new Date(appointment.date);
-    const [hours, minutes] = appointment.time.split(':').map(Number);
-
-    // Create full date with hours and minutes
-    const appointmentDateTime = new Date(appointmentDate);
-    appointmentDateTime.setHours(hours, minutes, 0, 0);
-
-    const currentDateTime = new Date();
-
-    // If date and time have passed, it's completed
-    if (appointmentDateTime < currentDateTime) {
-      return 'Terminada';
-    }
-    return 'Pendiente';
+    const status = AppointmentStatusCalculator.calculateStatus(appointment.date, appointment.time);
+    return status; // Devuelve 'Terminada' o 'Pendiente'
   }
 
   getAppointmentStatusClass(appointment: Appointment): string {

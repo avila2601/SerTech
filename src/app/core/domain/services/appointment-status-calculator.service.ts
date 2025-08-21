@@ -8,16 +8,20 @@ export class AppointmentStatusCalculator {
   /**
    * Calculate appointment status based on date and time
    */
-  static calculateStatus(fecha: string, hora: string): AppointmentStatus {
-    const now = new Date();
-    const appointmentDate = new Date(`${fecha}T${hora}`);
+  static calculateStatus(fecha: string | Date, hora: string): AppointmentStatus {
+    const appointmentDate = typeof fecha === 'string' ? new Date(fecha) : new Date(fecha);
+    const [hours, minutes] = hora.split(':').map(Number);
 
-    if (appointmentDate < now) {
+    // Crear fecha completa con hora y minutos
+    const appointmentDateTime = new Date(appointmentDate);
+    appointmentDateTime.setHours(hours, minutes, 0, 0);
+
+    const currentDateTime = new Date();
+
+    // Si la fecha y hora ya pasaron, está terminada
+    if (appointmentDateTime < currentDateTime) {
       return AppointmentStatus.COMPLETED;
-    } else if (appointmentDate > now) {
-      return AppointmentStatus.CONFIRMED;
-    } else {
-      return AppointmentStatus.IN_PROGRESS;
     }
+    return AppointmentStatus.PENDING;
   }
 }

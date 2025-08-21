@@ -1,0 +1,20 @@
+<div class="modal-backdrop" (click)="closeModal()"></div>
+<div class="modal-ingreso" (click)="$event.stopPropagation()">
+  <h2>Iniciar Sesión</h2>
+  <form (ngSubmit)="login()" autocomplete="off">
+    <div class="form-group">
+      <label for="email">Ingresa tu e-mail</label>
+      <input
+        #emailInput
+        id="email"
+        name="email"
+        type="email"
+        [(ngModel)]="email"
+        required
+        autocomplete="off"
+      />
+    </div>
+    <button class="btn btn-primary btn-ingresar" type="submit">Ingresar</button>
+  </form>
+  <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+</div>
