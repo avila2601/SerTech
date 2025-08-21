@@ -1,0 +1,117 @@
+<div class="welcome-page">
+  <!-- Hero Section -->
+  <div class="hero-text-section">
+    <section class="hero-section">
+      <div class="hero-background-left"></div>
+      <div class="hero-background-right"></div>
+
+      <div class="hero-content">
+        <h1 class="hero-title">{{ projectInfo.title }}</h1>
+        <p class="hero-subtitle">{{ projectInfo.subtitle }}</p>
+        <p class="hero-description">{{ projectInfo.description }}</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Credenciales y Guía Section -->
+  <section class="services-overview">
+    <div class="container">
+      <!-- Título de sección -->
+      <h2>🔑 Información de Acceso</h2>
+
+      <div class="services-grid">
+        <!-- Card de Técnico -->
+        <div class="service-card credential-card">
+          <div class="service-icon">👨‍🔧</div>
+          <h3>Acceso Técnico</h3>
+          <div class="credential-info">
+            <p><strong>ID:</strong> {{ technicianCredentials.id }}</p>
+            <p>
+              <strong>Password:</strong> {{ technicianCredentials.password }}
+            </p>
+          </div>
+          <button
+            class="btn btn-primary copy-btn"
+            (click)="
+              copyToClipboard(
+                technicianCredentials.id +
+                  ' / ' +
+                  technicianCredentials.password
+              )
+            "
+          >
+            📋 Copiar Credenciales
+          </button>
+          <p class="access-description">
+            Accede a la sección Técnicos para gestionar servicios, ver citas
+            asignadas y actualizar estados.
+          </p>
+        </div>
+
+        <!-- Card de Cliente -->
+        <div class="service-card info-card">
+          <div class="service-icon">👤</div>
+          <h3>Área Cliente</h3>
+          <p class="no-credentials">
+            <strong>Sin credenciales necesarias</strong>
+          </p>
+          <p class="access-description">
+            Crea un servicio en el menú Inicio y diligencia la informacion requerida. Al agendar un servicio, tus datos serán guardados y podrás ingresar con tu correo por medio de Ingreso Clientes.
+          </p>
+        </div>
+
+        <!-- Guía de Uso -->
+        <div class="service-card guide-card">
+          <div class="service-icon">🗺️</div>
+          <h3>Guía de Navegación</h3>
+          <div class="guide-steps">
+            <p><strong>1.</strong> Agenda servicios desde el menú Inicio</p>
+            <p>
+              <strong>2.</strong> Ingresa como cliente o técnico
+            </p>
+            <p><strong>3.</strong> Gestiona citas y servicios según tu rol</p>
+          </div>
+        </div>
+
+        <!-- Tecnologías -->
+        <div class="service-card tech-card">
+          <div class="service-icon">💻</div>
+          <h3>Tecnologías Utilizadas</h3>
+          <div class="tech-list">
+            <span
+              class="tech-badge"
+              *ngFor="let tech of projectInfo.technologies"
+            >
+              {{ tech }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Arquitectura -->
+        <div class="service-card architecture-card">
+          <div class="service-icon">🏗️</div>
+          <h3>Arquitectura</h3>
+          <div class="architecture-features">
+            <p>✅ Clean Architecture</p>
+            <p>✅ Repository Pattern</p>
+            <p>✅ Use Cases</p>
+            <p>✅ Dependency Injection</p>
+            <p>✅ Reactive Programming</p>
+          </div>
+        </div>
+
+        <!-- Funcionalidades -->
+        <div class="service-card features-card">
+          <div class="service-icon">⚡</div>
+          <h3>Funcionalidades</h3>
+          <div class="features-list">
+            <p>🛠️ Catálogo de servicios</p>
+            <p>📅 Gestión de citas</p>
+            <p>👥 Administración de clientes y técnicos</p>
+            <p>⭐ Sistema de reseñas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

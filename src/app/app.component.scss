@@ -18,6 +18,12 @@
       align-items: center;
     }
 
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
     .nav-brand h2 {
       color: white;
       margin: 0;
@@ -27,6 +33,26 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+    }
+
+    .info-demo-link {
+      color: #a0a0a0;
+      text-decoration: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(160, 160, 160, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+
+      &:hover,
+      &.active {
+        color: #fff;
+        background: rgba(102, 126, 234, 0.2);
+        border-color: rgba(102, 126, 234, 0.5);
+        transform: translateY(-1px);
+      }
     }
 
     .nav-menu {
@@ -88,8 +114,17 @@
 
     /* Responsive para tablets */
     @media (max-width: 768px) {
+      .nav-brand {
+        gap: 1rem;
+      }
+
       .nav-brand h2 {
         font-size: 1.3rem;
+      }
+
+      .info-demo-link {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.6rem;
       }
 
       .nav-menu {
@@ -148,8 +183,17 @@
         padding: 0 15px;
       }
 
+      .nav-brand {
+        gap: 0.8rem;
+      }
+
       .nav-brand h2 {
         font-size: 1.2rem;
+      }
+
+      .info-demo-link {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
       }
 
       .nav-menu {

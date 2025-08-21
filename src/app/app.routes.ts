@@ -1,10 +1,16 @@
 import { Routes } from '@angular/router';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AuthGuard, TechniciansGuard } from './core/application/guards';
 
 export const routes: Routes = [
-  // Primary English routes
+  // Home page as main (Inicio)
   { path: '', component: HomeComponent },
+
+  // Welcome page for recruiters/demo
+  { path: 'welcome', component: WelcomeComponent },
+
+  // Application routes
   { path: 'about-us', loadComponent: () => import('./pages/about-us/about-us.component').then(m => m.AboutUsComponent) },
   { path: 'clients', loadComponent: () => import('./features/clients/clients.component').then(m => m.ClientsComponent) },
   { path: 'services', loadComponent: () => import('./features/services/services.component').then(m => m.ServicesComponent) },
